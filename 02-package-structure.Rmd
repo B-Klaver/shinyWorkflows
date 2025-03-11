@@ -1,0 +1,242 @@
+# Package Structure
+
+```{r, include = FALSE, R.options = list(tidyverse.quiet = TRUE)}
+sapply(
+  c(
+    'kableExtra',
+    'magrittr'
+  ),
+  require,
+  character.only = TRUE
+) 
+```
+
+In R, the fundamental unit of shareable code is the package. A package bundles together code, data, documentation, and tests, and is easy to share with others.
+
+But packages are useful even if you never share your code. As Hilary Parker says in her introduction to packages: “Seriously, it doesn’t have to be about sharing your code (although that is an added benefit!). It is about saving yourself time.” Organising code in a package makes your life easier because packages come with conventions. For example, you put R code in R/, you put tests in tests/ and you put data in data/. These conventions are helpful because:
+
+- They save time — you don’t need to think about the best way to organise a project, you can just follow a template.
+
+- Standardised conventions lead to standardised tools — if you buy into R’s package conventions, you get many tools for free.
+
+```{r echo=F}
+knitr::include_graphics("images/package_workflow.png")
+```
+
+## Loading devtools and usethis
+
+The `devtools` package is fundamental for developing packages, it comes with a suite of incredibly powerful functions. In addition,
+it comes with the required package `usethis`, which compliments the `devtools` package with another suite of functions required to properly build packages.
+
+``` {r}
+library(devtools)
+```
+
+## Package Structure
+
+In an R package or R project structured as a package the typical files and folders will be (locally, you can consult your Files pane):
+
+``` {r echo = FALSE, eval = create}
+
+data.frame(
+  path = c(
+    '.Rbuildignore',
+    '.gitignore',
+    'DESCRIPTION',
+    'NAMESPACE',
+    'R/'
+  ),
+  type = c(
+    'file',
+    'file',
+    'file',
+    'file',
+    'folder'
+  ),
+  description = c(
+    'Lists files that we need to have around but that should not be included when building the R package from source.',
+    'Tells Git to ignore some standard, behind-the-scenes files created by R and RStudio.',
+    'Provides metadata about your package.',
+    'Declares the functions your package exports for external use and the external functions your package imports from other packages.',
+    'the “business end” of your package. It will soon contain .R files with function definitions.'
+  )
+) %>% 
+  knitr::kable()
+
+```
+
+## `load_all` function
+
+In a package or project structured as a package you are typically making functions that are stored in the `R/` folder. In a standard project you may be familiar with the use of `source("R/myfunction.R")` to load or run a script. However, devtools allows us to easily run/load all of our project contents with one simple function call:
+
+```{r, eval=F}
+devtools::load_all()
+```
+
+
+This does a few main things: 
+
+- Loads/runs your scripts located in the `R/` folder   
+- Loads data stored in your `data` folder   
+- Loads other package objects   
+- Loads package dependencies listed in the `DESCRIPTION` file   
+
+
+:::: {.notebox}
+
+::: {.center}
+
+**NOTE**
+
+:::
+
+One main difference is that these functions and data that have been loaded will not appear in the environment, even though they are available.
+
+::::
+
+## The `DESCRIPTION` file
+
+The `DESCRIPTION` file provides metadata for your package. Some key pieces of this metadata include the description of the project and the dependencies.
+
+If your project doesn't have a `DESCRIPTION` file you can easily add one using usethis:
+
+```{r, eval = F}
+usethis::use_description()
+```
+
+You can manually edit this file or alternatively add certain elements using usethis. For example adding dependencies:
+
+``` {r, eval = F}
+usethis::use_package('dplyr')
+```
+
+:::: {.notebox}
+
+::: {.center}
+
+**NOTE**
+
+:::
+
+After creating a `DESCRIPTION` file in your project you will automatically enter package development mode as this is the key file for this.
+
+::::
+
+<br/>
+
+[Read more!](https://r-pkgs.org/description.html)
+
+## Documenting your functions
+
+At some point we have all used the help functions in R by easily calling something like `?mutate`. This requires special documentation which is stored in path such as `man/mutate` within the package. To do this for ourselves we have to use something called roxygen2, which helps create these handy help windows. To do this with your functions you can open your function script, place the cursor somewhere within the function and then do *Code > Insert roxygen skeleton*, which will create a basic skeleton to fill out such as this:
+
+```{r, eval = F}
+#' Split a string
+#'
+#' @param x A character vector with one element.
+#' @param split What to split on.
+#'
+#' @return A character vector.
+#' @export
+#'
+#' @examples
+#' x <- "alfa,bravo,charlie,delta"
+#' strsplit1(x, split = ",")
+strsplit1 <- function(x, split) {
+  strsplit(x, split = split)[[1]]
+}
+```
+
+Now, one more step is needed. We must use devtools to automatically create that `man/function` and update our `NAMESPACE` file like so:
+
+```{r, eval = F}
+devtools::document()
+```
+
+<br/>
+
+[Read more!](https://r-pkgs.org/man.html)
+
+## The `NAMESPACE`
+
+The `NAMESPACE` file is an automatically generated and maintaind file by R, this should not be manually modified. It is filled out depending on the roxygen2 comments left in your scripts and is updated, as described above by using `devtools::document()`. It informs the package what contents should be exported when building the package, as well as what needs to be imported (package dependencies) for the package to run.
+
+<br/>
+[Read more!](https://r-pkgs.org/dependencies-mindset-background.html#sec-dependencies-namespace)
+
+## The `README` file
+
+The `README` file is a very useful document that can help provide context, general information, and usage insight to users. In addition, when knitted, `README` files are formatted to be directly compatible with web-based Github and Gitlab.
+
+To get a `README` file started in a project all that you need to do is:
+
+```{r, eval =F}
+usethis::use_readme_rmd() 
+```
+
+:::: {.notebox}
+
+::: {.center}
+**NOTE**
+:::
+
+Remember, you have to knit your `README` in order to produce a `.md` file version of it, which will be directly used in places like Github or Gitlab.
+
+::::
+
+## Organizing your scripts
+
+The file name should be meaningful and convey which functions are defined within. While you’re free to arrange functions into files as you wish, the two extremes are bad: don’t put all functions into one file and don’t put each function into its own separate file.
+
+``` {r echo=F}
+data.frame(
+  "Organizing principle" = c(
+    "One function",
+    "Main function plus helpers",
+    "Family of functions"
+  ),
+  Comments = c(
+    "Defines exactly one function, that’s not particulary large, but doesn’t fit naturally into any other .R file",
+    "Defines the user-facing function, a method, and private helpers",
+    "Defines a family of functions, all documented together in a big help topic, plus private helpers"
+  )
+) %>% 
+  knitr::kable()
+```
+   
+:::: {.tipbox} 
+
+::: {.center}
+
+**TIP**
+
+:::
+
+Another file you often see in the wild is `R/utils.R`.
+This is a common place to define small utilities that are used inside multiple package functions.
+Since they serve as helpers to multiple functions, placing them in `R/utils.R` makes them easier to re-discover when you return to your package after a long break.
+
+::::   
+
+## Using data in a package
+
+Traditionally, data in a package is stored in the `data/` folder. The data there will be saved as a special type of data that will make it available when you run `devtools::load_all()`. To store data within a package like this you need to run:
+
+``` {r eval=F}
+usethis::use_data(df)
+```
+
+:::: {.tipbox}
+
+::: {.center}
+**TIP**
+:::
+
+Because you need to actively tell the project to update the dataset in the `data/` folder using the above function call, it is not recommended to use this for datasets that get updated regularly. For example in the context of a shiny app you may use this for standard datasets that aren't subject to change frequently (eg. population files, health geography crosswalks), whereas other data that feed the app that are routinely updated remain in another folder such as the `inst/` folder.
+
+::::
+
+
+## Additional Resources
+
+- [R Package Manual](https://r-pkgs.org/)   

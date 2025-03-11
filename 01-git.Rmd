@@ -1,0 +1,130 @@
+# Git
+
+[Git](https://git-scm.com/) is a free and open-source version control system. When used regularly and as intended, developers will have a full history of their project within a local repository. In addition to a historical log of changes to project files, git allows for project branching to support users to test/develop new code, while maintaining the master version for easy reversion. When users are ready to implement their new branch into the main codebase git can be used for merging files, whereby it tracks changes and ensures there are no conflicts between the main version and the new version. 
+
+Beyond local usage, git is also supported by web-based repositories such as [Github](https://github.com/) and [Gitlab](https://about.gitlab.com/), where projects can be pushed, pulled, and cloned. These software allow for easy collaboration with other developers and provide a number of user-friendly features that make working with git easier.
+
+:::: {.notebox}
+
+::: {.center}
+**NOTE**
+:::
+
+In RStudio, git is accessed in the terminal or in the top right under the Git tab when Git has been initialized for the project.
+
+::::
+
+## Basic workflow {#basic-workflow}
+
+Step 1) Create a project.
+
+Step 2) Initialize git.   
+`git init`
+
+Step 3) Add a file to the local repo   
+`git add filename.R`
+
+Step 4) Commit your change with a message   
+`git commit -m "Add filename.R"`
+
+Step 5) Create a branch to test/develop code   
+`git branch test_branch`
+
+Step 6) Go into that branch   
+`git checkout test_branch`
+
+Step 7) Modify your code and repeat steps 3 and 4
+
+Step 8) When ready merge branches     
+`git merge master test_branch`
+
+## Setting up Github or Gitlab projects
+
+Ensure your profile is set up   
+`git config --global user.name "Braeden Klaver"`   
+`git config --global user.email "braeden.klaver@bccdc.ca"`   
+
+### Pre-existing project on Github or Gitlab
+
+Step 1) In your terminal navigate to the folder you want to clone the project to   
+`cd "U:/myprojects"`
+
+Step 2) Clone the project into that folder and give the project a name   
+`git clone http://lvmgenodh01.phsabc.ehcnet.ca/braeden.klaver/test.git myproject` 
+
+### Personal project without git
+
+Step 1) Open your R project
+
+Step 2) Initialize git   
+`git init`
+
+Step 3) Create a project on [Gitlab](https://about.gitlab.com/) or [Github](https://github.com/)
+
+Step 4) Connect your R project to that repository (should be the URL)   
+`git remote add origin http://lvmgenodh01.phsabc.ehcnet.ca/braeden.klaver/test.git`
+
+Step 5) Add and commit your files   
+`git add .`   
+`git commit -m "Initial commit"`
+
+Step 6) Push your project to that repository    
+`git push`
+
+
+### Personal project with Git
+
+Step 1) Open your R project
+
+Step 2) Connect your R project to that repository (should be the URL)   
+`git remote add origin http://lvmgenodh01.phsabc.ehcnet.ca/braeden.klaver/test.git`
+
+Step 3) Push your project to that repository   
+`git push`
+
+## Collaborative workflow
+
+In addition to the basic workflow, when working with a web-based repository like [Github](https://github.com/) or [Gitlab](https://about.gitlab.com/) there are additional steps you will need to take.
+
+Step 1) Pulling changes from the repository - your coworkers may have made changes!   
+`git pull`
+
+Step 2) Follow the basic workflow (Section \@ref(basic-workflow))
+
+Step 3) Pushing your changes to the repository - your coworkers will want to be up to date!   
+`git push`
+
+## Using Git at the BCCDC
+
+### Git on Citrix
+
+[Git](https://git-scm.com/) is installed on citrix already, it can be initialized as described above or you can click a check box to create a git repository when creating a new project.
+
+### Github
+
+Because [Github](https://github.com/) is an external web-based repository there are some considerations for its use at the BCCDC. Currently, there are no formal guidelines on using it, for this reason using it for BCCDC-specific projects should be avoided.
+
+
+### Gitlab
+
+The BCCDC has a private [Gitlab repository](http://lvmgenodh01.phsabc.ehcnet.ca/), which can be used for regular BCCDC projects within the scope set out in the [guiding document](https://healthbc-my.sharepoint.com/:w:/r/personal/kathleen_mclean_bccdc_ca/Documents/GitLab%20Guideline%20for%20distribution.docx?d=w2584389db5be4a7d8dc59ed28080e351&csf=1&web=1&e=OH30gE). 
+
+:::: {.notebox}
+
+::: {.center}
+**NOTE**
+:::
+
+You can request access to Gitlab via this [form](https://surveys.vch.ca/Survey.aspx?s=62de2ddc1daf413091a8e063d80428cd).
+
+::::
+
+### Suggested workflow
+
+Working with git tracked projects requires you to have your own local repository. For this reason, it is recommended to keep this repository in your `U:/` drive. As a reminder, project data may not be permitted on your `U:/` drive, therefore ensure your code is loading that data from an appropriate location. If you find that you need your data to be in the project folder, we would recommend having an additional repository cloned in the `O:/` drive - however, we would not recommend anyone to do any development work in this clone.
+
+## Additional Resources
+
+- [Mike Kuo's Git Tutorial](https://healthbc-my.sharepoint.com/personal/michael_kuo_bccdc_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fmichael%5Fkuo%5Fbccdc%5Fca%2FDocuments%2FMicrosoft%20Teams%20Chat%20Files%2Fversion%5Fcontrol%5Ftutorial%2Ehtml&parent=%2Fpersonal%2Fmichael%5Fkuo%5Fbccdc%5Fca%2FDocuments%2FMicrosoft%20Teams%20Chat%20Files&ga=1)   
+- [Git Playground](https://learngitbranching.js.org/)   
+
