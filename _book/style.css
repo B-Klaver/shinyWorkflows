@@ -29,6 +29,14 @@ pre code {
   border-radius: 10px;
 }
 
+.warnbox {
+  padding: 1em;
+  background: #f5bfbf;
+  color: black;
+  border: 2px solid red;
+  border-radius: 10px;
+}
+
 .center {
   text-align: center;
 }

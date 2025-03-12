@@ -2,7 +2,7 @@
 
 [Git](https://git-scm.com/) is a free and open-source version control system. When used regularly and as intended, developers will have a full history of their project within a local repository. In addition to a historical log of changes to project files, git allows for project branching to support users to test/develop new code, while maintaining the master version for easy reversion. When users are ready to implement their new branch into the main codebase git can be used for merging files, whereby it tracks changes and ensures there are no conflicts between the main version and the new version. 
 
-Beyond local usage, git is also supported by web-based repositories such as [Github](https://github.com/) and [Gitlab](https://about.gitlab.com/), where projects can be pushed, pulled, and cloned. These software allow for easy collaboration with other developers and provide a number of user-friendly features that make working with git easier.
+Beyond local usage, git is also supported by web-based repositories such as [Github](https://github.com/) and [Gitlab](https://about.gitlab.com/), where projects can be pushed, pulled, and cloned. These sites allow for easy collaboration with other developers and provide a number of user-friendly features that make working with git easier.
 
 :::: {.notebox}
 
@@ -14,29 +14,42 @@ In RStudio, git is accessed in the terminal or in the top right under the Git ta
 
 ::::
 
-## Basic workflow {#basic-workflow}
+## Basic git workflow {#basic-workflow}
 
 Step 1) Create a project.
 
 Step 2) Initialize git.   
 `git init`
 
-Step 3) Add a file to the local repo   
+Step 3) Check your project file status
+`git status`
+
+Step 4) Add a file to the local repo   
 `git add filename.R`
 
-Step 4) Commit your change with a message   
+Step 5) Commit your change with a message   
 `git commit -m "Add filename.R"`
 
-Step 5) Create a branch to test/develop code   
+Step 6) Create a branch to test/develop code   
 `git branch test_branch`
 
-Step 6) Go into that branch   
+Step 7) Go into that branch   
 `git checkout test_branch`
 
-Step 7) Modify your code and repeat steps 3 and 4
+Step 8) Modify your code and repeat steps 3 and 4
 
-Step 8) When ready merge branches     
+Step 9) When ready merge branches     
 `git merge master test_branch`
+
+:::: {.tipbox}
+
+::: {.center}
+**TIP**
+:::
+
+Branching is useful when you have a stable codebase that you do not want to break. You can create a branch to do development work and test new features until it's ready for integration with the stable codebase.
+
+::::
 
 ## Setting up Github or Gitlab projects
 
@@ -82,9 +95,9 @@ Step 2) Connect your R project to that repository (should be the URL)
 Step 3) Push your project to that repository   
 `git push`
 
-## Collaborative workflow
+## Collaborative git workflow
 
-In addition to the basic workflow, when working with a web-based repository like [Github](https://github.com/) or [Gitlab](https://about.gitlab.com/) there are additional steps you will need to take.
+In addition to the basic workflow, when working with a web-based repository like [Github](https://github.com/) or [Gitlab](https://about.gitlab.com/) there are additional steps you will need to take:
 
 Step 1) Pulling changes from the repository - your coworkers may have made changes!   
 `git pull`
@@ -99,6 +112,16 @@ Step 3) Pushing your changes to the repository - your coworkers will want to be 
 ### Git on Citrix
 
 [Git](https://git-scm.com/) is installed on citrix already, it can be initialized as described above or you can click a check box to create a git repository when creating a new project.
+
+:::: {.tipbox}
+
+::: {.center}
+**TIP**
+:::
+
+If you have a local R installation and you'd like to work there but do not have git installed locally you can still leverage citrix R to use git for your projects.
+
+::::
 
 ### Github
 
@@ -119,9 +142,51 @@ You can request access to Gitlab via this [form](https://surveys.vch.ca/Survey.a
 
 ::::
 
-### Suggested workflow
+### Suggested project workflow
 
-Working with git tracked projects requires you to have your own local repository. For this reason, it is recommended to keep this repository in your `U:/` drive. As a reminder, project data may not be permitted on your `U:/` drive, therefore ensure your code is loading that data from an appropriate location. If you find that you need your data to be in the project folder, we would recommend having an additional repository cloned in the `O:/` drive - however, we would not recommend anyone to do any development work in this clone.
+Working with git tracked projects requires you to have your own local repository. For this reason, it is recommended to keep this repository in your `U:/` drive. In addition, we would recommend having another local repository in the `O:/` drive, which would be dedicated to running pipelines or deploying apps and **not** for development work.
+
+:::: {.warnbox}
+
+::: {.center}
+**WARNING**
+:::
+
+Some project data may not be permitted on your `U:/` drive, therefore ensure your code is loading that data from an appropriate location.
+
+::::
+
+## Git Commands Summary
+
+``` {r echo=F}
+data.frame(
+  Command = c(
+    'git init',
+    'git status',
+    'git add',
+    'git rm',
+    'git commit',
+    'git branch',
+    'git checkout',
+    'git merge',
+    'git pull',
+    'git push'
+  ),
+  Description = c(
+    'Initialize git for the directory',
+    'Check the status of files in the directory (eg. are they being tracked, have they been modified)',
+    'Stage a file for commit',
+    'Remove a file staged for commit',
+    'Commit your changes',
+    'Create a branch for development work',
+    'Checkout a branch to work within',
+    'Merge two branches together',
+    'Pull the most up-to-date repository from a remote (ie. Github or Gitlab)',
+    'Push your changes to a remote repository (ie. Github or Gitlab)'
+  )
+) %>% 
+  knitr::kable()
+```
 
 ## Additional Resources
 

@@ -1,7 +1,165 @@
 # Shiny
 
+## Basic UI
+
+## Basic reactivity
+
+## Layout and themes
+
+## Uploads and downloads
+
+## Dynamic UI
+
 
 ## Packaging a Shiny App
 
+Using package structure for a shiny app gets your toes into the water of package development. It’s a long way from a complete package, but it’s still useful because it activates new tools that make it easier to work with larger app and provides you with standard conventions that can be used across projects. 
 
+### Put all R code in the `R/` directory
+
+Because we are going to be working in an app-package we need to create an `R/` directory. This is where we will keep all of the core R code components that will build our app. As a reminder, in a package we are leveraging useful tools like `devtools::load_all()` (See section \@ref(load_all)), which will go into the `R/` directory and load/run all of the code within this directory.
+
+### Write a function that starts your app
+
+As mentioned in section (LINK HERE), we need three primary pieces to create an app:
+
+``` {r eval=F}
+ui <- fluidPage(
+  ...
+)
+
+server <- function(input, output, session) {
+  ...
+}
+
+shinyApp(ui, server, ...)
+```
+
+Now, to begin converting our project to a package-app we must wrap this into a function:
+
+``` {r eval=F}
+myApp <- function(...) {
+  ui <- fluidPage(
+    ...
+  )
+  server <- function(input, output, session) {
+    ...
+  }
+  shinyApp(ui, server, ...)
+}
+```
+
+:::: {.notebox}
+
+:::{.center}
+**NOTE**
+:::
+
+The function you create shouldn't need any arguments, all that we will use this for is to easily run our app locally and set it up for easy deployment later.
+
+::::
+
+### Save your data to the `data/` directory
+
+We may have some datasets or lists that we use in our app that aren't routinely updated. These are perfect candidates to convert into `.rda` files using the handy function `usethis::use_data()` that we talked about in section \@ref(pkg-data). These will automatically be stored in the `data/` directory and can be easily called directly after running `load_all()`.
+
+### Create an `inst/` directory
+
+The `inst/` directory is where we can store other raw datasets that are more subject to change, for example the data used to feed our apps that comes from external pipelines. There is no standard convention so you can name things as you please, but common usage includes folders named `inst/extdata` or `inst/ext` to store these datasets.
+
+:::: {.notebox}
+
+:::{.center}
+**NOTE**
+:::
+
+Load it with `read.csv(system.file("exdata", "mydata.csv", package = "myApp"))`. Notice that our package-app automatically knows to look in our `inst/` folder?
+
+``` {r eval=F}
+myApp <- function(...) {
+  read.csv(system.file("exdata", "mydata.csv", package = "myApp"))
+  ui <- fluidPage(
+    ...
+  )
+  server <- function(input, output, session) {
+    ...
+  }
+  shinyApp(ui, server, ...)
+}
+```
+
+::::
+
+### Create a `www/` directory
+
+This directory is where you can store some of the other non-script or data components to the app such as CSS stylings or images. There are no rules to this but a suggestion would be to have a `www/css` and `www/images` sub-directory scheme for your app.
+
+:::: {.tipbox}
+
+:::{.center}
+**TIP**
+:::
+
+If you want to call files from within these sub-directories (eg. `href = "css/style.css"`) you will need to tell your app where they are:
+
+```{r eval=F}
+myApp <- function(...) {
+  shiny::addResourcePath("css", file.path(getwd(), "www/css"))
+  shiny::addResourcePath("images", file.path(getwd(), "www/images"))
+  ui <- fluidPage(
+    ...
+  )
+  server <- function(input, output, session) {
+    ...
+  }
+  shinyApp(ui, server, ...)
+}
+```
+
+### Create a `DESCRIPTION` file
+
+Because we are working in a package environment one of the critical components will be our description file, which was discussed in section \@ref(desc). Don't forget to set your dependencies!
+
+
+### Deploying your app-package
+
+One of the final pieces to setting up your app-package is the `app.R` script. This is what will be used when we go to deploy our app to the server and contains two simple but important lines of code:
+
+```{r eval=F}
+pkgload::load_all(".")
+myApp()
+```
+
+:::: {.warningbox}
+
+:::{.center}
+**WARNING**
+:::
+
+Although this is an R script, we **DO NOT** place this under our `R/` directory. This would result in an infinite loop when loading due to our `load_all()` function! Therefore place this at the top-level of your project directory.
+
+::::
+
+Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a DESCRIPTION file, it requires you to explicitly specify them. The easiest way to do this is to call usethis::use_package(). You’ll need to start with shiny and pkgload:   
+
+```{r eval=F}
+usethis::use_package("shiny")
+usethis::use_package("pkgload")
+```
+
+[Read more!](https://mastering-shiny.org/scaling-packaging.html#deploying-your-app-package)
+
+### Workflow
+
+Putting your app code into the package structure unlocks a new workflow:
+
+- Re-load all code in the app with `Cmd/Ctrl + Shift + L`. This calls `devtools::load_all()` which automatically saves all open files, `source()`s every file in `R/`, loads all datasets in `data/` then puts your cursor in the console.  
+
+- Re-run the app with `myApp()`.   
+
+[Read more!](https://mastering-shiny.org/scaling-packaging.html#workflow)
+
+## Additional Resources
+
+- [Shiny Manual](https://mastering-shiny.org/)   
 
