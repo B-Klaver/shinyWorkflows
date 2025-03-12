@@ -1,15 +1,4 @@
-# Package Structure
-
-```{r, include = FALSE, R.options = list(tidyverse.quiet = TRUE)}
-sapply(
-  c(
-    'kableExtra',
-    'magrittr'
-  ),
-  require,
-  character.only = TRUE
-) 
-```
+# Package Development
 
 In R, the fundamental unit of shareable code is the package. A package bundles together code, data, documentation, and tests, and is easy to share with others.
 
@@ -19,7 +8,7 @@ But packages are useful even if you never share your code. As Hilary Parker says
 
 - Standardised conventions lead to standardised tools — if you buy into R’s package conventions, you get many tools for free.
 
-```{r echo=F}
+```{r img1, echo=F}
 knitr::include_graphics("images/package_workflow.png")
 ```
 
@@ -27,7 +16,7 @@ knitr::include_graphics("images/package_workflow.png")
 
 In an R package or R project structured as a package the typical files and folders will be (locally, you can consult your Files pane):
 
-``` {r echo = FALSE, eval = create}
+``` {r pkgfiles, echo = FALSE}
 
 data.frame(
   path = c(
@@ -65,7 +54,7 @@ it comes with the required package `usethis`, which compliments the `devtools` p
 library(devtools)
 ```
 
-## `load_all` function {#load_all}
+## `load_all` function {#load}
 
 In a package or project structured as a package you are typically making functions that are stored in the `R/` folder. In a standard project you may be familiar with the use of `source("R/myfunction.R")` to load or run a script. However, devtools allows us to easily run/load all of our project contents with one simple function call:
 
@@ -225,16 +214,6 @@ Traditionally, data in a package is stored in the `data/` folder. The data there
 ``` {r eval=F}
 usethis::use_data(df)
 ```
-
-:::: {.tipbox}
-
-::: {.center}
-**TIP**
-:::
-
-Because you need to actively tell the project to update the dataset in the `data/` folder using the above function call, it is not recommended to use this for datasets that get updated regularly.
-
-::::
 
 ## Additional Resources
 

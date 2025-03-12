@@ -1,15 +1,85 @@
 # Shiny
 
-## Basic UI
+```{r, include = FALSE, R.options = list(tidyverse.quiet = TRUE)}
+sapply(
+  c(
+    'shiny'
+  ),
+  require,
+  character.only = TRUE
+) 
+```
 
-## Basic reactivity
+If you’ve never used Shiny before, welcome! Shiny is an R package that allows you to easily create rich, interactive web apps. Shiny allows you to take your work in R and expose it via a web browser so that anyone can use it. Shiny makes you look awesome by making it easy to produce polished web apps with a minimum amount of pain.
 
-## Layout and themes
+## Shiny App Structure
 
-## Uploads and downloads
+Shiny apps are composed of two main elements.
+
+- The UI: This is where you define the layout and appearance of your app, including sliders, plots, tabs, etc.
+- The server: This is where you connect your UI components using logic behind the scenes to drive app behaviour.
+
+These two elements are operationalized by calling `shinyApp(ui = ui, server = server)`
+
+## UI
+
+### Setting up the UI
+
+TO create a shiny app you must create a UI. Traditionally, using shiny you would do this using the function `fluidPage()`. The UI will contain elements such as calls to CSS stylings, overall UI design, inputs, and outputs.
+
+### Layout and themes
+
+
+
+al lof the page layouts and panels, sidebars
+
+CSS
+
+html
+
+### Inputs
+
+There are a number of inputs that are incredibly useful in shiny apps such as `radioButtons()`, `selectInput()`, `actionButton()`, and `dateRangeInput()`. These allow users to interact with our app to dictate what appears in our app.
+
+These functions all share a two main arguments:
+
+- `inputID`: This is the identifier used to connect the front end with the back end: if your UI has an input with ID "name", the server function will access it with input$name.   
+- `label`: This is used to create a human-readable label for the control (ie. Select Geography). 
+
+:::: {.notebox}
+
+::: {.center}
+**NOTE**
+:::
+
+The `inputId` has two constraints:
+
+- It must be a simple string that contains only letters, numbers, and underscores (no spaces, dashes, periods, or other special characters allowed!). Name it like you would name a variable in R.
+
+- It must be unique. If it’s not unique, you’ll have no way to refer to this control in your server function!
+
+::::
+
+### Outputs
+
+In the UI we can also specify the outputs that we'd like to include, for example plots, text, or tables. In essence, these are 'placeholders', which will be filled in based on what we define in our server. Similar to inputs, we must also specify an `inputID` as the first argument.
+
+
+## Server
+
+On the server side, we need to use a different suite of functions that will focus on three main things:
+
+- Inputs: these are referenced by calling their IDs using `input$button1` for example.
+- Outputs: Because we set up our 'placeholders' in the UI we need to tell them what to be filled with here (ie. render a plot).
+- Reactivity: these will determine the behaviour of your app, typically in response to things like `input$button1`.
 
 ## Dynamic UI
 
+## Basic example
+
+
+
+## Deploying your app
 
 ## Packaging a Shiny App
 
@@ -17,7 +87,7 @@ Using package structure for a shiny app gets your toes into the water of package
 
 ### Put all R code in the `R/` directory
 
-Because we are going to be working in an app-package we need to create an `R/` directory. This is where we will keep all of the core R code components that will build our app. As a reminder, in a package we are leveraging useful tools like `devtools::load_all()` (See section \@ref(load_all)), which will go into the `R/` directory and load/run all of the code within this directory.
+Because we are going to be working in an app-package we need to create an `R/` directory. This is where we will keep all of the core R code components that will build our app. As a reminder, in a package we are leveraging useful tools like `devtools::load_all()` (See section \@ref(load)), which will go into the `R/` directory and load/run all of the code within this directory.
 
 ### Write a function that starts your app
 
@@ -73,11 +143,11 @@ The `inst/` directory is where we can store other raw datasets that are more sub
 **NOTE**
 :::
 
-Load it with `read.csv(system.file("exdata", "mydata.csv", package = "myApp"))`. Notice that our package-app automatically knows to look in our `inst/` folder?
+Load data with `read.csv(system.file("exdata", "mydata.csv", package = "myApp"))`. Notice that our package-app automatically knows to look in our `inst/` folder?
 
 ``` {r eval=F}
 myApp <- function(...) {
-  read.csv(system.file("exdata", "mydata.csv", package = "myApp"))
+  read.csv(system.file("extdata", "mydata.csv", package = "myApp"))
   ui <- fluidPage(
     ...
   )
@@ -116,9 +186,11 @@ myApp <- function(...) {
 }
 ```
 
+::::
+
 ### Create a `DESCRIPTION` file
 
-Because we are working in a package environment one of the critical components will be our description file, which was discussed in section \@ref(desc). Don't forget to set your dependencies!
+Because we are working in a package environment one of the critical components will be our `DESCRIPTION` file, which was discussed in section \@ref(desc). Don't forget to set your dependencies!
 
 
 ### Deploying your app-package
@@ -140,7 +212,7 @@ Although this is an R script, we **DO NOT** place this under our `R/` directory.
 
 ::::
 
-Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a DESCRIPTION file, it requires you to explicitly specify them. The easiest way to do this is to call usethis::use_package(). You’ll need to start with shiny and pkgload:   
+Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a `DESCRIPTION` file, it requires you to explicitly specify them. The easiest way to do this is to call usethis::use_package(). You’ll need to start with shiny and pkgload:   
 
 ```{r eval=F}
 usethis::use_package("shiny")
@@ -162,4 +234,5 @@ Putting your app code into the package structure unlocks a new workflow:
 ## Additional Resources
 
 - [Shiny Manual](https://mastering-shiny.org/)   
+- [Shiny Cheatsheet](https://rstudio.github.io/cheatsheets/html/shiny.html)
 

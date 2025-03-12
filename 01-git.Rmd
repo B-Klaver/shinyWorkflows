@@ -1,5 +1,16 @@
 # Git
 
+```{r pkg1, include = FALSE, R.options = list(tidyverse.quiet = TRUE)}
+sapply(
+  c(
+    'kableExtra',
+    'magrittr'
+  ),
+  require,
+  character.only = TRUE
+) 
+```
+
 [Git](https://git-scm.com/) is a free and open-source version control system. When used regularly and as intended, developers will have a full history of their project within a local repository. In addition to a historical log of changes to project files, git allows for project branching to support users to test/develop new code, while maintaining the master version for easy reversion. When users are ready to implement their new branch into the main codebase git can be used for merging files, whereby it tracks changes and ensures there are no conflicts between the main version and the new version. 
 
 Beyond local usage, git is also supported by web-based repositories such as [Github](https://github.com/) and [Gitlab](https://about.gitlab.com/), where projects can be pushed, pulled, and cloned. These sites allow for easy collaboration with other developers and provide a number of user-friendly features that make working with git easier.
@@ -47,7 +58,7 @@ Step 9) When ready merge branches
 **TIP**
 :::
 
-Branching is useful when you have a stable codebase that you do not want to break. You can create a branch to do development work and test new features until it's ready for integration with the stable codebase.
+Branching is useful when you have a stable codebase that you do not want to break or if you are working collaboratively on a code base. You can create a branch to do development work and test new features until it's ready for integration with the stable codebase or your coworkers. If you are developing something from scratch by yourself you may not need to use branching until later.
 
 ::::
 
@@ -156,9 +167,9 @@ Some project data may not be permitted on your `U:/` drive, therefore ensure you
 
 ::::
 
-## Git Commands Summary
+## Basic Git Commands Summary
 
-``` {r echo=F}
+``` {r gitcommands, echo=F}
 data.frame(
   Command = c(
     'git init',
@@ -187,6 +198,16 @@ data.frame(
 ) %>% 
   knitr::kable()
 ```
+
+:::: {.notebox}
+
+::: {.center}
+**NOTE**
+:::
+
+There are many other functions that you can use in git beyond those listed above, however, these give you the tools to get started.
+
+::::
 
 ## Additional Resources
 
