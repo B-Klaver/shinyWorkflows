@@ -25,17 +25,17 @@ These two elements are operationalized by calling `shinyApp(ui = ui, server = se
 
 ### Setting up the UI
 
-TO create a shiny app you must create a UI. Traditionally, using shiny you would do this using the function `fluidPage()`. The UI will contain elements such as calls to CSS stylings, overall UI design, inputs, and outputs.
+TO create a shiny app you must create a UI. Traditionally, in shiny you would do this using the function `fluidPage()`. The UI will contain elements such as calls to CSS stylings, overall UI design, inputs, and outputs.
 
 ### Layout and themes
 
+In the UI one of the main things you will do is to set up the general look of the app. You can do this using elements such as layouts, which you can use to create sidebars, panels/tabs, and columns.
 
+Beyond the layout, you can also set a theme for your app. Currently, the easiest way to do this is to use the bslib package and set the theme by calling `bslib::bs_theme()`. There are a number of preset themes you can use, but you are also free to customize your own theme using this function.
 
-al lof the page layouts and panels, sidebars
+You can further tweak your app's look by using custom CSS stylings and by incorporating html code into your UI call.
 
-CSS
-
-html
+[Read more!](https://mastering-shiny.org/action-layout.html)
 
 ### Inputs
 
@@ -60,23 +60,96 @@ The `inputId` has two constraints:
 
 ::::
 
+[Read more!](https://mastering-shiny.org/basic-ui.html#inputs)
+
 ### Outputs
 
 In the UI we can also specify the outputs that we'd like to include, for example plots, text, or tables. In essence, these are 'placeholders', which will be filled in based on what we define in our server. Similar to inputs, we must also specify an `inputID` as the first argument.
 
+[Read more!](https://mastering-shiny.org/basic-ui.html#outputs)
 
 ## Server
 
-On the server side, we need to use a different suite of functions that will focus on three main things:
+On the server side, we build the logic that will power our app. Specifically, we need to build the reactivity aspect of our app. We do this by using a different suite of functions that will dictate the reactivity, which will utilize the inputs and outputs we set up in our UI.
 
-- Inputs: these are referenced by calling their IDs using `input$button1` for example.
-- Outputs: Because we set up our 'placeholders' in the UI we need to tell them what to be filled with here (ie. render a plot).
-- Reactivity: these will determine the behaviour of your app, typically in response to things like `input$button1`.
+### Inputs
+
+Inputs are essentially data sent from the browser (ie. UI) to the server, which can be accessed by calling `input$inputID`. Because these are dictated on the browser side, these values are not modifiable within the server - it wouldn't make sense if a user chose "Fraser Health" and we had logic on the server than turned this into "Interior Health".
+
+The other important point about inputs is we inherently want to use them in a "reactive" context (ie. we want to have logic that reacts to user input). For this reason, we must use the reactivity aspect of our UI to modify outputs accordingly.
+
+[Read more!](https://mastering-shiny.org/basic-reactivity.html#input)
+
+### Outputs
+
+Similar to inputs we refer to outputs using their output IDs by calling `output$outputID`. However, unlike inputs we aren't receiving user inputs we are pushing outputs. Outputs are always created using `render` functions, these may be in in reactive statements and can change depending on inputs or they can be stand alone outputs that aren't connected to any inputs.
+
+[Read more!](https://mastering-shiny.org/basic-reactivity.html#output)
+
+### Reactivity
+
+Reactivity is what brings everything together in an app. This is where we can use user inputs to update UI and outputs automatically. Reactive functions from shiny have many options for how they update things, you can make UI and ouputs update in real time, when you click a button, or under other conditions! This is called declarative programming when you set certain constraints and let the program (our app) determine when to execute under those constraints. Interestingly, shiny operates lazily, in other words, it will only do the minimum work required to get the job done and only when it has to. We are basically telling shiny to: 
+
+>“Ensure there is a sandwich in the refrigerator whenever I look inside of it”
+
+```{r echo=F}
+knitr::include_graphics("images/reactivity-diagram.png")
+```
+
+[Read more!](https://mastering-shiny.org/basic-reactivity.html#reactive-programming)
+
+### Execution order
+
+Prepare yourself, this is where we begin to flip all of our coding knowledge on its head. Unlike regular scripts where we expect R to execute things orderly, line by line, shiny server logic doesn't function this way.. Instead, shiny will only execute specific lines of the server when it has what it needs for that line. With that being said, it's still recommended to have things in order to avoid confusion. But I think it's an important thing to realize, because it highlights what is truly going on in the background and what makes shiny "lazy".
+
+:::: {.notebox}
+:::{.center}
+**NOTE**
+:::
+This:
+```{r eval=F}
+server <- function(input, output, session) {
+  output$greeting <- renderText(string())
+  string <- reactive(paste0("Hello ", input$name, "!"))
+}
+```
+
+is the same as this:
+```{r eval=F}
+server <- function(input, output, session) {
+  string <- reactive(paste0("Hello ", input$name, "!"))
+  output$greeting <- renderText(string())
+}
+```
+::::
 
 ## Dynamic UI
 
+We won't dive too deeply into dynamic UI elements. They essentially function as typical UI inputs, however, they can be updated by other inputs to update in a reactive function similar to how we can use inputs to update outputs, except in this case the output is a UI element.
+
+[Read more!](https://mastering-shiny.org/action-dynamic.html#action-dynamic)
+
 ## Basic example
 
+### Set up
+
+First we need to do some prep before we build our app. Let's load a dataset and our libraries:
+
+``` {r eval=F}
+
+library(shiny)
+library(bslib)
+library(datasets)
+
+
+
+```
+
+### Build the UI
+
+### Build the server
+
+### Putting it all together
 
 
 ## Deploying your app

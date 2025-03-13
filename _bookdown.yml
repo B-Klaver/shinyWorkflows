@@ -3,4 +3,3 @@ language:
   ui:
     chapter_name: ""
 output_dir: "docs"
-book_directory: "docs"

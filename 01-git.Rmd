@@ -134,6 +134,17 @@ If you have a local R installation and you'd like to work there but do not have 
 
 ::::
 
+### Git locally
+
+If you want to use [Git](https://git-scm.com/) locally you will need to install it for your system. Typically, this will be the 64-bit windows version found [here](https://git-scm.com/downloads/win). Once it is downloaded you should be able to use git as described above in your local RStudio.
+
+:::: {.notebox}
+:::{.center}
+**NOTE**
+:::
+The benefits of having a local installation of git is that if you primarily use your local RStudio you can access it directly through there rather than jumping to citrix. Additionally, you can use it to connect to repositories in Github, which is not possible on citrix.
+::::
+
 ### Github
 
 Because [Github](https://github.com/) is an external web-based repository there are some considerations for its use at the BCCDC. Currently, there are no formal guidelines on using it, for this reason using it for BCCDC-specific projects should be avoided.

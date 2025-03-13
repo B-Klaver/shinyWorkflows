@@ -48,3 +48,13 @@ bslib
 section
 modularization
 section-1
+cover-image-path-to-the-social-sharing-image-like-imagescover.jpg
+inputs-1
+outputs-1
+reactivity
+execution-order
+set-up
+build-the-ui
+build-the-server
+putting-it-all-together
+git-locally
