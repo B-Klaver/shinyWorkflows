@@ -57,3 +57,7 @@ bslib
 section
 modularization
 section-1
+cover-image-path-to-the-social-sharing-image-like-imagescover.jpg
+app-structure
+reactivity-react
+react
