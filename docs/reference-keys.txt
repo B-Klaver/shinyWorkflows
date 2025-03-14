@@ -25,7 +25,7 @@ organizing-your-scripts
 pkg-data
 additional-resources-1
 shiny
-shiny-app-structure
+app-structure
 ui
 setting-up-the-ui
 layout-and-themes
@@ -34,7 +34,7 @@ outputs
 server
 inputs-1
 outputs-1
-reactivity
+react
 execution-order
 dynamic-ui
 basic-example
@@ -42,7 +42,7 @@ set-up
 build-the-ui
 build-the-server
 putting-it-all-together
-deploying-your-app
+deploying-your-app-to-shinyapps.io
 packaging-a-shiny-app
 put-all-r-code-in-the-r-directory
 write-a-function-that-starts-your-app
@@ -57,7 +57,3 @@ bslib
 section
 modularization
 section-1
-cover-image-path-to-the-social-sharing-image-like-imagescover.jpg
-app-structure
-reactivity-react
-react
