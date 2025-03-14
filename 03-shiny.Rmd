@@ -248,11 +248,13 @@ server <- function(input, output, session) {
 
 ### Putting it all together
 
+Now we're finally ready to deploy locally!
+
 ``` {r eval=F}
 shinyApp(ui, server)
 ```
 
-## Deploying your app
+## Deploying your app to shinyapps.io
 
 At the BCCDC we have a shinyapps.io account that allows up to publish our apps to their servers. We can set these to be publically viewable, as well as private. Typically, privately deployed apps are for development purposes or previewing prior to public release. To deploy the app you just need to call two functions like so:
 
