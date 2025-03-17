@@ -13,6 +13,12 @@ pre code {
   white-space: inherit;
 }
 
+.book .book-body .page-wrapper .page-inner section.normal h1 { font-size: 30pt; }
+
+.book .book-body .page-wrapper .page-inner section.normal h2 { font-size: 26pt; }
+
+.book .book-body .page-wrapper .page-inner section.normal h3 { font-size: 18pt; }
+
 .notebox {
   padding: 1em;
   background: #fcf0e6;

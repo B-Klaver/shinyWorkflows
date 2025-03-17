@@ -26,7 +26,6 @@ workflow.</p>" />
 <meta name="author" content="Braeden Klaver" />
 
 
-<meta name="date" content="2025-03-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,13 +171,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="shiny.html"><a href="shiny.html#app-structure"><i class="fa fa-check"></i><b>3.1</b> Shiny App Structure</a></li>
 <li class="chapter" data-level="3.2" data-path="shiny.html"><a href="shiny.html#ui"><i class="fa fa-check"></i><b>3.2</b> UI</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="shiny.html"><a href="shiny.html#setting-up-the-ui"><i class="fa fa-check"></i><b>3.2.1</b> Setting up the UI</a></li>
-<li class="chapter" data-level="3.2.2" data-path="shiny.html"><a href="shiny.html#layout-and-themes"><i class="fa fa-check"></i><b>3.2.2</b> Layout and themes</a></li>
-<li class="chapter" data-level="3.2.3" data-path="shiny.html"><a href="shiny.html#inputs"><i class="fa fa-check"></i><b>3.2.3</b> Inputs</a></li>
-<li class="chapter" data-level="3.2.4" data-path="shiny.html"><a href="shiny.html#outputs"><i class="fa fa-check"></i><b>3.2.4</b> Outputs</a></li>
+<li class="chapter" data-level="3.2.2" data-path="shiny.html"><a href="shiny.html#layout"><i class="fa fa-check"></i><b>3.2.2</b> Layout</a></li>
+<li class="chapter" data-level="3.2.3" data-path="shiny.html"><a href="shiny.html#themes"><i class="fa fa-check"></i><b>3.2.3</b> Themes</a></li>
+<li class="chapter" data-level="3.2.4" data-path="shiny.html"><a href="shiny.html#ui-inputs"><i class="fa fa-check"></i><b>3.2.4</b> UI Inputs</a></li>
+<li class="chapter" data-level="3.2.5" data-path="shiny.html"><a href="shiny.html#ui-outputs"><i class="fa fa-check"></i><b>3.2.5</b> UI Outputs</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="shiny.html"><a href="shiny.html#server"><i class="fa fa-check"></i><b>3.3</b> Server</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="shiny.html"><a href="shiny.html#inputs-1"><i class="fa fa-check"></i><b>3.3.1</b> Inputs</a></li>
-<li class="chapter" data-level="3.3.2" data-path="shiny.html"><a href="shiny.html#outputs-1"><i class="fa fa-check"></i><b>3.3.2</b> Outputs</a></li>
+<li class="chapter" data-level="3.3.1" data-path="shiny.html"><a href="shiny.html#server-inputs"><i class="fa fa-check"></i><b>3.3.1</b> Server Inputs</a></li>
+<li class="chapter" data-level="3.3.2" data-path="shiny.html"><a href="shiny.html#server-outputs"><i class="fa fa-check"></i><b>3.3.2</b> Server Outputs</a></li>
 <li class="chapter" data-level="3.3.3" data-path="shiny.html"><a href="shiny.html#react"><i class="fa fa-check"></i><b>3.3.3</b> Reactivity</a></li>
 <li class="chapter" data-level="3.3.4" data-path="shiny.html"><a href="shiny.html#execution-order"><i class="fa fa-check"></i><b>3.3.4</b> Execution order</a></li>
 </ul></li>
@@ -189,7 +189,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.5.3" data-path="shiny.html"><a href="shiny.html#build-the-server"><i class="fa fa-check"></i><b>3.5.3</b> Build the server</a></li>
 <li class="chapter" data-level="3.5.4" data-path="shiny.html"><a href="shiny.html#putting-it-all-together"><i class="fa fa-check"></i><b>3.5.4</b> Putting it all together</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="shiny.html"><a href="shiny.html#deploying-your-app-to-shinyapps.io"><i class="fa fa-check"></i><b>3.6</b> Deploying your app to shinyapps.io</a></li>
+<li class="chapter" data-level="3.6" data-path="shiny.html"><a href="shiny.html#deploying-to-shinyapps.io"><i class="fa fa-check"></i><b>3.6</b> Deploying to shinyapps.io</a></li>
 <li class="chapter" data-level="3.7" data-path="shiny.html"><a href="shiny.html#packaging-a-shiny-app"><i class="fa fa-check"></i><b>3.7</b> Packaging a Shiny App</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="shiny.html"><a href="shiny.html#put-all-r-code-in-the-r-directory"><i class="fa fa-check"></i><b>3.7.1</b> Put all R code in the <code>R/</code> directory</a></li>
 <li class="chapter" data-level="3.7.2" data-path="shiny.html"><a href="shiny.html#write-a-function-that-starts-your-app"><i class="fa fa-check"></i><b>3.7.2</b> Write a function that starts your app</a></li>
@@ -234,19 +234,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="app-structure" class="section level2 hasAnchor">
 <h2><span class="header-section-number">3.1</span> Shiny App Structure<a href="shiny.html#app-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Shiny apps are composed of two main elements:</p>
-<p><strong>UI:</strong> This is where you define the layout and appearance of your app, including sliders, plots, tabs, etc.
-<strong>The server:</strong> This is where you connect your UI components using logic behind the scenes to drive app behaviour.</p>
-<p>These two elements are operationalized by calling <code>shinyApp(ui = ui, server = server)</code>.</p>
+<p><strong>UI:</strong><br />
+This is where you define the layout and appearance of your app, including sliders, plots, tabs, etc.</p>
+<p><strong>The server:</strong><br />
+This is where you connect your UI components using logic behind the scenes to drive app behaviour.</p>
+<p>These two elements are combined to render a shiny app by calling <code>shiny::shinyApp(ui = ui, server = server)</code>.</p>
 </div>
 <div id="ui" class="section level2 hasAnchor">
 <h2><span class="header-section-number">3.2</span> UI<a href="shiny.html#ui" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="setting-up-the-ui" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.2.1</span> Setting up the UI<a href="shiny.html#setting-up-the-ui" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>To create a shiny app you must create a UI. Traditionally, in shiny you do this using the function <code>shiny::fluidPage()</code> or <code>shiny::navbarPage()</code>. The UI will contain elements such as calls to CSS stylings, overall UI design, inputs, and outputs.</p>
-<p><img src="images/ui-layout.png" width="514" /></p>
+<p>To create a shiny app you must create a UI. Traditionally, in shiny you do this using the functions <code>shiny::fluidPage()</code> or <code>shiny::navbarPage()</code>. The UI will contain elements such as calls to CSS stylings, overall UI design, inputs, and outputs.</p>
 </div>
-<div id="layout-and-themes" class="section level3 hasAnchor">
-<h3><span class="header-section-number">3.2.2</span> Layout and themes<a href="shiny.html#layout-and-themes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="layout" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.2.2</span> Layout<a href="shiny.html#layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One of the main things you will set up in the UI is the overall layout and theme. Shiny gives you multiple tools to craft your layout including:</p>
 <ul>
 <li><a href="https://mastering-shiny.org/action-layout.html#page-with-sidebar">Sidebars</a></li>
@@ -254,16 +255,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://mastering-shiny.org/action-layout.html#tabsets">Tabs</a></li>
 <li><a href="https://mastering-shiny.org/action-layout.html#navlists-and-navbars">Navigation lists and bars</a></li>
 </ul>
-<p><img src="images/multirow.png" width="514" /></p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-12"></span>
+<img src="images/ui-layout.png" alt="Structure of a basic app with sidebar" width="514" />
+<p class="caption">
+Figure 3.1: Structure of a basic app with sidebar
+</p>
+</div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="images/multirow.png" alt="The structure underlying a simple multi-row app" width="514" />
+<p class="caption">
+Figure 3.2: The structure underlying a simple multi-row app
+</p>
+</div>
+</div>
+<div id="themes" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.2.3</span> Themes<a href="shiny.html#themes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Beyond the layout, you can also set a theme for your app. Currently, the easiest way to do this is to use the <code>bslib</code> package and set the theme by calling <code>bslib::bs_theme()</code>. There are a number of preset themes you can use, but you are also free to customize your own theme using this function. Read more on themes <a href="https://mastering-shiny.org/action-layout.html#getting-started">here</a>.</p>
 <p>You can further tweak your app’s look by using custom CSS stylings and by incorporating html code into your UI call. Read more about that <a href="https://shiny.posit.co/r/articles/build/css/">here</a>.</p>
 </div>
-<div id="inputs" class="section level3 hasAnchor">
-<h3><span class="header-section-number">3.2.3</span> Inputs<a href="shiny.html#inputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>There are a number of inputs that you can use in shiny apps such as <code>radioButtons()</code>, <code>selectInput()</code>, <code>actionButton()</code>, and <code>dateRangeInput()</code>. These allow users to interact and dictate what appears in our app. Check out the all of the potential inputs <a href="https://rstudio.github.io/cheatsheets/html/shiny.html#inputs">here</a>.</p>
+<div id="ui-inputs" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.2.4</span> UI Inputs<a href="shiny.html#ui-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>There are a number of inputs that you can use in shiny apps such as <code>shiny::radioButtons()</code>, <code>shiny::selectInput()</code>, <code>shiny::actionButton()</code>, and <code>shiny::dateRangeInput()</code>. These allow users to interact and dictate what appears in our app. Check out the all of the potential inputs <a href="https://rstudio.github.io/cheatsheets/html/shiny.html#inputs">here</a>.</p>
 <p>These functions all share a two main arguments:</p>
 <ul>
-<li><code>inputID</code>: This is the identifier used to connect the front end with the back end: if your UI has an input with ID “name”, the server function will access it with <code>input$name</code>.<br />
+<li><code>inputID</code>: This is the identifier used to connect the front end with the back end; if your UI has an input with ID “name”, the server function will access it with <code>input$name</code>.<br />
 </li>
 <li><code>label</code>: This is used to create a human-readable label for the control (ie. “Select Geography”).</li>
 </ul>
@@ -280,8 +295,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><br>
 <a href="https://mastering-shiny.org/basic-ui.html#inputs">Read more!</a></p>
 </div>
-<div id="outputs" class="section level3 hasAnchor">
-<h3><span class="header-section-number">3.2.4</span> Outputs<a href="shiny.html#outputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="ui-outputs" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.2.5</span> UI Outputs<a href="shiny.html#ui-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>In the UI we can also specify the outputs that we’d like to include, for example plots, text, or tables; check out the <a href="https://rstudio.github.io/cheatsheets/html/shiny.html#outputs">cheatsheet</a> for a list of <code>Output()</code> functions. In essence, these are ‘placeholders’, which will be filled in based on what we define in our server. Similar to inputs, we must also specify an <code>outputID</code> as the first argument.</p>
 <p><a href="https://mastering-shiny.org/basic-ui.html#outputs">Read more!</a></p>
 </div>
@@ -289,14 +304,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="server" class="section level2 hasAnchor">
 <h2><span class="header-section-number">3.3</span> Server<a href="shiny.html#server" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>On the server side, we build the logic that will power our app. Specifically, we need to fill our outputs and link them to the corresponding inputs if required. We do this by using a different suite of functions that will dictate what we fill our outputs with and using reactivity elements to link inputs to outputs.</p>
-<div id="inputs-1" class="section level3 hasAnchor">
-<h3><span class="header-section-number">3.3.1</span> Inputs<a href="shiny.html#inputs-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="server-inputs" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.3.1</span> Server Inputs<a href="shiny.html#server-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Inputs are essentially data sent from the browser (ie. UI) to the server, which can be accessed by calling <code>input$inputID</code>. Because these are dictated on the browser side, these values are not modifiable (ie. they are read-only) within the server.</p>
 <p>The other important point about inputs is we inherently want to use them in a “reactive” context; in other words, we want to have logic that reacts to user input to drive behaviour on the backend to cause some kind of update to the frontend browser. More on this in section @(react).</p>
 <p><a href="https://mastering-shiny.org/basic-reactivity.html#input">Read more!</a></p>
 </div>
-<div id="outputs-1" class="section level3 hasAnchor">
-<h3><span class="header-section-number">3.3.2</span> Outputs<a href="shiny.html#outputs-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="server-outputs" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.3.2</span> Server Outputs<a href="shiny.html#server-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Similar to inputs we refer to outputs using their output IDs by calling <code>output$outputID</code>. However, as you may have guessed, instead of receiving inputs from the browser, we are providing outputs to fill in the UI “placeholders”. Outputs are always created using <code>render</code> functions, these may be wrapped in in reactive statements so that they update depending on inputs or they can be stand alone outputs that aren’t connected to any inputs.</p>
 <p><a href="https://mastering-shiny.org/basic-reactivity.html#output">Read more!</a></p>
 </div>
@@ -306,7 +321,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>“Ensure there is a sandwich in the refrigerator whenever I look inside of it”</p>
 </blockquote>
-<p><img src="images/reactivity-diagram.png" width="578" /></p>
+<br>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
+<img src="images/reactivity-diagram.png" alt="The different reactive functions and how they operate." width="578" />
+<p class="caption">
+Figure 3.3: The different reactive functions and how they operate.
+</p>
+</div>
 <p><a href="https://mastering-shiny.org/basic-reactivity.html#reactive-programming">Read more!</a></p>
 </div>
 <div id="execution-order" class="section level3 hasAnchor">
@@ -339,17 +360,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.5</span> Basic example<a href="shiny.html#basic-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="set-up" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.5.1</span> Set up<a href="shiny.html#set-up" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>First we need to do some prep before we build our app. Let’s load a dataset and our libraries:</p>
+<p>First we need to do some prep before we build our app. Let’s load our libraries:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">library</span>(shiny)</a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="kw">library</span>(bslib)</a>
-<a class="sourceLine" id="cb11-3" title="3"><span class="kw">library</span>(datasets)</a></code></pre></div>
+<a class="sourceLine" id="cb11-3" title="3"><span class="kw">library</span>(datasets)</a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 </div>
 <div id="build-the-ui" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.5.2</span> Build the UI<a href="shiny.html#build-the-ui" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">navbarPage</span>(</a>
-<a class="sourceLine" id="cb12-2" title="2">  <span class="co">#Let&#39;s set up our title for the page</span></a>
+<a class="sourceLine" id="cb12-2" title="2">  <span class="co"># Let&#39;s set up our title for the page</span></a>
 <a class="sourceLine" id="cb12-3" title="3">  <span class="dt">title =</span> <span class="st">&#39;Appy Hour&#39;</span>,</a>
-<a class="sourceLine" id="cb12-4" title="4">  <span class="co">#Create a drop down list of the flower species</span></a>
+<a class="sourceLine" id="cb12-4" title="4">  <span class="co"># Create a drop down list of the flower species</span></a>
 <a class="sourceLine" id="cb12-5" title="5">  shiny<span class="op">::</span><span class="kw">selectInput</span>(</a>
 <a class="sourceLine" id="cb12-6" title="6">    <span class="st">&#39;species&#39;</span>,</a>
 <a class="sourceLine" id="cb12-7" title="7">    <span class="dt">label =</span> <span class="st">&#39;Select Species:&#39;</span>,</a>
@@ -359,68 +381,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb12-11" title="11">      )</a>
 <a class="sourceLine" id="cb12-12" title="12">    )</a>
 <a class="sourceLine" id="cb12-13" title="13">  ),</a>
-<a class="sourceLine" id="cb12-14" title="14">  <span class="co">#Set up our first tab, which will be for our plot</span></a>
+<a class="sourceLine" id="cb12-14" title="14">  <span class="co"># Set up our first tab, which will be for our plot</span></a>
 <a class="sourceLine" id="cb12-15" title="15">  shiny<span class="op">::</span><span class="kw">tabPanel</span>(</a>
 <a class="sourceLine" id="cb12-16" title="16">    <span class="dt">title =</span> <span class="st">&#39;Plot&#39;</span>,</a>
-<a class="sourceLine" id="cb12-17" title="17">    <span class="co">#Let&#39;s make two plots but I want them side-by-side so we need to use fluidRow()</span></a>
+<a class="sourceLine" id="cb12-17" title="17">    <span class="co"># Let&#39;s make two plots but I want them side-by-side so we need to use fluidRow()</span></a>
 <a class="sourceLine" id="cb12-18" title="18">    shiny<span class="op">::</span><span class="kw">fluidRow</span>(</a>
-<a class="sourceLine" id="cb12-19" title="19">      <span class="co">#Within our fluidRow we want two columns that are evenly split (remember 12 is the whole width)</span></a>
-<a class="sourceLine" id="cb12-20" title="20">      shiny<span class="op">::</span><span class="kw">column</span>(</a>
-<a class="sourceLine" id="cb12-21" title="21">        <span class="dv">6</span>,  </a>
-<a class="sourceLine" id="cb12-22" title="22">        shiny<span class="op">::</span><span class="kw">plotOutput</span>(</a>
-<a class="sourceLine" id="cb12-23" title="23">          <span class="dt">outputId =</span> <span class="st">&#39;plot1&#39;</span></a>
-<a class="sourceLine" id="cb12-24" title="24">        )</a>
-<a class="sourceLine" id="cb12-25" title="25">      ),</a>
-<a class="sourceLine" id="cb12-26" title="26">      shiny<span class="op">::</span><span class="kw">column</span>(</a>
-<a class="sourceLine" id="cb12-27" title="27">        <span class="dv">6</span>,  </a>
-<a class="sourceLine" id="cb12-28" title="28">        shiny<span class="op">::</span><span class="kw">plotOutput</span>(</a>
-<a class="sourceLine" id="cb12-29" title="29">          <span class="dt">outputId =</span> <span class="st">&#39;plot2&#39;</span></a>
-<a class="sourceLine" id="cb12-30" title="30">        )</a>
-<a class="sourceLine" id="cb12-31" title="31">      )</a>
-<a class="sourceLine" id="cb12-32" title="32">    )</a>
-<a class="sourceLine" id="cb12-33" title="33">  ),</a>
-<a class="sourceLine" id="cb12-34" title="34">  <span class="co">#Set up our second tab, which will be for our table</span></a>
-<a class="sourceLine" id="cb12-35" title="35">  shiny<span class="op">::</span><span class="kw">tabPanel</span>(</a>
-<a class="sourceLine" id="cb12-36" title="36">    <span class="st">&#39;Table&#39;</span>,</a>
-<a class="sourceLine" id="cb12-37" title="37">    shiny<span class="op">::</span><span class="kw">tableOutput</span>(</a>
-<a class="sourceLine" id="cb12-38" title="38">      <span class="dt">outputId =</span> <span class="st">&#39;table1&#39;</span></a>
-<a class="sourceLine" id="cb12-39" title="39">    )</a>
-<a class="sourceLine" id="cb12-40" title="40">  )</a>
-<a class="sourceLine" id="cb12-41" title="41">)</a></code></pre></div>
+<a class="sourceLine" id="cb12-19" title="19">      <span class="co"># Within our fluidRow we want two columns that are evenly split </span></a>
+<a class="sourceLine" id="cb12-20" title="20">      <span class="co"># (remember 12 is the whole width)</span></a>
+<a class="sourceLine" id="cb12-21" title="21">      shiny<span class="op">::</span><span class="kw">column</span>(</a>
+<a class="sourceLine" id="cb12-22" title="22">        <span class="dv">6</span>,  </a>
+<a class="sourceLine" id="cb12-23" title="23">        shiny<span class="op">::</span><span class="kw">plotOutput</span>(</a>
+<a class="sourceLine" id="cb12-24" title="24">          <span class="dt">outputId =</span> <span class="st">&#39;plot1&#39;</span></a>
+<a class="sourceLine" id="cb12-25" title="25">        )</a>
+<a class="sourceLine" id="cb12-26" title="26">      ),</a>
+<a class="sourceLine" id="cb12-27" title="27">      shiny<span class="op">::</span><span class="kw">column</span>(</a>
+<a class="sourceLine" id="cb12-28" title="28">        <span class="dv">6</span>,  </a>
+<a class="sourceLine" id="cb12-29" title="29">        shiny<span class="op">::</span><span class="kw">plotOutput</span>(</a>
+<a class="sourceLine" id="cb12-30" title="30">          <span class="dt">outputId =</span> <span class="st">&#39;plot2&#39;</span></a>
+<a class="sourceLine" id="cb12-31" title="31">        )</a>
+<a class="sourceLine" id="cb12-32" title="32">      )</a>
+<a class="sourceLine" id="cb12-33" title="33">    )</a>
+<a class="sourceLine" id="cb12-34" title="34">  ),</a>
+<a class="sourceLine" id="cb12-35" title="35">  <span class="co"># Set up our second tab, which will be for our table</span></a>
+<a class="sourceLine" id="cb12-36" title="36">  shiny<span class="op">::</span><span class="kw">tabPanel</span>(</a>
+<a class="sourceLine" id="cb12-37" title="37">    <span class="st">&#39;Table&#39;</span>,</a>
+<a class="sourceLine" id="cb12-38" title="38">    shiny<span class="op">::</span><span class="kw">tableOutput</span>(</a>
+<a class="sourceLine" id="cb12-39" title="39">      <span class="dt">outputId =</span> <span class="st">&#39;table1&#39;</span></a>
+<a class="sourceLine" id="cb12-40" title="40">    )</a>
+<a class="sourceLine" id="cb12-41" title="41">  )</a>
+<a class="sourceLine" id="cb12-42" title="42">)</a></code></pre></div>
 </div>
 <div id="build-the-server" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.5.3</span> Build the server<a href="shiny.html#build-the-server" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
 <a class="sourceLine" id="cb13-2" title="2">  </a>
-<a class="sourceLine" id="cb13-3" title="3">  <span class="co"># We need to set up a reactive wrapper, given we are only changing our plot and table as a result of the change of the input</span></a>
-<a class="sourceLine" id="cb13-4" title="4">  <span class="co"># for our species the observeEvent() should work perfectly.</span></a>
-<a class="sourceLine" id="cb13-5" title="5">  shiny<span class="op">::</span><span class="kw">observeEvent</span>(</a>
-<a class="sourceLine" id="cb13-6" title="6">    input<span class="op">$</span>species,</a>
-<a class="sourceLine" id="cb13-7" title="7">    {</a>
-<a class="sourceLine" id="cb13-8" title="8">      <span class="co"># Filter our data based on the inputs from the UI</span></a>
-<a class="sourceLine" id="cb13-9" title="9">      data &lt;-<span class="st"> </span>datasets<span class="op">::</span>iris <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-10" title="10"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw">filter</span>(</a>
-<a class="sourceLine" id="cb13-11" title="11">          Species <span class="op">==</span><span class="st"> </span>input<span class="op">$</span>species</a>
-<a class="sourceLine" id="cb13-12" title="12">        )</a>
-<a class="sourceLine" id="cb13-13" title="13">      </a>
-<a class="sourceLine" id="cb13-14" title="14">      <span class="co"># Then because we have outputs we need the corresponding </span></a>
-<a class="sourceLine" id="cb13-15" title="15">      <span class="co"># render functions (plot and table) and create our outputs </span></a>
-<a class="sourceLine" id="cb13-16" title="16">      <span class="co"># within those and assign them to the placeholders in the UI</span></a>
-<a class="sourceLine" id="cb13-17" title="17">      output<span class="op">$</span>plot1 &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPlot</span>(</a>
-<a class="sourceLine" id="cb13-18" title="18">        <span class="kw">plot</span>(data<span class="op">$</span>Petal.Length, data<span class="op">$</span>Petal.Width)</a>
-<a class="sourceLine" id="cb13-19" title="19">      )</a>
-<a class="sourceLine" id="cb13-20" title="20">      </a>
-<a class="sourceLine" id="cb13-21" title="21">      output<span class="op">$</span>plot2 &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPlot</span>(</a>
-<a class="sourceLine" id="cb13-22" title="22">        <span class="kw">plot</span>(data<span class="op">$</span>Sepal.Length, data<span class="op">$</span>Sepal.Width)</a>
-<a class="sourceLine" id="cb13-23" title="23">      )</a>
-<a class="sourceLine" id="cb13-24" title="24">      </a>
-<a class="sourceLine" id="cb13-25" title="25">      output<span class="op">$</span>table1 &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderTable</span>(</a>
-<a class="sourceLine" id="cb13-26" title="26">        data</a>
-<a class="sourceLine" id="cb13-27" title="27">      )</a>
-<a class="sourceLine" id="cb13-28" title="28">    }</a>
-<a class="sourceLine" id="cb13-29" title="29">  )</a>
-<a class="sourceLine" id="cb13-30" title="30">  </a>
-<a class="sourceLine" id="cb13-31" title="31">}</a></code></pre></div>
+<a class="sourceLine" id="cb13-3" title="3">  <span class="co"># We need to set up a reactive wrapper, given we are only changing our plot </span></a>
+<a class="sourceLine" id="cb13-4" title="4">  <span class="co"># and table as a result of the change of the input</span></a>
+<a class="sourceLine" id="cb13-5" title="5">  <span class="co"># for our species the observeEvent() should work perfectly.</span></a>
+<a class="sourceLine" id="cb13-6" title="6">  shiny<span class="op">::</span><span class="kw">observeEvent</span>(</a>
+<a class="sourceLine" id="cb13-7" title="7">    input<span class="op">$</span>species,</a>
+<a class="sourceLine" id="cb13-8" title="8">    {</a>
+<a class="sourceLine" id="cb13-9" title="9">      <span class="co"># Filter our data based on the inputs from the UI</span></a>
+<a class="sourceLine" id="cb13-10" title="10">      data &lt;-<span class="st"> </span>datasets<span class="op">::</span>iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw">filter</span>(</a>
+<a class="sourceLine" id="cb13-12" title="12">          Species <span class="op">==</span><span class="st"> </span>input<span class="op">$</span>species</a>
+<a class="sourceLine" id="cb13-13" title="13">        )</a>
+<a class="sourceLine" id="cb13-14" title="14">      </a>
+<a class="sourceLine" id="cb13-15" title="15">      <span class="co"># Then because we have outputs we need the corresponding </span></a>
+<a class="sourceLine" id="cb13-16" title="16">      <span class="co"># render functions (plot and table) and create our outputs </span></a>
+<a class="sourceLine" id="cb13-17" title="17">      <span class="co"># within those and assign them to the placeholders in the UI</span></a>
+<a class="sourceLine" id="cb13-18" title="18">      output<span class="op">$</span>plot1 &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPlot</span>(</a>
+<a class="sourceLine" id="cb13-19" title="19">        <span class="kw">plot</span>(data<span class="op">$</span>Petal.Length, data<span class="op">$</span>Petal.Width)</a>
+<a class="sourceLine" id="cb13-20" title="20">      )</a>
+<a class="sourceLine" id="cb13-21" title="21">      </a>
+<a class="sourceLine" id="cb13-22" title="22">      output<span class="op">$</span>plot2 &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPlot</span>(</a>
+<a class="sourceLine" id="cb13-23" title="23">        <span class="kw">plot</span>(data<span class="op">$</span>Sepal.Length, data<span class="op">$</span>Sepal.Width)</a>
+<a class="sourceLine" id="cb13-24" title="24">      )</a>
+<a class="sourceLine" id="cb13-25" title="25">      </a>
+<a class="sourceLine" id="cb13-26" title="26">      output<span class="op">$</span>table1 &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderTable</span>(</a>
+<a class="sourceLine" id="cb13-27" title="27">        data</a>
+<a class="sourceLine" id="cb13-28" title="28">      )</a>
+<a class="sourceLine" id="cb13-29" title="29">    }</a>
+<a class="sourceLine" id="cb13-30" title="30">  )</a>
+<a class="sourceLine" id="cb13-31" title="31">  </a>
+<a class="sourceLine" id="cb13-32" title="32">}</a></code></pre></div>
 </div>
 <div id="putting-it-all-together" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.5.4</span> Putting it all together<a href="shiny.html#putting-it-all-together" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -428,8 +452,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">shinyApp</span>(ui, server)</a></code></pre></div>
 </div>
 </div>
-<div id="deploying-your-app-to-shinyapps.io" class="section level2 hasAnchor">
-<h2><span class="header-section-number">3.6</span> Deploying your app to shinyapps.io<a href="shiny.html#deploying-your-app-to-shinyapps.io" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="deploying-to-shinyapps.io" class="section level2 hasAnchor">
+<h2><span class="header-section-number">3.6</span> Deploying to shinyapps.io<a href="shiny.html#deploying-to-shinyapps.io" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>At the BCCDC we have a shinyapps.io account that allows up to publish our apps to their servers. We can set these to be publically viewable, as well as private. Typically, privately deployed apps are for development purposes or previewing prior to public release. To deploy the app you just need to call two functions like so:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">rsconnect<span class="op">::</span><span class="kw">setAccountInfo</span>(</a>
 <a class="sourceLine" id="cb15-2" title="2">      <span class="dt">name   =</span> <span class="st">&#39;bccdc&#39;</span>,</a>
@@ -453,11 +477,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Using package structure for a shiny app gets your toes into the water of package development. It’s a long way from a complete package, but it’s still useful because it activates new tools that make it easier to work with larger app and provides you with standard conventions that can be used across projects.</p>
 <div id="put-all-r-code-in-the-r-directory" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.7.1</span> Put all R code in the <code>R/</code> directory<a href="shiny.html#put-all-r-code-in-the-r-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Because we are going to be working in an app-package we need to create an <code>R/</code> directory. This is where we will keep all of the core R code components that will build our app. As a reminder, in a package we are leveraging useful tools like <code>devtools::load_all()</code> (See section <a href="package-development.html#load">2.3</a>), which will go into the <code>R/</code> directory and load/run all of the code within this directory.</p>
+<p>Because we are going to be working in an app-package we need to create an <code>R/</code> directory. This is where we will keep all of the core R code components that will build our app. As a reminder, in a package we are leveraging useful tools like <code>devtools::load_all()</code> (See section <a href="package-development.html#load">2.3</a>), which will load/run all of the code in the <code>R/</code> directory.</p>
 </div>
 <div id="write-a-function-that-starts-your-app" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.7.2</span> Write a function that starts your app<a href="shiny.html#write-a-function-that-starts-your-app" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>As mentioned in section @(app-structure), we need three primary pieces to create an app:</p>
+<p>As mentioned in section <a href="shiny.html#app-structure">3.1</a>, we need three primary pieces to create an app:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
 <a class="sourceLine" id="cb16-2" title="2">  ...</a>
 <a class="sourceLine" id="cb16-3" title="3">)</a>
@@ -467,7 +491,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb16-7" title="7">}</a>
 <a class="sourceLine" id="cb16-8" title="8"></a>
 <a class="sourceLine" id="cb16-9" title="9"><span class="kw">shinyApp</span>(ui, server, ...)</a></code></pre></div>
-<p>Now, to begin converting our project to a package-app we must wrap this into a function:</p>
+<p>Now, to begin converting our project to a package-app we must wrap these three things into a function:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">myApp &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</a>
 <a class="sourceLine" id="cb17-2" title="2">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
 <a class="sourceLine" id="cb17-3" title="3">    ...</a>
@@ -486,7 +510,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="save-your-data-to-the-data-directory" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.7.3</span> Save your data to the <code>data/</code> directory<a href="shiny.html#save-your-data-to-the-data-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We may have some datasets or lists that we use in our app that aren’t routinely updated. These are perfect candidates to convert into <code>.rda</code> files using the handy function <code>usethis::use_data()</code> that we talked about in section <a href="package-development.html#pkg-data">2.9</a>. These will automatically be stored in the <code>data/</code> directory and can be easily called directly after running <code>load_all()</code>.</p>
+<p>We may have some datasets or lists that we use in our app that <strong>aren’t</strong> routinely updated. These are perfect candidates to convert into <code>.rda</code> files using the handy function <code>usethis::use_data()</code> that we talked about in section <a href="package-development.html#pkg-data">2.9</a>. These will automatically be stored in the <code>data/</code> directory and can be easily called directly after running <code>load_all()</code>.</p>
 </div>
 <div id="create-an-inst-directory" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.7.4</span> Create an <code>inst/</code> directory<a href="shiny.html#create-an-inst-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -538,7 +562,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>One of the final pieces to setting up your app-package is the <code>app.R</code> script. This is what will be used when we go to deploy our app to the server and contains two simple but important lines of code:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">pkgload<span class="op">::</span><span class="kw">load_all</span>(<span class="st">&quot;.&quot;</span>)</a>
 <a class="sourceLine" id="cb20-2" title="2"><span class="kw">myApp</span>()</a></code></pre></div>
-<div class="warningbox">
+<div class="warnbox">
 <div class="center">
 <p><strong>WARNING</strong></p>
 </div>

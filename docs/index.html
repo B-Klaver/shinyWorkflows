@@ -26,7 +26,6 @@ workflow.</p>" />
 <meta name="author" content="Braeden Klaver" />
 
 
-<meta name="date" content="2025-03-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,13 +171,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="shiny.html"><a href="shiny.html#app-structure"><i class="fa fa-check"></i><b>3.1</b> Shiny App Structure</a></li>
 <li class="chapter" data-level="3.2" data-path="shiny.html"><a href="shiny.html#ui"><i class="fa fa-check"></i><b>3.2</b> UI</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="shiny.html"><a href="shiny.html#setting-up-the-ui"><i class="fa fa-check"></i><b>3.2.1</b> Setting up the UI</a></li>
-<li class="chapter" data-level="3.2.2" data-path="shiny.html"><a href="shiny.html#layout-and-themes"><i class="fa fa-check"></i><b>3.2.2</b> Layout and themes</a></li>
-<li class="chapter" data-level="3.2.3" data-path="shiny.html"><a href="shiny.html#inputs"><i class="fa fa-check"></i><b>3.2.3</b> Inputs</a></li>
-<li class="chapter" data-level="3.2.4" data-path="shiny.html"><a href="shiny.html#outputs"><i class="fa fa-check"></i><b>3.2.4</b> Outputs</a></li>
+<li class="chapter" data-level="3.2.2" data-path="shiny.html"><a href="shiny.html#layout"><i class="fa fa-check"></i><b>3.2.2</b> Layout</a></li>
+<li class="chapter" data-level="3.2.3" data-path="shiny.html"><a href="shiny.html#themes"><i class="fa fa-check"></i><b>3.2.3</b> Themes</a></li>
+<li class="chapter" data-level="3.2.4" data-path="shiny.html"><a href="shiny.html#ui-inputs"><i class="fa fa-check"></i><b>3.2.4</b> UI Inputs</a></li>
+<li class="chapter" data-level="3.2.5" data-path="shiny.html"><a href="shiny.html#ui-outputs"><i class="fa fa-check"></i><b>3.2.5</b> UI Outputs</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="shiny.html"><a href="shiny.html#server"><i class="fa fa-check"></i><b>3.3</b> Server</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="shiny.html"><a href="shiny.html#inputs-1"><i class="fa fa-check"></i><b>3.3.1</b> Inputs</a></li>
-<li class="chapter" data-level="3.3.2" data-path="shiny.html"><a href="shiny.html#outputs-1"><i class="fa fa-check"></i><b>3.3.2</b> Outputs</a></li>
+<li class="chapter" data-level="3.3.1" data-path="shiny.html"><a href="shiny.html#server-inputs"><i class="fa fa-check"></i><b>3.3.1</b> Server Inputs</a></li>
+<li class="chapter" data-level="3.3.2" data-path="shiny.html"><a href="shiny.html#server-outputs"><i class="fa fa-check"></i><b>3.3.2</b> Server Outputs</a></li>
 <li class="chapter" data-level="3.3.3" data-path="shiny.html"><a href="shiny.html#react"><i class="fa fa-check"></i><b>3.3.3</b> Reactivity</a></li>
 <li class="chapter" data-level="3.3.4" data-path="shiny.html"><a href="shiny.html#execution-order"><i class="fa fa-check"></i><b>3.3.4</b> Execution order</a></li>
 </ul></li>
@@ -189,7 +189,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.5.3" data-path="shiny.html"><a href="shiny.html#build-the-server"><i class="fa fa-check"></i><b>3.5.3</b> Build the server</a></li>
 <li class="chapter" data-level="3.5.4" data-path="shiny.html"><a href="shiny.html#putting-it-all-together"><i class="fa fa-check"></i><b>3.5.4</b> Putting it all together</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="shiny.html"><a href="shiny.html#deploying-your-app-to-shinyapps.io"><i class="fa fa-check"></i><b>3.6</b> Deploying your app to shinyapps.io</a></li>
+<li class="chapter" data-level="3.6" data-path="shiny.html"><a href="shiny.html#deploying-to-shinyapps.io"><i class="fa fa-check"></i><b>3.6</b> Deploying to shinyapps.io</a></li>
 <li class="chapter" data-level="3.7" data-path="shiny.html"><a href="shiny.html#packaging-a-shiny-app"><i class="fa fa-check"></i><b>3.7</b> Packaging a Shiny App</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="shiny.html"><a href="shiny.html#put-all-r-code-in-the-r-directory"><i class="fa fa-check"></i><b>3.7.1</b> Put all R code in the <code>R/</code> directory</a></li>
 <li class="chapter" data-level="3.7.2" data-path="shiny.html"><a href="shiny.html#write-a-function-that-starts-your-app"><i class="fa fa-check"></i><b>3.7.2</b> Write a function that starts your app</a></li>
@@ -231,7 +231,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Shiny App Workflows</h1>
 <p class="author"><em>Braeden Klaver</em></p>
-<p class="date"><em>2025-03-14</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered hasAnchor">
 <h1>Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>

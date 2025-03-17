@@ -1,7 +1,6 @@
 --- 
 title: "Shiny App Workflows"
 author: "Braeden Klaver"
-date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -12,7 +11,7 @@ description: |
 link-citations: yes
 ---
 
-# Preface {-}
+# Preface {.unnumbered}
 
 This document aims to provide a walkthrough on how to work within
 a shiny app workflow that leverages git/gitlab, package structure, 

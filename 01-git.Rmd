@@ -225,3 +225,10 @@ There are many other functions that you can use in git beyond those listed above
 - [Mike Kuo's Git Tutorial](https://healthbc-my.sharepoint.com/personal/michael_kuo_bccdc_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fmichael%5Fkuo%5Fbccdc%5Fca%2FDocuments%2FMicrosoft%20Teams%20Chat%20Files%2Fversion%5Fcontrol%5Ftutorial%2Ehtml&parent=%2Fpersonal%2Fmichael%5Fkuo%5Fbccdc%5Fca%2FDocuments%2FMicrosoft%20Teams%20Chat%20Files&ga=1)   
 - [Git Playground](https://learngitbranching.js.org/)   
 
+:::: {.notebox}
+:::{.center}
+**NOTE**
+:::
+The Git Playground does not work on Microsoft Edge! Try it on Google Chrome.
+::::
+
