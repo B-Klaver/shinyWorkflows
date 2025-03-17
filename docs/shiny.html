@@ -555,22 +555,22 @@ Figure 3.3: The different reactive functions and how they operate.
 </div>
 <div id="create-a-description-file" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.7.6</span> Create a <code>DESCRIPTION</code> file<a href="shiny.html#create-a-description-file" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Because we are working in a package environment one of the critical components will be our <code>DESCRIPTION</code> file, which was discussed in section <a href="package-development.html#desc">2.4</a>. Don’t forget to set your dependencies!</p>
+<p>Because we are working in a package environment one of the critical components will be our <code>DESCRIPTION</code> file, which was discussed in section <a href="package-development.html#desc">2.4</a>.</p>
+<p>Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a <code>DESCRIPTION</code> file, it requires you to explicitly specify them. The easiest way to do this is to call <code>usethis::use_package()</code>. You’ll need to start with shiny and pkgload:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">usethis<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;shiny&quot;</span>)</a>
+<a class="sourceLine" id="cb20-2" title="2">usethis<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;pkgload&quot;</span>)</a></code></pre></div>
 </div>
 <div id="deploying-your-app-package" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.7.7</span> Deploying your app-package<a href="shiny.html#deploying-your-app-package" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One of the final pieces to setting up your app-package is the <code>app.R</code> script. This is what will be used when we go to deploy our app to the server and contains two simple but important lines of code:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">pkgload<span class="op">::</span><span class="kw">load_all</span>(<span class="st">&quot;.&quot;</span>)</a>
-<a class="sourceLine" id="cb20-2" title="2"><span class="kw">myApp</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">pkgload<span class="op">::</span><span class="kw">load_all</span>(<span class="st">&quot;.&quot;</span>)</a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="kw">myApp</span>()</a></code></pre></div>
 <div class="warnbox">
 <div class="center">
 <p><strong>WARNING</strong></p>
 </div>
 <p>Although this is an R script, we <strong>DO NOT</strong> place this under our <code>R/</code> directory. This would result in an infinite loop when loading due to our <code>load_all()</code> function! Therefore place this at the top-level of your project directory.</p>
 </div>
-<p>Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a <code>DESCRIPTION</code> file, it requires you to explicitly specify them. The easiest way to do this is to call usethis::use_package(). You’ll need to start with shiny and pkgload:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">usethis<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;shiny&quot;</span>)</a>
-<a class="sourceLine" id="cb21-2" title="2">usethis<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;pkgload&quot;</span>)</a></code></pre></div>
 <p><a href="https://mastering-shiny.org/scaling-packaging.html#deploying-your-app-package">Read more!</a></p>
 </div>
 <div id="workflow" class="section level3 hasAnchor">

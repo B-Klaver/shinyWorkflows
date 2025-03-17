@@ -394,7 +394,14 @@ myApp <- function(...) {
 
 ### Create a `DESCRIPTION` file
 
-Because we are working in a package environment one of the critical components will be our `DESCRIPTION` file, which was discussed in section \@ref(desc). Don't forget to set your dependencies!
+Because we are working in a package environment one of the critical components will be our `DESCRIPTION` file, which was discussed in section \@ref(desc).
+
+Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a `DESCRIPTION` file, it requires you to explicitly specify them. The easiest way to do this is to call `usethis::use_package()`. You’ll need to start with shiny and pkgload:   
+
+```{r eval=F}
+usethis::use_package("shiny")
+usethis::use_package("pkgload")
+```
 
 
 ### Deploying your app-package
@@ -415,13 +422,6 @@ myApp()
 Although this is an R script, we **DO NOT** place this under our `R/` directory. This would result in an infinite loop when loading due to our `load_all()` function! Therefore place this at the top-level of your project directory.
 
 ::::
-
-Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a `DESCRIPTION` file, it requires you to explicitly specify them. The easiest way to do this is to call usethis::use_package(). You’ll need to start with shiny and pkgload:   
-
-```{r eval=F}
-usethis::use_package("shiny")
-usethis::use_package("pkgload")
-```
 
 [Read more!](https://mastering-shiny.org/scaling-packaging.html#deploying-your-app-package)
 
