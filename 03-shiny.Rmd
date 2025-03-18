@@ -16,11 +16,9 @@ Shiny is an R package that allows you to easily create rich, interactive web app
 
 Shiny apps are composed of two main elements:   
 
-**UI:**    
-This is where you define the layout and appearance of your app, including sliders, plots, tabs, etc.   
+**UI:** This is where you define the layout and appearance of your app, including sliders, plots, tabs, etc.   
 
-**The server:**    
-This is where you connect your UI components using logic behind the scenes to drive app behaviour.
+**The server:** This is where you connect your UI components using logic behind the scenes to drive app behaviour.
 
 These two elements are combined to render a shiny app by calling `shiny::shinyApp(ui = ui, server = server)`.
 
@@ -30,7 +28,7 @@ These two elements are combined to render a shiny app by calling `shiny::shinyAp
 
 To create a shiny app you must create a UI. Traditionally, in shiny you do this using the functions `shiny::fluidPage()` or `shiny::navbarPage()`. The UI will contain elements such as calls to CSS stylings, overall UI design, inputs, and outputs.
 
-### Layout
+### Layouts
 
 One of the main things you will set up in the UI is the overall layout and theme. Shiny gives you multiple tools to craft your layout including:
 
@@ -93,7 +91,7 @@ On the server side, we build the logic that will power our app. Specifically, we
 
 Inputs are essentially data sent from the browser (ie. UI) to the server, which can be accessed by calling `input$inputID`. Because these are dictated on the browser side, these values are not modifiable (ie. they are read-only) within the server.
 
-The other important point about inputs is we inherently want to use them in a "reactive" context; in other words, we want to have logic that reacts to user input to drive behaviour on the backend to cause some kind of update to the frontend browser. More on this in section \@(react).
+The other important point about inputs is we inherently want to use them in a "reactive" context; in other words, we want to have logic that reacts to user input to drive behaviour on the backend to cause some kind of update to the frontend browser. More on this in section \@ref(react).
 
 [Read more!](https://mastering-shiny.org/basic-reactivity.html#input)
 
@@ -105,7 +103,7 @@ Similar to inputs we refer to outputs using their output IDs by calling `output$
 
 ### Reactivity {#react}
 
-Reactivity is what brings everything together in an app. This is where we can use user inputs to update UI and outputs. There are many different types of reactive functions for different purposes; you can make UI and ouputs update in real time, when you click a button, or under other conditions! This is called declarative programming when you set certain constraints and let the program (our server logic) determine when to execute under those constraints. Interestingly, shiny operates lazily, in other words, it will only do the minimum work required to get the job done and only when it has to. We are basically telling shiny to: 
+Reactivity is what brings everything together in an app. This is where we can use user inputs to update UI and outputs. There are many different types of reactive functions for different purposes; you can make UI and ouputs update in real time, when you click a button, or under other conditions! This is called declarative programming when you set certain constraints and let the program (the server logic) determine when to execute under those constraints. Interestingly, shiny operates lazily, in other words, it will only do the minimum work required to get the job done and only when it has to. We are basically telling shiny to: 
 
 >“Ensure there is a sandwich in the refrigerator whenever I look inside of it”
 
@@ -138,7 +136,7 @@ server <- function(input, output, session) {
 
 :::: {.tipbox}
 :::{.center}
-**NOTE**
+**TIP**
 :::
 It's still recommended to have things in order to avoid confusion. But I think it's an important thing to realize, because it highlights what is truly going on in the background and what makes shiny "lazy".
 ::::
@@ -164,7 +162,16 @@ library(tidyverse)
 
 ```
 
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+This is also where we would load datasets, set up global variables, and add paths if we need them for the app. Because this app is super simple we will just load our libraries.
+::::
+
 ### Build the UI
+
+Let's create a simple UI with `shiny::navbarPage()` so we have tabs up top, we'll make one dropdown menu, a couple of plots side by side, and a table that shows the data that is being used in the plots.
 
 ``` {r eval=F}
 
@@ -216,6 +223,8 @@ ui <- shiny::navbarPage(
 
 ### Build the server
 
+Now let's connect everything. We need to use a reactive function to tell shiny to update our plots and table when a new flower species is selected. We also need to fill our plot and table placeholders with render functions.
+
 ``` {r eval=F}
 
 server <- function(input, output, session) {
@@ -252,6 +261,13 @@ server <- function(input, output, session) {
 }
 ```
 
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Remember, the server function requires the same three arguments everytime: `input`, `output`, and `session`.
+::::
+
 ### Putting it all together
 
 Now we're finally ready to deploy locally!
@@ -262,7 +278,7 @@ shinyApp(ui, server)
 
 ## Deploying to shinyapps.io
 
-At the BCCDC we have a shinyapps.io account that allows up to publish our apps to their servers. We can set these to be publically viewable, as well as private. Typically, privately deployed apps are for development purposes or previewing prior to public release. To deploy the app you just need to call two functions like so:
+At the BCCDC we have a [shinyapps.io](https://www.shinyapps.io/) account that allows up to publish our apps to their servers. We can set these to be publically viewable, as well as private. Typically, privately deployed apps are for development purposes or previewing prior to public release. To deploy the app you just need to call two functions like so:
 
 ``` {r eval=F}
 rsconnect::setAccountInfo(
@@ -329,13 +345,20 @@ myApp <- function(...) {
 **NOTE**
 :::
 
-The function you create shouldn't need any arguments, all that we will use this for is to easily run our app locally and set it up for easy deployment later.
+The function you create shouldn't need any arguments, all that we will use this for is to easily run our app locally and set it up for easy deployment later by simply calling `myApp()`.
 
 ::::
 
 ### Save your data to the `data/` directory
 
 We may have some datasets or lists that we use in our app that **aren't** routinely updated. These are perfect candidates to convert into `.rda` files using the handy function `usethis::use_data()` that we talked about in section \@ref(pkg-data). These will automatically be stored in the `data/` directory and can be easily called directly after running `load_all()`.
+
+::::{.tipbox}
+:::{.center}
+**TIP**
+:::
+Good candidates for us include things like crosswalk files for health geographies, age categories, and lists (domains, diseases, regions).
+::::
 
 ### Create an `inst/` directory
 
@@ -347,7 +370,7 @@ The `inst/` directory is where we can store other raw datasets that are more sub
 **NOTE**
 :::
 
-Load data with `read.csv(system.file("exdata", "mydata.csv", package = "myApp"))`. Notice that our package-app automatically knows to look in our `inst/` folder?
+Load data with `read.csv(system.file("extdata", "mydata.csv", package = "myApp"))`. Notice that our package-app automatically knows to look in our `inst/` folder?
 
 ``` {r eval=F}
 myApp <- function(...) {
@@ -396,7 +419,7 @@ myApp <- function(...) {
 
 Because we are working in a package environment one of the critical components will be our `DESCRIPTION` file, which was discussed in section \@ref(desc).
 
-Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But now that you have a `DESCRIPTION` file, it requires you to explicitly specify them. The easiest way to do this is to call `usethis::use_package()`. You’ll need to start with shiny and pkgload:   
+Normally when you deploy an app, the rsconnect package automatically figures out all of the packages your code uses. But because we are making a package-app with a `DESCRIPTION` file, it requires you to explicitly specify them. The easiest way to do this is to call `usethis::use_package()`. You’ll need to start with shiny and pkgload:   
 
 ```{r eval=F}
 usethis::use_package("shiny")
@@ -419,7 +442,7 @@ myApp()
 **WARNING**
 :::
 
-Although this is an R script, we **DO NOT** place this under our `R/` directory. This would result in an infinite loop when loading due to our `load_all()` function! Therefore place this at the top-level of your project directory.
+Although this is an R script, we **DO NOT** place this under our `R/` directory. This would result in an infinite loop when running `load_all()` due to the `load_all()` function in the script! Therefore place this at the top-level of your project directory.
 
 ::::
 

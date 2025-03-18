@@ -31,7 +31,7 @@ shiny
 app-structure
 ui
 setting-up-the-ui
-layout
+layouts
 themes
 ui-inputs
 ui-outputs
