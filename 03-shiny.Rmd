@@ -370,8 +370,7 @@ The `inst/` directory is where we can store other raw datasets that are more sub
 **NOTE**
 :::
 
-Load data with `read.csv(system.file("extdata", "mydata.csv", package = "myApp"))`. Notice that our package-app automatically knows to look in our `inst/` folder?
-
+To load data we need to use `system.file()` to point to our data's location, as well as setting the `package` arugment to our project's name.
 ``` {r eval=F}
 myApp <- function(...) {
   read.csv(system.file("extdata", "mydata.csv", package = "myApp"))
@@ -384,6 +383,7 @@ myApp <- function(...) {
   shinyApp(ui, server, ...)
 }
 ```
+Notice that our package-app automatically knows to look in our `inst/` folder?
 
 ::::
 
