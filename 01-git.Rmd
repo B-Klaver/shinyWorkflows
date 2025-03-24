@@ -68,6 +68,13 @@ Ensure your profile is set up
 `git config --global user.name "Braeden Klaver"`   
 `git config --global user.email "braeden.klaver@bccdc.ca"`   
 
+::::{.warnbox}
+:::{.center}
+**WARNING**
+:::
+When you create a new repository on github or gitlab it can cause issues if you create it with a README. It is recommended when creating new repositories to make sure they are a clean slate.
+::::
+
 ### Pre-existing project on Github or Gitlab
 
 Step 1) In your terminal navigate to the folder you want to clone the project to   
@@ -105,13 +112,6 @@ Step 2) Connect your R project to that repository (should be the URL)
 
 Step 3) Push your project to that repository   
 `git push -u origin --all`
-
-::::{.warnbox}
-:::{.center}
-**WARNING**
-:::
-When you create a new repository on github or gitlab it can cause issues if you create it with a README. It is recommended when creating new repositories to make sure they are a clean slate.
-::::
 
 ## Collaborative git workflow
 
