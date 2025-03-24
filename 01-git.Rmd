@@ -93,7 +93,7 @@ Step 5) Add and commit your files
 `git commit -m "Initial commit"`
 
 Step 6) Push your project to that repository    
-`git push`
+`git push -u origin --all`
 
 
 ### Personal project with Git
@@ -104,7 +104,14 @@ Step 2) Connect your R project to that repository (should be the URL)
 `git remote add origin http://lvmgenodh01.phsabc.ehcnet.ca/braeden.klaver/test.git`
 
 Step 3) Push your project to that repository   
-`git push`
+`git push -u origin --all`
+
+::::{.warnbox}
+:::{.center}
+**WARNING**
+:::
+When you create a new repository on github or gitlab it can cause issues if you create it with a README. It is recommended when creating new repositories to make sure they are a clean slate.
+::::
 
 ## Collaborative git workflow
 
@@ -116,7 +123,14 @@ Step 1) Pulling changes from the repository - your coworkers may have made chang
 Step 2) Follow the basic workflow (Section \@ref(basic-workflow))
 
 Step 3) Pushing your changes to the repository - your coworkers will want to be up to date!   
-`git push`
+`git push` or `git push origin` 
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+You have to use `git push origin branch_name` when working on a branch that isn't your main or master.
+::::
 
 ## Using Git at the BCCDC
 

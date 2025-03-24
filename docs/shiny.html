@@ -203,10 +203,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.8" data-path="shiny.html"><a href="shiny.html#additional-resources-2"><i class="fa fa-check"></i><b>3.8</b> Additional Resources</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="bslib.html"><a href="bslib.html"><i class="fa fa-check"></i><b>4</b> bslib</a><ul>
-<li class="chapter" data-level="4.1" data-path="bslib.html"><a href="bslib.html#section"><i class="fa fa-check"></i><b>4.1</b> </a></li>
+<li class="chapter" data-level="4.1" data-path="bslib.html"><a href="bslib.html#themes-1"><i class="fa fa-check"></i><b>4.1</b> Themes</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="bslib.html"><a href="bslib.html#bootswatch-themes"><i class="fa fa-check"></i><b>4.1.1</b> Bootswatch themes</a></li>
+<li class="chapter" data-level="4.1.2" data-path="bslib.html"><a href="bslib.html#main-colours-and-fonts"><i class="fa fa-check"></i><b>4.1.2</b> Main colours and fonts</a></li>
+<li class="chapter" data-level="4.1.3" data-path="bslib.html"><a href="bslib.html#additional-theming-tools"><i class="fa fa-check"></i><b>4.1.3</b> Additional theming tools</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="bslib.html"><a href="bslib.html#layouts-1"><i class="fa fa-check"></i><b>4.2</b> Layouts</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="bslib.html"><a href="bslib.html#multi-column"><i class="fa fa-check"></i><b>4.2.1</b> Multi-column</a></li>
+<li class="chapter" data-level="4.2.2" data-path="bslib.html"><a href="bslib.html#multi-page"><i class="fa fa-check"></i><b>4.2.2</b> Multi-page</a></li>
+<li class="chapter" data-level="4.2.3" data-path="bslib.html"><a href="bslib.html#multi-panel"><i class="fa fa-check"></i><b>4.2.3</b> Multi-panel</a></li>
+<li class="chapter" data-level="4.2.4" data-path="bslib.html"><a href="bslib.html#scrolling-vs-filling"><i class="fa fa-check"></i><b>4.2.4</b> Scrolling vs filling</a></li>
+<li class="chapter" data-level="4.2.5" data-path="bslib.html"><a href="bslib.html#mobile-layout"><i class="fa fa-check"></i><b>4.2.5</b> Mobile layout</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="bslib.html"><a href="bslib.html#components"><i class="fa fa-check"></i><b>4.3</b> Components</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="bslib.html"><a href="bslib.html#cards"><i class="fa fa-check"></i><b>4.3.1</b> Cards</a></li>
+<li class="chapter" data-level="4.3.2" data-path="bslib.html"><a href="bslib.html#sidebars-1"><i class="fa fa-check"></i><b>4.3.2</b> Sidebars</a></li>
+<li class="chapter" data-level="4.3.3" data-path="bslib.html"><a href="bslib.html#value-boxes"><i class="fa fa-check"></i><b>4.3.3</b> Value boxes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="bslib.html"><a href="bslib.html#tooltips-and-popovers"><i class="fa fa-check"></i><b>4.3.4</b> Tooltips and Popovers</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="bslib.html"><a href="bslib.html#basic-example-with-bslib"><i class="fa fa-check"></i><b>4.4</b> Basic Example with <code>bslib</code></a></li>
+<li class="chapter" data-level="4.5" data-path="bslib.html"><a href="bslib.html#additional-resources-3"><i class="fa fa-check"></i><b>4.5</b> Additional Resources</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="modularization.html"><a href="modularization.html"><i class="fa fa-check"></i><b>5</b> Modularization</a><ul>
-<li class="chapter" data-level="5.1" data-path="modularization.html"><a href="modularization.html#section-1"><i class="fa fa-check"></i><b>5.1</b> </a></li>
+<li class="chapter" data-level="5.1" data-path="modularization.html"><a href="modularization.html#section"><i class="fa fa-check"></i><b>5.1</b> </a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -537,7 +556,7 @@ Figure 3.3: The different reactive functions and how they operate.
 <div class="center">
 <p><strong>NOTE</strong></p>
 </div>
-<p>Load data with <code>read.csv(system.file("extdata", "mydata.csv", package = "myApp"))</code>. Notice that our package-app automatically knows to look in our <code>inst/</code> folder?</p>
+<p>To load data we need to use <code>system.file()</code> to point to our data’s location, as well as setting the <code>package</code> arugment to our project’s name.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">myApp &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</a>
 <a class="sourceLine" id="cb18-2" title="2">  <span class="kw">read.csv</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;mydata.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;myApp&quot;</span>))</a>
 <a class="sourceLine" id="cb18-3" title="3">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
@@ -548,6 +567,7 @@ Figure 3.3: The different reactive functions and how they operate.
 <a class="sourceLine" id="cb18-8" title="8">  }</a>
 <a class="sourceLine" id="cb18-9" title="9">  <span class="kw">shinyApp</span>(ui, server, ...)</a>
 <a class="sourceLine" id="cb18-10" title="10">}</a></code></pre></div>
+<p>Notice that our package-app automatically knows to look in our <code>inst/</code> folder?</p>
 </div>
 </div>
 <div id="create-a-www-directory" class="section level3 hasAnchor">
