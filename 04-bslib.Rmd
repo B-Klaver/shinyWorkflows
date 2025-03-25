@@ -18,15 +18,27 @@ knitr::include_graphics("images/bslib_ex.png")
 
 ### Pages {#pages}
 
-One of the core features of `bslib` is the use of pages or tabs. We all know what this means so I won't go too deep, but in terms of usage it means you will typically be creating `bslib` apps using the `bslib::page_navbar()` function to allow you to create child tabs with `bslib::nav_panel()`. Additionally, sidebars are critical for most apps and many functions, including `bslib::page_navbar()` have a built in `sidebar` argument that you can fill using `bslib::sidebar()`.
+One of the core features of `bslib` is the use of pages or tabs. We all know what this means so I won't go too deep, but in terms of usage it means you will typically be creating `bslib` apps using the `bslib::page_navbar()` function to allow you to create child tabs with `bslib::nav_panel()`. Additionally, sidebars are critical for most apps and many functions, including `bslib::page_navbar()`, have a built in `sidebar` argument that you can fill using `bslib::sidebar()`.
+
+```{r echo=F,fig.cap="Example of a bslib dashboard with a page layout"}
+knitr::include_graphics("images/pages_ex.png")
+```
 
 ### Cards {#cards-intro}
 
 Another core feature of `bslib` apps is the `card()`. Apps built using `bslib` will almost always use cards, these are essentially containers that hold content in an organized way that make it really easy for users to engage, understand, and navigate your app. 
 
+```{r echo=F,fig.cap="Example of a bslib dashboard cards"}
+knitr::include_graphics("images/card_ex.png")
+```
+
 ### Content filling {#filling}
 
-The last core concept to `bslib` is the way it is geared towards a filling layout, which means that contents are encouraged to grow/shrink to fit the browser window so that regardless of the resolution you're accessing the app it will adjust to fill it nicely. As a result, many functions have a `fill` argument; these are considered "fillable" containers. The child contents - child in this case means it is wrapped by the parent function - will then do the filling feature when `fill = TRUE`, which is the default. When content goes beyond the screen resolution `bslib` will make the content scrollable.
+The last core concept to `bslib` is the way it is geared towards a filling layout, which means that contents are encouraged to grow/shrink to fit the browser window so that regardless of the resolution you're accessing the app it will adjust to fill it nicely. As a result, many functions have a `fill` argument; these are considered "fillable" containers. The child contents, a child in this case means it is wrapped by the parent function, will then do the filling feature when `fill = TRUE`, which is the default. When content goes beyond the screen resolution `bslib` will make the content scrollable.
+
+```{r echo=F,fig.cap="Example of a plot output filling a card"}
+knitr::include_graphics("images/fill_ex.png")
+```
 
 There is a lot to filling and it's fundamental to `bslib` so it is recommended to read more about it [here](https://rstudio.github.io/bslib/articles/filling/index.html).
 
@@ -78,9 +90,14 @@ Not only can we use tabs at the page level using `bslib::page_sidebar()`, we can
 
 [Read more!](https://rstudio.github.io/bslib/articles/dashboards/index.html#multi-panel)
 
-### Scrolling vs filling
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Personally, the most useful feature set from this is the use of tabs for cards using `bslib::navset_card_*()`.
+::::
 
-DOES THIS NEED TO BE REFERENCED IN THE CARDS???
+### Scrolling vs filling
 
 Both `bslib::page_sidebar()` and `bslib::page_navbar()` default to a filling layout (see Section \@ref(filling)). Sometimes this results in undesireable behaviour, you can combat this by setting `bslib::card()` heights using `min_height` to restrict how small a card gets or `max_height` to restrict how large a card will get:
 
@@ -266,9 +283,9 @@ bslib::layout_column_wrap(
 
 [Read more!](https://rstudio.github.io/bslib/articles/column-layout/index.html#nested-layouts)
 
-::::{.tipbox}
+::::{.notebox}
 :::{.center}
-**TIP**
+**NOTE**
 :::
 In terms of formatting `bslib::layout_column_wrap()` is easier and provides a clean uniform look. It is likely that you will use this over `bslib::layout_columns()` in most cases.
 ::::
@@ -285,11 +302,11 @@ A `bslib::card()` is designed to handle any number of “known” card items (e.
 
 ### Card components {-}
 
-The `bslib::card_header()` is where you can place contents in a header. This is a great place for your title and any icons!
+`bslib::card_header()`: is where you can place contents in a header. This is a great place for your title and any icons!
 
-The `bslib::card_body()` is where you can place your main card contents. If you find yourself using `bslib::card_body()` without changing any of its defaults, consider dropping it altogether since it will be wrapped together into an implicit `card_body()` call anyways.
+`bslib::card_body()`: is where you can place your main card contents. If you find yourself using `bslib::card_body()` without changing any of its defaults, consider dropping it altogether since it will be wrapped together into an implicit `card_body()` call anyways.
 
-The `bslib::card_footer()` is where you can place contents in a footer. This is a great place for any tooltips or popovers (see section \@ref(tips-popovers)).
+`bslib::card_footer()`: is where you can place contents in a footer. This is a great place for any tooltips or popovers (see section \@ref(tips-popovers)).
 
 ### Restricting growth {-}
 
@@ -310,7 +327,7 @@ Although scrolling is convenient for reducing the amount of space required to pa
 :::{.center}
 **TIP**
 :::
-Scrolling in cards can get a bit weird depending on the content. I'd recommend trying always having `full_screen = TRUE` and comparing how scrolling the card feels compared to scrolling the page. Remember, this can differ between pages/tabs!
+Scrolling in cards can get a bit weird depending on the content. I'd recommend always having `full_screen = TRUE` and comparing how scrolling the card feels compared to scrolling the page. Remember, this can differ between pages/tabs!
 ::::
 
 ### Filling outputs {-}
@@ -386,14 +403,14 @@ bslib::page_navbar(
 )
 ```
 
+[Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#multi-page-layout)
+
 ::::{.tipbox}
 :::{.center}
 **TIP**
 :::
-This is one of the best options for setting up a sidebar as it is built in with the `page_navbar()` which you will likely be building your app with anyways!
+This is one of the best options for setting up a sidebar as it is built in with the `bslib::page_navbar()` which you will likely be building your app with anyways!
 ::::
-
-[Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#multi-page-layout)
 
 ### Conditional and reactive updates {-}
 
@@ -423,14 +440,6 @@ shinyApp(
   }
 )
 ```
-
-
-::::{.tipbox}
-:::{.center}
-**TIP**
-:::
-Conditional arguments in the sidebar are useful if certain filters are only applicable to certain pages.
-::::
 
 We can also set the sidebar to open up one specific pages:
 
@@ -463,18 +472,20 @@ server <- function(input, output) {
 }
 ```
 
+[Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#shiny)
+
 ::::{.tipbox}
 :::{.center}
 **TIP**
 :::
-Having the sidebar hidden may be useful if the first page is an intro for example.
+Conditional arguments in the sidebar are useful if certain filters are only applicable to certain pages and having the sidebar hidden may be useful if the first page is an intro for example.
 ::::
 
-[Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#shiny)
 
 ### Additional sidebar features
 
 Here are even more things you can do with sidebars:   
+
 - **Accordions:** Within a sidebar you can create an accordion using `bslib::accordion()` that will be flush to the sidebar and is an easy way to group input controls in a drop-down style. [Read more!](https://rstudio.github.io/bslib/articles/dashboards/index.html#accordions)    
 - **Nested sidebars:** If you want to get wild and have nested sidebars go for it! [Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#nested-sidebars)   
 - **Styling:** There are a handful of other arguments to further customize the look and feel if the sidebar layout. They allow for a specific background color (via bg), which is applied to the sidebar area and main content area respectively. [Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#styling-and-customization)
@@ -483,7 +494,7 @@ Here are even more things you can do with sidebars:
 
 A `bslib::value_box()` is a special kind of card designed for highlighting a value along with a title and a showcase placeholder (typically a [bsicons](https://github.com/rstudio/bsicons) icon). You can even have a plot as a backdrop to the value showcase. These can be standalone value boxes and they can also easily be inserted into cards!
 
-```{r echo=F,fig.cap="An example of a value box."}
+```{r echo=F,fig.cap="An example of value boxes."}
 knitr::include_graphics("images/value_box.png")
 ```
 
