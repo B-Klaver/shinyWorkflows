@@ -62,6 +62,7 @@ workflow
 additional-resources-2
 bslib
 fundamentals
+filling
 themes-1
 bootswatch-themes
 main-colours-and-fonts
@@ -77,7 +78,7 @@ mobile-layout
 cards-1
 sidebars
 value-boxes
-tooltips-and-popovers
+tips-popovers
 using-shiny-info
 basic-example-with-bslib
 additional-resources-3

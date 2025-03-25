@@ -78,7 +78,7 @@ Beyond the pre-packaged themes and customizing colours and fonts there are other
 
 ### Multi-column
 
-#### `bslib::layout_columns()` {-}
+#### `bslib::layout_columns()`
 
 Create column layouts easily using `bslib::layout_columns()`. Optional arguments include:
 
@@ -103,7 +103,7 @@ knitr::include_graphics("images/layout_columns.png")
 
 [Read more!](https://rstudio.github.io/bslib/articles/dashboards/index.html#multi-column)
 
-#### `bslib::layout_column_wrap()` {#col-wrap} {-}
+#### `bslib::layout_column_wrap()` {#col-wrap}
 
 When displaying multiple cards (or value boxes, etc) at once, it’s often most visually appealing to have them displayed in a grid-like layout where each card has the same height and width. This is the core principle of `bslib::layout_column_wrap()`, instead of specifying every column's width and every row's height like `bslib::layout_columns()`, we will give a width and height to apply to every card.
 
