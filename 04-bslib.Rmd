@@ -622,13 +622,13 @@ This is probably the most advanced you can get with `shiny` and `bslib`. When yo
 
 ## Advanced Example with `bslib`
 
+### Build the UI
+
 Let's create a more advanced UI with `bslib::page_navbar` so we have tabs up top, a sidebar on the left, theme it for BCCDC, with 3 tabs:    
 
 - Tab 1 will be for a bit of an about filled with practically nothing because I just want to add more features and having this tab is the only way..   
 - Tab 2 will be looking into population data for each state.
 - Tab 3 will be cover some metrics on poverty at the county level.
-
-### Build the UI
 
 ``` {r eval=F}
 

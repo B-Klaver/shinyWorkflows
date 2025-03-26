@@ -813,6 +813,8 @@ Figure 4.6: An example of value boxes.
 </div>
 <div id="advanced-example-with-bslib" class="section level2 hasAnchor">
 <h2><span class="header-section-number">4.9</span> Advanced Example with <code>bslib</code><a href="bslib.html#advanced-example-with-bslib" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="build-the-ui-1" class="section level3 hasAnchor">
+<h3><span class="header-section-number">4.9.1</span> Build the UI<a href="bslib.html#build-the-ui-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s create a more advanced UI with <code>bslib::page_navbar</code> so we have tabs up top, a sidebar on the left, theme it for BCCDC, with 3 tabs:</p>
 <ul>
 <li>Tab 1 will be for a bit of an about filled with practically nothing because I just want to add more features and having this tab is the only way..<br />
@@ -820,8 +822,6 @@ Figure 4.6: An example of value boxes.
 <li>Tab 2 will be looking into population data for each state.</li>
 <li>Tab 3 will be cover some metrics on poverty at the county level.</li>
 </ul>
-<div id="build-the-ui-1" class="section level3 hasAnchor">
-<h3><span class="header-section-number">4.9.1</span> Build the UI<a href="bslib.html#build-the-ui-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">library</span>(magrittr) <span class="co"># I need %&gt;%...</span></a>
 <a class="sourceLine" id="cb45-2" title="2"></a>
 <a class="sourceLine" id="cb45-3" title="3"><span class="co"># We will start with an htmltools::tagList() call because this allows </span></a>
