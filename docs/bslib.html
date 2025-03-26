@@ -223,11 +223,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3.5" data-path="bslib.html"><a href="bslib.html#other-features"><i class="fa fa-check"></i><b>4.3.5</b> Other features</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="bslib.html"><a href="bslib.html#sidebars"><i class="fa fa-check"></i><b>4.4</b> Sidebars</a><ul>
-<li class="chapter" data-level="" data-path="bslib.html"><a href="bslib.html#floating-layout"><i class="fa fa-check"></i>Floating layout</a></li>
-<li class="chapter" data-level="" data-path="bslib.html"><a href="bslib.html#filling-layout"><i class="fa fa-check"></i>Filling layout</a></li>
-<li class="chapter" data-level="" data-path="bslib.html"><a href="bslib.html#multi-page-layout"><i class="fa fa-check"></i>Multi-page layout</a></li>
-<li class="chapter" data-level="" data-path="bslib.html"><a href="bslib.html#conditional-and-reactive-updates"><i class="fa fa-check"></i>Conditional and reactive updates</a></li>
-<li class="chapter" data-level="4.4.1" data-path="bslib.html"><a href="bslib.html#additional-sidebar-features"><i class="fa fa-check"></i><b>4.4.1</b> Additional sidebar features</a></li>
+<li class="chapter" data-level="4.4.1" data-path="bslib.html"><a href="bslib.html#floating-layout"><i class="fa fa-check"></i><b>4.4.1</b> Floating layout</a></li>
+<li class="chapter" data-level="4.4.2" data-path="bslib.html"><a href="bslib.html#filling-layout"><i class="fa fa-check"></i><b>4.4.2</b> Filling layout</a></li>
+<li class="chapter" data-level="4.4.3" data-path="bslib.html"><a href="bslib.html#multi-page-layout"><i class="fa fa-check"></i><b>4.4.3</b> Multi-page layout</a></li>
+<li class="chapter" data-level="4.4.4" data-path="bslib.html"><a href="bslib.html#conditional-and-reactive-updates"><i class="fa fa-check"></i><b>4.4.4</b> Conditional and reactive updates</a></li>
+<li class="chapter" data-level="4.4.5" data-path="bslib.html"><a href="bslib.html#additional-sidebar-features"><i class="fa fa-check"></i><b>4.4.5</b> Additional sidebar features</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="bslib.html"><a href="bslib.html#value-boxes"><i class="fa fa-check"></i><b>4.5</b> Value boxes</a></li>
 <li class="chapter" data-level="4.6" data-path="bslib.html"><a href="bslib.html#tips-popovers"><i class="fa fa-check"></i><b>4.6</b> Tooltips and Popovers</a></li>
@@ -599,8 +599,8 @@ Figure 4.5: Example of bslib::layout_columns()
 </div>
 <div id="sidebars" class="section level2 hasAnchor">
 <h2><span class="header-section-number">4.4</span> Sidebars<a href="bslib.html#sidebars" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="floating-layout" class="section level3 unnumbered hasAnchor">
-<h3>Floating layout<a href="bslib.html#floating-layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="floating-layout" class="section level3 hasAnchor">
+<h3><span class="header-section-number">4.4.1</span> Floating layout<a href="bslib.html#floating-layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Easily create a floating layout with a sidebar using <code>bslib::layout_sidebar()</code>. This will align nicely with the main contents or can even be placed inside cards.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">bslib<span class="op">::</span><span class="kw">layout_sidebar</span>(</a>
 <a class="sourceLine" id="cb35-2" title="2">  <span class="dt">sidebar =</span> <span class="kw">sidebar</span>(<span class="st">&quot;Sidebar&quot;</span>),</a>
@@ -608,8 +608,8 @@ Figure 4.5: Example of bslib::layout_columns()
 <a class="sourceLine" id="cb35-4" title="4">)</a></code></pre></div>
 <p><a href="https://rstudio.github.io/bslib/articles/sidebars/index.html#floating-layout">Read more!</a></p>
 </div>
-<div id="filling-layout" class="section level3 unnumbered hasAnchor">
-<h3>Filling layout<a href="bslib.html#filling-layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="filling-layout" class="section level3 hasAnchor">
+<h3><span class="header-section-number">4.4.2</span> Filling layout<a href="bslib.html#filling-layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>If you prefer to have a sidebar that extends the whole length of the page then make sure you nest your <code>bslib::layout_sidebar()</code> inside of a <code>bslib::page_fillage()</code> function.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">bslib<span class="op">::</span><span class="kw">page_fillable</span>(</a>
 <a class="sourceLine" id="cb36-2" title="2">  bslib<span class="op">::</span><span class="kw">layout_sidebar</span>(</a>
@@ -619,8 +619,8 @@ Figure 4.5: Example of bslib::layout_columns()
 <a class="sourceLine" id="cb36-6" title="6">)</a></code></pre></div>
 <p><a href="https://rstudio.github.io/bslib/articles/sidebars/index.html#filling-layout">Read more!</a></p>
 </div>
-<div id="multi-page-layout" class="section level3 unnumbered hasAnchor">
-<h3>Multi-page layout<a href="bslib.html#multi-page-layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="multi-page-layout" class="section level3 hasAnchor">
+<h3><span class="header-section-number">4.4.3</span> Multi-page layout<a href="bslib.html#multi-page-layout" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>If you want to use a single sidebar for multiple pages of an app you want to use the <code>sidebar</code> argument that is found in <code>bslib::page_navbar()</code> or <code>bslib::navset_card_tab()</code>.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">bslib<span class="op">::</span><span class="kw">page_navbar</span>(</a>
 <a class="sourceLine" id="cb37-2" title="2">  <span class="dt">sidebar =</span> bslib<span class="op">::</span><span class="kw">sidebar</span>(<span class="st">&quot;Sidebar&quot;</span>),</a>
@@ -635,8 +635,8 @@ Figure 4.5: Example of bslib::layout_columns()
 <p>This is one of the best options for setting up a sidebar as it is built in with the <code>bslib::page_navbar()</code> which you will likely be building your app with anyways!</p>
 </div>
 </div>
-<div id="conditional-and-reactive-updates" class="section level3 unnumbered hasAnchor">
-<h3>Conditional and reactive updates<a href="bslib.html#conditional-and-reactive-updates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="conditional-and-reactive-updates" class="section level3 hasAnchor">
+<h3><span class="header-section-number">4.4.4</span> Conditional and reactive updates<a href="bslib.html#conditional-and-reactive-updates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Sometimes we want to have conditional contents in the sidebar that are based on the page/tab that has been selected. We can use <code>bslib::conditionalPanel()</code> inside of the <code>sidebar</code> argument in <code>bslib::page_navbar()</code>/<code>bslib::navset_card_tab()</code>/<code>navset_tab_pill()</code>. We just have to provide an <code>id</code> that we can reference in the <code>bslib::conditionalPanel()</code>:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">shinyApp</span>(</a>
 <a class="sourceLine" id="cb38-2" title="2">  <span class="kw">page_navbar</span>(</a>
@@ -696,7 +696,7 @@ Figure 4.5: Example of bslib::layout_columns()
 </div>
 </div>
 <div id="additional-sidebar-features" class="section level3 hasAnchor">
-<h3><span class="header-section-number">4.4.1</span> Additional sidebar features<a href="bslib.html#additional-sidebar-features" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<h3><span class="header-section-number">4.4.5</span> Additional sidebar features<a href="bslib.html#additional-sidebar-features" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here are even more things you can do with sidebars:</p>
 <ul>
 <li><strong>Accordions:</strong> Within a sidebar you can create an accordion using <code>bslib::accordion()</code> that will be flush to the sidebar and is an easy way to group input controls in a drop-down style. <a href="https://rstudio.github.io/bslib/articles/dashboards/index.html#accordions">Read more!</a><br />
@@ -1072,7 +1072,7 @@ Figure 4.6: An example of value boxes.
 <a class="sourceLine" id="cb45-251" title="251">)</a></code></pre></div>
 <div id="build-the-server-1" class="section level3 hasAnchor">
 <h3><span class="header-section-number">4.9.1</span> Build the server<a href="bslib.html#build-the-server-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>.</p>
+<p>Alright it’s time to connect everything together and make it reactive!</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
 <a class="sourceLine" id="cb46-2" title="2">  </a>
 <a class="sourceLine" id="cb46-3" title="3">  <span class="co"># Let&#39;s handle the sidebar opening on page 2 and 3 first</span></a>

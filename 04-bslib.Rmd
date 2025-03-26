@@ -371,7 +371,7 @@ There is a ton of functionality for cards that we don't necessarily need to dive
 
 ## Sidebars
 
-### Floating layout {-}
+### Floating layout
 
 Easily create a floating layout with a sidebar using `bslib::layout_sidebar()`. This will align nicely with the main contents or can even be placed inside cards.
 
@@ -384,7 +384,7 @@ bslib::layout_sidebar(
 
 [Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#floating-layout)
 
-### Filling layout {-}
+### Filling layout
 
 If you prefer to have a sidebar that extends the whole length of the page then make sure you nest your `bslib::layout_sidebar()` inside of a `bslib::page_fillage()` function.
 
@@ -399,7 +399,7 @@ bslib::page_fillable(
 
 [Read more!](https://rstudio.github.io/bslib/articles/sidebars/index.html#filling-layout)
 
-### Multi-page layout {-}
+### Multi-page layout
 
 If you want to use a single sidebar for multiple pages of an app you want to use the `sidebar` argument that is found in `bslib::page_navbar()` or `bslib::navset_card_tab()`.
 
@@ -420,7 +420,7 @@ bslib::page_navbar(
 This is one of the best options for setting up a sidebar as it is built in with the `bslib::page_navbar()` which you will likely be building your app with anyways!
 ::::
 
-### Conditional and reactive updates {-}
+### Conditional and reactive updates
 
 Sometimes we want to have conditional contents in the sidebar that are based on the page/tab that has been selected. We can use `bslib::conditionalPanel()` inside of the `sidebar` argument in `bslib::page_navbar()`/`bslib::navset_card_tab()`/`navset_tab_pill()`. We just have to provide an `id` that we can reference in the `bslib::conditionalPanel()`: 
 
@@ -886,7 +886,7 @@ ui <- htmltools::tagList(
 
 ### Build the server
 
-.
+Alright it's time to connect everything together and make it reactive!
 
 ``` {r eval=F}
 

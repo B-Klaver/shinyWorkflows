@@ -83,6 +83,10 @@ scrolling
 filling-outputs
 other-features
 sidebars
+floating-layout
+filling-layout
+multi-page-layout
+conditional-and-reactive-updates
 additional-sidebar-features
 value-boxes
 tips-popovers
