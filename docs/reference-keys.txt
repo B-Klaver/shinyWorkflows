@@ -77,6 +77,11 @@ bsliblayout_columns
 col-wrap
 mobile-layout
 cards
+card-components
+restricting-growth
+scrolling
+filling-outputs
+other-features
 sidebars
 additional-sidebar-features
 value-boxes
@@ -87,6 +92,8 @@ main-colours-and-fonts
 additional-theming-tools
 using-shiny-info
 advanced-example-with-bslib
+build-the-server-1
+putting-it-all-together-1
 additional-resources-3
 modularization
 section

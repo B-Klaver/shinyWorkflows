@@ -1,6 +1,6 @@
 # bslib
 
-The `bslib` R package provides a modern UI toolkit for Shiny and R Markdown based on Bootstrap, therefore we will not be going over any server-related code as that is all done using `shiny`. It simply builds on `shiny` to help create more intricate and beautiful UI for your app. In summary, `bslib` facilitates:
+The `bslib` R package provides a modern UI toolkit that builds on the `shiny` package. In summary, `bslib` facilitates:
 
 - Creation of delightful and customizable Shiny dashboards.   
 - UI components (e.g., cards, value boxes, sidebars, etc).   
@@ -18,9 +18,9 @@ knitr::include_graphics("images/bslib_ex.png")
 
 ### Pages {#pages}
 
-One of the core features of `bslib` is the use of pages or tabs. We all know what this means so I won't go too deep, but in terms of usage it means you will typically be creating `bslib` apps using the `bslib::page_navbar()` function to allow you to create child tabs with `bslib::nav_panel()`. Additionally, sidebars are critical for most apps and many functions, including `bslib::page_navbar()`, have a built in `sidebar` argument that you can fill using `bslib::sidebar()`.
+One of the core features of `bslib` is the use of pages/tabs. To build an app this way `bslib` makes it easy by using the `bslib::page_navbar()` function to create child tabs with `bslib::nav_panel()`. Additionally, `bslib` apps tend to rely on sidebars so many functions, including `bslib::page_navbar()`, have a built in `sidebar` argument that you can fill using `bslib::sidebar()`.
 
-```{r echo=F,fig.cap="Example of a bslib dashboard with a page layout"}
+```{r echo=F,fig.cap="Example of a bslib dashboard with a page layout."}
 knitr::include_graphics("images/pages_ex.png")
 ```
 
@@ -28,19 +28,20 @@ knitr::include_graphics("images/pages_ex.png")
 
 Another core feature of `bslib` apps is the `card()`. Apps built using `bslib` will almost always use cards, these are essentially containers that hold content in an organized way that make it really easy for users to engage, understand, and navigate your app. 
 
-```{r echo=F,fig.cap="Example of a bslib dashboard cards"}
+```{r echo=F,fig.cap="Example of a bslib dashboard cards."}
 knitr::include_graphics("images/card_ex.png")
 ```
 
 ### Content filling {#filling}
 
-The last core concept to `bslib` is the way it is geared towards a filling layout, which means that contents are encouraged to grow/shrink to fit the browser window so that regardless of the resolution you're accessing the app it will adjust to fill it nicely. As a result, many functions have a `fill` argument; these are considered "fillable" containers. The child contents, a child in this case means it is wrapped by the parent function, will then do the filling feature when `fill = TRUE`, which is the default. When content goes beyond the screen resolution `bslib` will make the content scrollable.
+The last core concept to `bslib` is the way it is geared towards a filling layout, which means that contents are encouraged to grow/shrink to fit the browser window so that regardless of the resolution you're accessing the app it will adjust to fill it nicely. As a result, many functions have a `fill` argument; these are considered "fillable" containers. The child contents, a child in this case means it is wrapped by the parent function, will fill the parent feature when `fill = TRUE`, which is the default. When content goes beyond the screen resolution `bslib` will make the content scrollable.   
 
-```{r echo=F,fig.cap="Example of a plot output filling a card"}
+There is a lot to filling and it's fundamental to `bslib` so it is recommended to read more about it [here](https://rstudio.github.io/bslib/articles/filling/index.html).   
+
+```{r echo=F,fig.cap="Example of a plot filling a card and cards filling a page."}
 knitr::include_graphics("images/fill_ex.png")
 ```
 
-There is a lot to filling and it's fundamental to `bslib` so it is recommended to read more about it [here](https://rstudio.github.io/bslib/articles/filling/index.html).
 
 ## Layouts
 
@@ -49,6 +50,7 @@ There is a lot to filling and it's fundamental to `bslib` so it is recommended t
 To create multiple pages (or tabs) you can use `bslib::page_navbar()`, where you can set the `sidebar` argument if you want a sidebar, as well as add pages (tabs) by calling `bslib::nav_panel()`. Beyond a sidebar and tabs you can also create additional space between elements on the tab bar using `bslib::nav_spacer()` and even add links using `bslib::nav_item()`.
 
 ``` {r eval=F}
+#A typical setup
 bslib::page_navbar(
   title = "Interesting title",
   sidebar = bslib::sidebar(),
@@ -300,17 +302,19 @@ Filling layout for mobile devices is defaulted to `FALSE`. You can enable it by 
 
 A `bslib::card()` is designed to handle any number of “known” card items (e.g., `card_header()`, `card_body()`, etc) as unnamed arguments (i.e., children). As we’ll see shortly, `card()` also has some useful named arguments (e.g., `full_screen`, `height`, etc).
 
-### Card components {-}
+[Read more!](https://rstudio.github.io/bslib/articles/cards/index.html)
 
-`bslib::card_header()`: is where you can place contents in a header. This is a great place for your title and any icons!
+### Card components
 
-`bslib::card_body()`: is where you can place your main card contents. If you find yourself using `bslib::card_body()` without changing any of its defaults, consider dropping it altogether since it will be wrapped together into an implicit `card_body()` call anyways.
+- `bslib::card_header()`: is where you can place contents in a header. This is a great place for your title and any icons!    
+- `bslib::card_body()`: is where you can place your main card contents. If you find yourself using `bslib::card_body()` without changing any of its defaults, consider dropping it altogether since it will be wrapped together into an implicit `card_body()` call anyways.    
+- `bslib::card_footer()`: is where you can place contents in a footer. This is a great place for any tooltips or popovers (see section \@ref(tips-popovers)).    
 
-`bslib::card_footer()`: is where you can place contents in a footer. This is a great place for any tooltips or popovers (see section \@ref(tips-popovers)).
+### Restricting growth
 
-### Restricting growth {-}
+By default, a `card()`’s size grows to accommodate the size of its contents. Thus, if a `card_body()` contains a large amount of text, tables, etc., you may want to specify a `height` or `max_height` so it doesn't get too large. If the contents go beyond the `max_height` the card will become scrollable. 
 
-By default, a `card()`’s size grows to accommodate the size of its contents. Thus, if a `card_body()` contains a large amount of text, tables, etc., you may want to specify a `height` or `max_height`. If the contents go beyond the `max_height` the card will become scrollable only if the card's parent is set to `fill = TRUE`, if it isn't then the page becomes scrollable.
+[Read more!](https://rstudio.github.io/bslib/articles/cards/index.html#restricting-growth)
 
 ::::{.tipbox}
 :::{.center}
@@ -319,9 +323,11 @@ By default, a `card()`’s size grows to accommodate the size of its contents. T
 These things can be finnicky, you really need to feel it out for yourself and do a lot of testing. Also, setting the `height` helps with formatting on mobile, otherwise things can get a bit squishy.
 ::::
 
-### Scrolling {-}
+### Scrolling
 
-Although scrolling is convenient for reducing the amount of space required to park lots of content, it can also be a nuisance to the user. When the contents of a card go beyond the height of the screen `bslib` will automatically create a scroll bar for the card. To help reduce the need for scrolling, consider pairing scrolling with `full_screen = TRUE` (which adds an icon to expand the card’s size to the browser window). Alternatively, set the parent to `fill = FALSE` and the whole page will become scrollable.
+Although scrolling is convenient for reducing the amount of space required to park lots of content, it can also be a nuisance to the user. When the contents of a card go beyond the height of the screen `bslib` will automatically create a scroll bar for the card. To help reduce the need for scrolling, consider pairing scrolling with `full_screen = TRUE` (which adds an icon to expand the card’s size to the browser window). Additionally, set the parent to `fill = FALSE` and the whole page will become scrollable, where you can then set the card `height` argument so that the content fits within the card without the need for scrolling.
+
+[Read more!](https://rstudio.github.io/bslib/articles/cards/index.html#restricting-growth)
 
 ::::{.tipbox}
 :::{.center}
@@ -330,11 +336,13 @@ Although scrolling is convenient for reducing the amount of space required to pa
 Scrolling in cards can get a bit weird depending on the content. I'd recommend always having `full_screen = TRUE` and comparing how scrolling the card feels compared to scrolling the page. Remember, this can differ between pages/tabs!
 ::::
 
-### Filling outputs {-}
+### Filling outputs
 
 A `card()`’s default behavior is optimized for facilitating filling layouts. More specifically, if a fill item (e.g., plotly_widget), appears as a direct child of a `card_body()`, it resizes to fit the `card()`s specified height
 
-Fill item(s) aren’t limited in how much they grow and shrink, which can be problematic when a card becomes very small. To work around this, consider adding a `min_height` or `height` on the `card_body()` container or alternatively turn `fill` to `FALSE` in the cards parent container (ie. `layout_column_wrap()`).
+Fill item(s) aren’t limited in how much they grow and shrink, which can be problematic when a card becomes very small. To work around this, consider adding a `min_height` or `height` on the `card_body()` container or alternatively turn `fill` to `FALSE` in the cards parent container (ie. `layout_column_wrap()`). Setting `fill` to `FALSE` will make the page scrollable and therefore won't force the cards to adjust to the screen size, meaning you can set the card height to fit the content into the card without the need for scrolling.
+
+[Read more!](https://rstudio.github.io/bslib/articles/cards/index.html#filling-outputs)
 
 ``` {r eval=F}
 card(
@@ -349,7 +357,7 @@ card(
 )
 ```
 
-### Other features {-}
+### Other features
 
 There is a ton of functionality for cards that we don't necessarily need to dive deep on. These include:
 
@@ -530,7 +538,7 @@ actionButton(
   )
 ```
 
-There is a lot of functionality with tooltips and popovers, above are some of the main usages but you can read more and see more examples [here](https://rstudio.github.io/bslib/articles/tooltips-popovers/index.html).
+There is a lot of functionality with tooltips and popovers, above are the simple usages but you can read more intricate methods and see more examples [here](https://rstudio.github.io/bslib/articles/tooltips-popovers/index.html).
 
 ::::{.tipbox}
 :::{.center}
@@ -603,18 +611,502 @@ server <- function(input, output, session) {
 }
 ```
 
+[Read more!](https://rstudio.github.io/bslib/articles/cards/index.html#shiny)
+
 ::::{.notebox}
 :::{.center}
 **NOTE**
 :::
 This is probably the most advanced you can get with `shiny` and `bslib`. When you begin to work with things at this level you will need to learn how to use things like `browser()` and inspecting the shiny web-page. This is a bit beyond what we are going to cover here but I thought I'd introduce it.
 ::::
-<br>
-[Read more!](https://rstudio.github.io/bslib/articles/cards/index.html#shiny)
 
 ## Advanced Example with `bslib`
 
+Let's create a more advanced UI with `bslib::page_navbar` so we have tabs up top, a sidebar on the left, theme it for BCCDC, with 3 tabs:    
 
+- Tab 1 will be for a bit of an about filled with practically nothing because I just want to add more features and having this tab is the only way..   
+- Tab 2 will be looking into population data for each state.
+- Tab 3 will be cover some metrics on poverty at the county level.
+
+``` {r eval=F}
+
+library(magrittr) # I need %>%...
+
+# We will start with an htmltools::tagList() call because this allows 
+# us to add our css stylings before diving into the bslib setup
+
+ui <- htmltools::tagList(
+  
+  # I've commented it out because you won't have access to the css file.
+  # However, this is to provide you with an example of how you'd include it if you had it
+  
+  # htmltools::tags$head(
+  #   htmltools::tags$link(
+  #     rel = "stylesheet",
+  #     type = "text/css",
+  #     href = "css/dashboard_styling.css")
+  # ),
+  
+  ## Now we can begin the bslib section with our handy page_navbar()
+  bslib::page_navbar(
+    
+    # Set up the ID for our pages
+    id = "nav",
+    
+    # This will be the title for our app
+    title = "Midwest Population Dashboard", # How exciting...
+    
+    # Our BCCDC colour as the background
+    bg = "#004987",
+    
+    # Overall theme can just be something simple
+    theme = bslib::bs_theme(version = 5),
+    
+    # Let's include underlines for our page tabs
+    underline = TRUE,
+    
+    # We also want our window title to be related to the app's content
+    # this is what appears in the tab on your browser.
+    window_title = "Midwest Population Dashboard",
+    
+    # Let's make this mobile friendly
+    fillable_mobile = TRUE,
+    
+    # Sidebar -----------------------------------------------------------
+    
+    # Here we go! Sidebar first
+    # Make it not too wide, on the left hand side
+    sidebar = bslib::sidebar(
+      id = "sidebar",
+      width = 400,
+      position = "left",
+      # Let's set it to not open and only open on page 2 and 3
+      open = FALSE,
+      
+      # Conditional state selection for 2nd and 3rd pages
+      # Create a drop down list of the states
+      shiny::conditionalPanel(
+        # Here we tell it the conditions
+        condition = "input.nav == 'Population Profiles' ||
+        input.nav == 'Poverty Profiles'", 
+        
+        # This is our selection drop down
+        shiny::selectInput(
+          'state',
+          label = 'Select State:',
+          selected = "Illinois",
+          # I want them to be the full names but select based on acronym
+          choices = list(
+            "Illinois" = "IL",
+            "Indiana" = "IN",
+            "Michigan" = "MI",
+            "Ohio" = "OH",
+            "Wisconsin" = "WI"
+          )
+        )
+      ),
+      
+      # conditional county selection for 3rd page
+      # same thought process as above but this time
+      # for one of the pages only
+      shiny::conditionalPanel(
+        condition = "input.nav == 'Poverty Profiles'",
+        shiny::selectInput(
+          'county',
+          label = 'Select County:',
+          #Selected as NULL for now.
+          selected = NULL,
+          # To start we'll just pull the Illinois counties
+          # we will update based on state selection in server
+          choices = ggplot2::midwest %>% 
+            dplyr::filter(state == "IL") %>% 
+            dplyr::pull(county)%>% 
+            stringr::str_to_title() #they were all caps.. didn't like..
+        )
+      ),
+      
+      # At the bottom of the sidebar let's have a link to the info
+      # on the midwest dataset just because
+      shiny::actionButton(
+        inputId = "data_info",
+        label = "More on this dataset",
+        icon = shiny::icon('circle-info'),
+        onclick = "window.open('https://ggplot2.tidyverse.org/reference/midwest.html')"
+      )
+    ),
+    
+    # Page 1 -----------------------------------------------------------
+    
+    # Some gibberish About section
+    bslib::nav_panel(
+      title = "About",
+      bslib::layout_column_wrap(
+        width = 1,
+        # intro card
+        bslib::card(
+          min_height = 750,
+          bslib::card_header(
+            #This is how you can add a nice icon next to your title
+            shiny::h4(shiny::div(bsicons::bs_icon("list-task"), "About")) 
+          ),
+          shiny::htmlOutput(
+            "about" #output id right here!!! we'll fill it with text in the server
+          )
+        ) 
+      )
+    ),
+    
+    # Page 2 -----------------------------------------------------------
+    
+    # this will be at state level
+    # two plots, one for population by county bar chart
+    # second one can be pop by race at state level
+    bslib::nav_panel(
+      title = "Population Profiles",
+      bslib::layout_column_wrap(
+        width = "600px",
+        # I don't want to fill otherwise the cards will be huge and therefore the plots will get
+        # too big
+        fill = FALSE, 
+        # Card 1 pop by county -------------------------------------------
+        bslib::card(
+          full_screen = TRUE, # Let the people go full screen!
+          height = 575, # Seems like a good enough height
+          bslib::card_header(
+            shiny::h4(
+              shiny::div(
+                bsicons::bs_icon("pin-map-fill"), 
+                "Top 10 Populated Counties"
+              )
+            )
+          ),
+          # Add in our plot 'placeholder'.. hey that's shiny!!
+          shiny::plotOutput(
+            outputId = "county_pop"
+          )
+        ),
+        # Card 2 pop by race state -------------------------------------------
+        # same thing here as above
+        bslib::card(
+          full_screen = TRUE,
+          height = 575,
+          bslib::card_header(
+            shiny::h4(
+              shiny::div(
+                bsicons::bs_icon("people-fill"), 
+                "State Population by Race"
+              ),
+            )
+          ),
+          shiny::plotOutput(
+            outputId = "race_pop"
+          )
+        )
+      )
+    ),
+    
+    # Page 3 -----------------------------------------------------------
+    
+    # this will be at the county level and will 
+    # have 4 metrics for poverty in value boxes
+    bslib::nav_panel(
+      title = "Poverty Profiles",
+      bslib::layout_column_wrap(
+        width = 1/2, # we learned this! I think.. let me go back and check
+        fill = TRUE,
+        # Box 1 perc pov -------------------------------------------
+        bslib::value_box(
+          title = "Percentage in Poverty",
+          ## Because we want this value box to be reactive to our selections
+          ## we need to include a textOutput for our value that we'll fill in 
+          ## in the server!
+          value = shiny::textOutput('perc_poverty'), 
+          height = 300,
+          theme = bslib::value_box_theme(bg = "#fff", fg = "#004987") # let's set the theme 
+        ),
+        # Box 2 perc pov -------------------------------------------
+        # Same!!! but different metric
+        bslib::value_box(
+          title = "Percentage of Children in Poverty",
+          value = shiny::textOutput('perc_child_poverty'),
+          height = 300,
+          theme = bslib::value_box_theme(bg = "#fff", fg = "#004987")
+        ),
+        # Box 2 perc pov -------------------------------------------
+        # Same!!! but different metric
+        bslib::value_box(
+          title = "Percentage of Adults in Poverty",
+          value = shiny::textOutput('perc_adult_poverty'),
+          height = 300,
+          theme = bslib::value_box_theme(bg = "#fff", fg = "#004987")
+        ),
+        # Box 2 perc pov -------------------------------------------
+        # Same!!! but different metric
+        bslib::value_box(
+          title = "Percentage of Elderly in Poverty",
+          value = shiny::textOutput('perc_elder_poverty'),
+          height = 300,
+          theme = bslib::value_box_theme(bg = "#fff", fg = "#004987")
+        )
+      )
+    ),
+    
+    ## spaces everything after to far right because it looks nicer and 
+    ## I can make this example even more complicated
+    bslib::nav_spacer(),
+    
+    ## create a little drop down menu for links to shiny and bslib
+    bslib::nav_menu(
+      title = "References",
+      
+      # first order of business.. shiny
+      bslib::nav_item(
+        htmltools::tags$a(
+          shiny::icon("code"), 
+          htmltools::HTML("shiny"), 
+          href = 'https://mastering-shiny.org/', 
+          target = "_blank"
+        )
+      ),
+      
+      # second will be bslib
+      bslib::nav_item(
+        htmltools::tags$a(
+          shiny::icon("palette"), #that's an icon!
+          htmltools::HTML("bslib"), #This is our text
+          href = 'https://rstudio.github.io/bslib/', #URL
+          target = "_blank" #I'm not sure what this is... but it works
+        )
+      )
+    )
+  )
+)
+
+```
+
+### Build the server
+
+.
+
+``` {r eval=F}
+
+server <- function(input, output, session) {
+  
+  # Let's handle the sidebar opening on page 2 and 3 first
+  shiny::observe({
+    bslib::toggle_sidebar( #the server toggle
+      id = "sidebar", #the sidebar ID
+      open = input$nav != 'About' #Do the opposite (ie open) when not on the about
+    )
+  })
+  
+  # Page 1 About ----------------------------------------
+  
+  # Just to show you how to render text simply here..
+  output$about <- shiny::renderUI(
+    "This is the about section, this tells you what the app is about......."
+  )
+  
+  # Page 2 Population -----------------------------------
+  
+  ## we are only updating this page based on the state input
+  ## so we can use observeEvent()
+  shiny::observeEvent(input$state, {
+    
+    ## let's set up the data for the county plot first
+    county_pop_dat <- ggplot2::midwest %>%
+      dplyr::filter(state == input$state) %>% # We use the input here
+      dplyr::arrange(-poptotal) %>%
+      dplyr::mutate(county = factor(county, levels = county)) %>%
+      dplyr::top_n(
+        10,
+        poptotal
+      )
+    
+    ## Render the plot
+    output$county_pop <- shiny::renderPlot(
+      ggplot2::ggplot(
+        county_pop_dat,
+        ggplot2::aes(
+          x = county,
+          y = poptotal
+        )
+      ) +
+        ggplot2::geom_bar(
+          stat = "identity",
+          fill = "skyblue"
+        ) +
+        ggplot2::labs(
+          x = "County",
+          y = "Population"
+        ) +
+        ggplot2::scale_y_continuous(labels = scales::comma) +
+        ggplot2::theme_minimal() +
+        ggplot2::theme(
+          axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 14),  
+          axis.title.x = ggplot2::element_text(size = 16),  
+          axis.title.y = ggplot2::element_text(size = 16),
+          axis.text.y = ggplot2::element_text(size = 14)
+        )
+    )
+    
+    
+      
+    ## Next let's do the race pop plot
+    ## same idea let's filter using the input$state
+    race_pop_dat <- ggplot2::midwest %>% 
+      dplyr::filter(state == input$state) %>%
+      dplyr::select(
+        state, 
+        county, 
+        popwhite, 
+        popblack, 
+        popamerindian, 
+        popasian, 
+        popother
+      ) %>% 
+      tidyr::pivot_longer(
+        cols = c(
+          'popwhite',
+          'popblack',
+          'popamerindian',
+          'popasian',
+          'popother'
+        ),
+        names_to = "pop_type",
+        values_to = "population"
+      ) %>% 
+      dplyr::summarise(
+        population = sum(population),
+        .by = c('pop_type')
+      ) %>% 
+      dplyr::mutate(
+        pop_type = dplyr::case_when(
+          pop_type == 'popwhite' ~ "White",
+          pop_type == 'popblack' ~ "Black",
+          pop_type == 'popother' ~ "Other",
+          pop_type == 'popasian' ~ "Asian",
+          pop_type == 'popamerindian' ~ "Native American"
+        )
+      ) %>% 
+      dplyr::arrange(-population) %>% 
+      dplyr::mutate(
+        pop_type = factor(pop_type, levels = pop_type)
+      )
+    
+    ## plot this bad boy
+    output$race_pop <- shiny::renderPlot(
+      ggplot2::ggplot(
+        race_pop_dat, 
+        ggplot2::aes(
+          x = pop_type, 
+          y = population
+        )
+      ) +
+        ggplot2::geom_bar(
+          stat = "identity", 
+          fill = "skyblue"
+        ) +
+        ggplot2::labs(
+          x = "Race", 
+          y = "Population"
+        ) +
+        ggplot2::scale_y_continuous(labels = scales::comma) +
+        ggplot2::theme_minimal() +
+        ggplot2::theme(
+          axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 14),  
+          axis.title.x = ggplot2::element_text(size = 16),  
+          axis.title.y = ggplot2::element_text(size = 16),
+          axis.text.y = ggplot2::element_text(size = 14)
+        )
+    )
+    
+  })
+  
+  # Page 3 Poverty --------------------------------------
+  
+  ## First let's update the dropdown menu for the county 
+  ## when we select a state using input$state
+  shiny::observeEvent(input$state, {
+    
+    ## Filter for the counties for that state
+    new_choices <- ggplot2::midwest %>%
+      dplyr::filter(state == input$state) %>%
+      dplyr::pull(county) %>% 
+      stringr::str_to_title()
+    
+    ## Now let's update the UI reactively!
+    ## to do that we only need to reference that handy ID
+    shiny::updateSelectInput(
+      inputId = 'county',
+      label = 'Select County:',
+      selected = new_choices[1], #just select the first in the list
+      choices = new_choices
+    )
+    
+  })
+  
+  ## Next let's update the value boxes when the county changes
+  ## but we also need to take into account that the state's have
+  ## some overlapping county names so it needs to react to a change in either
+  ## we can do this using observe()
+  shiny::observe({
+    
+    ## Here let's set a global variable to the currently selected
+    ## state and county like so.. In observe() any reference to
+    ## an input is recognized by shiny and therefore this reactive
+    ## container will be re-ran.. lazily .. by shiny as a result.
+    state_selection <- input$state
+    county_selection <- input$county
+    
+    ## Now we use those to filter our data
+    vb_data <- ggplot2::midwest %>% 
+      dplyr::mutate(
+        county = stringr::str_to_title(county)
+      ) %>% 
+      dplyr::filter(
+        state == state_selection,
+        county == county_selection
+      )
+    
+    ## Lastly just update that text UI to include our metrics!
+    output$perc_poverty <- renderText({
+      paste0(round(vb_data$percbelowpoverty, 1), "%")
+    })
+    
+    output$perc_child_poverty <- renderText({
+      paste0(round(vb_data$percchildbelowpovert, 1), "%")
+    })
+    
+    output$perc_adult_poverty <- renderText({
+      paste0(round(vb_data$percadultpoverty, 1), "%")
+    })
+    
+    output$perc_elder_poverty <- renderText({
+      paste0(round(vb_data$percelderlypoverty, 1), "%")
+    })
+    
+    
+  })
+  
+}
+
+```
+
+### Putting it all together
+
+Now we're finally ready to deploy locally!
+
+``` {r eval=F}
+shinyApp(ui, server)
+```
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Phew... that was a bit of a step up. But I hope that you can see how we are slowly building on our skills from the `shiny` package with `bslib`.
+::::
 
 ## Additional Resources
 
