@@ -96,6 +96,7 @@ main-colours-and-fonts
 additional-theming-tools
 using-shiny-info
 advanced-example-with-bslib
+build-the-ui-1
 build-the-server-1
 putting-it-all-together-1
 additional-resources-3
