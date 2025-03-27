@@ -175,6 +175,8 @@ Let's create a simple UI with `shiny::navbarPage()` so we have tabs up top, we'l
 
 ``` {r eval=F}
 
+library(magrittr)
+
 ui <- shiny::navbarPage(
   # Let's set up our title for the page
   title = 'Appy Hour',
@@ -273,12 +275,12 @@ Remember, the server function requires the same three arguments everytime: `inpu
 Now we're finally ready to deploy locally!
 
 ``` {r eval=F}
-shinyApp(ui, server)
+shiny::shinyApp(ui, server)
 ```
 
 ## Deploying to shinyapps.io
 
-At the BCCDC we have a [shinyapps.io](https://www.shinyapps.io/) account that allows up to publish our apps to their servers. We can set these to be publically viewable, as well as private. Typically, privately deployed apps are for development purposes or previewing prior to public release. To deploy the app you just need to call two functions like so:
+At the BCCDC we have a [shinyapps.io](https://www.shinyapps.io/) account that allows us to publish our apps to their servers. We can set these to be publically viewable, as well as private. Typically, privately deployed apps are for development purposes or previewing prior to public release. To deploy the app you just need to call two functions like so:
 
 ``` {r eval=F}
 rsconnect::setAccountInfo(
