@@ -635,7 +635,7 @@ Let's create a more advanced UI with `bslib::page_navbar` so we have tabs up top
 library(magrittr) # I need %>%...
 
 # We will start with an htmltools::tagList() call because this allows 
-# us to add our css stylings before diving into the bslib setup
+# us to add multiple components together at once (ie. our css stylings before diving into the bslib setup)
 
 ui <- htmltools::tagList(
   
@@ -877,7 +877,7 @@ ui <- htmltools::tagList(
           shiny::icon("palette"), #that's an icon!
           htmltools::HTML("bslib"), #This is our text
           href = 'https://rstudio.github.io/bslib/', #URL
-          target = "_blank" #I'm not sure what this is... but it works
+          target = "_blank" #This means open the link in a new tab
         )
       )
     )

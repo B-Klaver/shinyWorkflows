@@ -1,5 +1,390 @@
 # Modularization
 
-## 
+At the simplest level, a module is a pair of UI and server functions. The magic of modules comes because these functions are constructed in a special way that creates a “namespace”. So far, when writing an app, the names (ids) of the controls are global: all parts of your server function can see all parts of your UI. Modules give you the ability to create controls that can only be seen from within the module. This is called a namespace because it creates “spaces” of “names” that are isolated from the rest of the app.
 
-. 
+Shiny modules have two big advantages. Firstly, namespacing makes it easier to understand how your app works because you can write, analyse, and test individual components in isolation. Secondly, because modules are functions they help you reuse code; anything you can do with a function, you can do with a module.
+
+## Module Basics
+
+To showcase modularization let's look at a very simple app:
+
+``` {r eval=F}
+ui <- fluidPage(
+  selectInput("var", "Variable", names(mtcars)),
+  numericInput("bins", "bins", 10, min = 1),
+  plotOutput("hist")
+)
+server <- function(input, output, session) {
+  data <- reactive(mtcars[[input$var]])
+  output$hist <- renderPlot({
+    hist(data(), breaks = input$bins, main = input$var)
+  }, res = 96)
+}
+```
+
+A module is very similar to an app, that is, they are composed of:    
+
+- A module UI function
+- A server function
+
+These functions both require an `id` argument that will namespace the module. To begin creating a module you are going to look for UI/server pairs in your app and extract them out into paired UI/server functions! In our example, this will be our inputs and plot.
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#module-basics)
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+In fact you can test your modules by treating them like a standalone app!
+::::
+
+### Module UI
+
+First the UI module. There are two steps:   
+
+- Put the UI in a function with an `id` argument   
+- Wrap each existing ID in a `NS()` function so that each previous ID turns into `NS(id, "previous_id")`
+
+This would look like this for our example:
+
+``` {r eval=F}
+histogramUI <- function(id) {
+  tagList(
+    selectInput(NS(id, "var"), "Variable", choices = names(mtcars)),
+    numericInput(NS(id, "bins"), "bins", value = 10, min = 1),
+    plotOutput(NS(id, "hist"))
+  )
+}
+```
+
+The UI components are wrapped in `tagList()`, which allows you to bundle components, which can then be placed in other functions in the app code such as `shiny::fluidRow()`, `bslib::layout_column_wrap()` or `bslib::sidebar()`. You can also wrap them in `shiny::fluidRow()` or `bslib::layout_column_wrap()` in the function itself if you'd prefer.
+
+There is another way to namespace within a UI function; if you only have one original ID, let's use the plot for our example, you can follow this format:
+
+``` {r eval=F}
+
+histogramUI <- function(id) {
+  
+  ns <- shiny::NS(id)
+  
+  plotOutput(
+    ns("hist")
+  )
+  
+}
+
+```
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#module-ui)
+
+### Module server
+
+The second part of this is the server function, which is also going to have an `id` argument. Inside of this function we call `moduleServer()` with the `id` arugment, and an additional function that looks like the typical server function:
+
+``` {r eval=F}
+histogramServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    data <- reactive(mtcars[[input$var]])
+    output$hist <- renderPlot({
+      hist(data(), breaks = input$bins, main = input$var)
+    }, res = 96)
+  })
+}
+```
+
+These two levels help distinguish the arguments between your module and the server function. It looks complex but this is how every module is set up, so it's really a copy and paste scenario.
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#module-server)
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+`moduleServer()` takes care of the namespacing automatically, that is `input$var` and `input$bins` identifies the original namespaces from the UI section of the module where we had `NS(id, "var")` and `NS(id, "bins")`.
+::::
+
+### Module testing
+
+It's good practice to test your module in a function that creates a simple app that only includes your module:
+
+``` {r eval=F}
+histogramApp <- function() {
+  ui <- fluidPage(
+    histogramUI("hist1")
+  )
+  server <- function(input, output, session) {
+    histogramServer("hist1")
+  }
+  shinyApp(ui, server)  
+}
+```
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Just like a regular app we need to link the UI and server using the same `id` name.
+::::
+
+### Namespacing
+
+Let's circle back on namespacing. At this point of the example we have two separate namespacing situations:
+
+- Inside of our module we have `NS(id, "var")`, `NS(id, "bins")`, and `NS(id, "hist")`
+- Outside of our module in our app function we have `id = 'hist1'`
+
+It's important to realize here that the namespaces that are created inside a module only exist (ie. can be referred to) within the two module functions; in other words, a module is in essence a "black box" that can't be seen from outside of the module. This means that as an author of a module, you don't need to worry about conflicts with namespacing with other modules or with namespacing in the app UI or server.
+
+If you'd like to refer to inputs from other places in the app in your module you'll have to pass them to a module argument explicitly - we'll talk about this later.
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#namespacing)
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Note that the module UI and server differ in how the namespacing is expressed:   
+
+- In the module UI, the namespacing is explicit: you have to call `NS(id, "name")` every time you create an input or output.   
+- In the module server, the namespacing is implicit. You only need to use `id` in the call to `moduleServer()` and then Shiny automatically namespaces `input` and `output` so that in your module code `input$name` means the input with name `NS(id, "name")`.   
+::::
+
+### Naming conventions
+
+A standard convention for naming can be as follows:
+
+- `R/histogram.R` holds all the code for the module.    
+- `histogramUI()` is the module UI. If it’s used primarily for `input` or `output` it can be called `histogramInput()` or `histogramOuput()` instead.    
+- `histogramServer()` is the module server.   
+- `histogramApp()` creates a complete app for interactive experimentation and more formal testing.   
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#naming-conventions)
+
+## Advanced Inputs and outputs
+
+Adding arguments beyond the `id` to the module UI gives greater control over the module, allowing you to use the same module in more places in your app.
+
+Unlike regular Shiny code, connecting modules together requires you to be explicit about inputs and outputs. Initially, this is going to feel tiresome. And it’s certainly more work than Shiny’s usual free-form association. But modules enforce specific lines of communication for a reason: they’re a little more work to create, but much easier to understand, and allow you to build substantially more complex apps.
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#inputs-and-outputs)
+
+### UI input and server output
+
+Let's look at an example from the [book](https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output) where we will have an additional argument in our input function and the server function returns a reactive value that we will use in a different element of the server.
+
+First they set up the input function:
+
+``` {r eval=F}
+# Two arguments, id as usual and a filter
+datasetInput <- function(id, filter = NULL) {
+  
+  # Get list of df names
+  names <- ls("package:datasets")
+  
+  # If a filter is present then update the names in the list
+  # accordingly
+  if (!is.null(filter)) {
+    # get the data to identify datasets and matrices
+    data <- lapply(names, get, "package:datasets")
+    # filter for selection, "dataset" or "matrix"
+    names <- names[vapply(data, filter, logical(1))]
+  }
+  
+  # Set up the UI selections for the list of names
+  selectInput(NS(id, "dataset"), "Pick a dataset", choices = names)
+  
+}
+```
+
+Then the server function:
+
+``` {r eval=F}
+datasetServer <- function(id) {
+  # set up the usual 
+  moduleServer(id, function(input, output, session) {
+    
+    # This will return a value, the last expression in the function
+    # will be the return value and should always be inside a reactive() wrapper
+    reactive(get(input$dataset, "package:datasets"))
+  })
+}
+```
+
+Finally putting it all together:
+
+``` {r eval=F}
+
+# They included an argument in the larger app call
+# it makes sense for this small example but you would probably
+# call it in the UI itself.. at least I would
+datasetApp <- function(filter = NULL) {
+  ui <- fluidPage(
+    # Set up the input portion of the module
+    datasetInput("dataset", filter = filter),
+    # also include a placeholder for a table to show
+    # the selected data from our module
+    tableOutput("data")
+  )
+  server <- function(input, output, session) {
+    # Set up the server, because it's giving us a reactive value
+    # that we want to use in the table we need to do `<-` assignment
+    # just like we would normally in R
+    data <- datasetServer("dataset")
+    # Now call this data in our table render
+    output$data <- renderTable(head(data()))
+  }
+  shinyApp(ui, server)
+}
+```
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output)
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+When you are returning a value in the server portion of your app that's reactive (ie. user input will impact it) you must assign it to a value in the environment. When you want to use that stored value you must refer to it like `value()` versus accessing it's reactive form by calling just `value`. In the above example this is why we call the reactive `data` value as `data()`.
+::::
+
+### Server inputs
+
+Given that we work with both reactive and unreactive values in an app, it can be smart to set up simple error messages in your server modules to ensure that future users know what type of value is expected in a server argument:
+
+``` {r eval=F}
+selectVarServer <- function(id, data, filter = is.numeric) {
+  # We need data to be reactive!
+  stopifnot(is.reactive(data))
+  # We need the filter to be a non-reactive value!
+  stopifnot(!is.reactive(filter))
+  
+  moduleServer(id, function(input, output, session) {
+    observeEvent(data(), {
+      updateSelectInput(session, "var", choices = find_vars(data(), filter))
+    })
+    
+    reactive(data()[[input$var]])
+  })
+}
+```
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#server-inputs)
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Another way to think about reactive or non-reactive values is when can the value change: is it fixed and constant over the life-time of the app, or is it reactive, changing as the user interacts with the app.
+::::
+
+### Modules inside of modules
+
+Modules can also be nested, in that you can call a module within another module. This makes sense if you have two components that are inherently tied together in your app. Here is an example from [mastering shiny](https://mastering-shiny.org/scaling-modules.html#modules-inside-of-modules):
+
+``` {r eval=F}
+
+# Because the example's goal is to allow users to select
+# a dataset and then select a variable from that dataset
+# it made sense to just combine the individual modules into a larger
+# module
+
+selectDataVarUI <- function(id) {
+  # Tag list for combining multiple components
+  tagList(
+    # This is a dataset input selection
+    datasetInput(NS(id, "data"), filter = is.data.frame),
+    # This is to select the variable from the selected dataset
+    selectVarInput(NS(id, "var"))
+  )
+}
+
+selectDataVarServer <- function(id, filter = is.numeric) {
+  moduleServer(id, function(input, output, session) {
+    # Here we pull the data based on the selection
+    data <- datasetServer("data")
+    # and here we filter the data for the variable
+    var <- selectVarServer("var", data, filter = filter)
+    var #return value
+  })
+}
+
+selectDataVarApp <- function(filter = is.numeric) {
+  ui <- fluidPage(
+    sidebarLayout(
+      # Now there only needs to be a single call in the UI
+      sidebarPanel(selectDataVarUI("var")),
+      mainPanel(verbatimTextOutput("out"))
+    )
+  )
+  server <- function(input, output, session) {
+    # and a single call in the server 
+    var <- selectDataVarServer("var", filter)
+    output$out <- renderPrint(var(), width = 40)
+  }
+  shinyApp(ui, server)
+}
+```
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#modules-inside-of-modules)
+
+### Multiple outputs
+
+Sometimes it's useful for the module's server to return more than one value. You can easily do this the same way you would for a regular R function - return a list. 
+The example from [mastering shiny]() is:
+
+``` {r eval=F}
+
+selectVarServer <- function(id, data, filter = is.numeric) {
+  stopifnot(is.reactive(data))
+  stopifnot(!is.reactive(filter))
+  
+  moduleServer(id, function(input, output, session) {
+    observeEvent(data(), {
+      updateSelectInput(session, "var", choices = find_vars(data(), filter))
+    })
+    
+    list(
+      # Return the name and the values of the variable
+      name = reactive(input$var),
+      value = reactive(data()[[input$var]])
+    )
+  })
+}
+
+histogramApp <- function() {
+  ui <- fluidPage(...)
+
+  server <- function(input, output, session) {
+    data <- datasetServer("data")
+    # assign the list to X
+    x <- selectVarServer("var", data)
+    # create a histogram using the values and title it with the
+    # variable name
+    histogramServer("hist", x$value, x$name)
+  }
+  shinyApp(ui, server)
+} 
+
+```
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#multiple-outputs)
+
+::::{.warnbox}
+:::{.center}
+**WARNING**
+:::
+The main challenge with this sort of code is remembering when you use the reactive form (e.g. `x$value`) vs. when you use its stored value (e.g. `x$value()`). Just remember that when passing an argument to a module, you want the module to react to the value changing which means that you have to pass the reactive, not it’s current value. However, if you want to display the actual current value you would pass the stored value.
+::::
+
+## Advising against single object modules
+
+When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, `plotOutput()` and `renderPlot()` are connected only by shared ID. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared ID. This also allows you to make them more generalizable and allows for reactivity.
+
+For a full example [read more here](https://mastering-shiny.org/scaling-modules.html#module-objects).
+
+## Example
+
+
+
+## Additional Resources
+
+- [Shiny Modules](https://mastering-shiny.org/scaling-modules.html#scaling-modules)

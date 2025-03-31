@@ -245,7 +245,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.10" data-path="bslib.html"><a href="bslib.html#additional-resources-3"><i class="fa fa-check"></i><b>4.10</b> Additional Resources</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="modularization.html"><a href="modularization.html"><i class="fa fa-check"></i><b>5</b> Modularization</a><ul>
-<li class="chapter" data-level="5.1" data-path="modularization.html"><a href="modularization.html#section"><i class="fa fa-check"></i><b>5.1</b> </a></li>
+<li class="chapter" data-level="5.1" data-path="modularization.html"><a href="modularization.html#module-basics"><i class="fa fa-check"></i><b>5.1</b> Module Basics</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="modularization.html"><a href="modularization.html#module-ui"><i class="fa fa-check"></i><b>5.1.1</b> Module UI</a></li>
+<li class="chapter" data-level="5.1.2" data-path="modularization.html"><a href="modularization.html#module-server"><i class="fa fa-check"></i><b>5.1.2</b> Module server</a></li>
+<li class="chapter" data-level="5.1.3" data-path="modularization.html"><a href="modularization.html#module-testing"><i class="fa fa-check"></i><b>5.1.3</b> Module testing</a></li>
+<li class="chapter" data-level="5.1.4" data-path="modularization.html"><a href="modularization.html#namespacing"><i class="fa fa-check"></i><b>5.1.4</b> Namespacing</a></li>
+<li class="chapter" data-level="5.1.5" data-path="modularization.html"><a href="modularization.html#naming-conventions"><i class="fa fa-check"></i><b>5.1.5</b> Naming conventions</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="modularization.html"><a href="modularization.html#advanced-inputs-and-outputs"><i class="fa fa-check"></i><b>5.2</b> Advanced Inputs and outputs</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="modularization.html"><a href="modularization.html#ui-input-and-server-output"><i class="fa fa-check"></i><b>5.2.1</b> UI input and server output</a></li>
+<li class="chapter" data-level="5.2.2" data-path="modularization.html"><a href="modularization.html#server-inputs-1"><i class="fa fa-check"></i><b>5.2.2</b> Server inputs</a></li>
+<li class="chapter" data-level="5.2.3" data-path="modularization.html"><a href="modularization.html#modules-inside-of-modules"><i class="fa fa-check"></i><b>5.2.3</b> Modules inside of modules</a></li>
+<li class="chapter" data-level="5.2.4" data-path="modularization.html"><a href="modularization.html#multiple-outputs"><i class="fa fa-check"></i><b>5.2.4</b> Multiple outputs</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="modularization.html"><a href="modularization.html#advising-against-single-object-modules"><i class="fa fa-check"></i><b>5.3</b> Advising against single object modules</a></li>
+<li class="chapter" data-level="5.4" data-path="modularization.html"><a href="modularization.html#example"><i class="fa fa-check"></i><b>5.4</b> Example</a></li>
+<li class="chapter" data-level="5.5" data-path="modularization.html"><a href="modularization.html#additional-resources-4"><i class="fa fa-check"></i><b>5.5</b> Additional Resources</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -826,7 +841,7 @@ Figure 4.6: An example of value boxes.
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">library</span>(magrittr) <span class="co"># I need %&gt;%...</span></a>
 <a class="sourceLine" id="cb45-2" title="2"></a>
 <a class="sourceLine" id="cb45-3" title="3"><span class="co"># We will start with an htmltools::tagList() call because this allows </span></a>
-<a class="sourceLine" id="cb45-4" title="4"><span class="co"># us to add our css stylings before diving into the bslib setup</span></a>
+<a class="sourceLine" id="cb45-4" title="4"><span class="co"># us to add multiple components together at once (ie. our css stylings before diving into the bslib setup)</span></a>
 <a class="sourceLine" id="cb45-5" title="5"></a>
 <a class="sourceLine" id="cb45-6" title="6">ui &lt;-<span class="st"> </span>htmltools<span class="op">::</span><span class="kw">tagList</span>(</a>
 <a class="sourceLine" id="cb45-7" title="7">  </a>
@@ -1068,7 +1083,7 @@ Figure 4.6: An example of value boxes.
 <a class="sourceLine" id="cb45-243" title="243">          shiny<span class="op">::</span><span class="kw">icon</span>(<span class="st">&quot;palette&quot;</span>), <span class="co">#that&#39;s an icon!</span></a>
 <a class="sourceLine" id="cb45-244" title="244">          htmltools<span class="op">::</span><span class="kw">HTML</span>(<span class="st">&quot;bslib&quot;</span>), <span class="co">#This is our text</span></a>
 <a class="sourceLine" id="cb45-245" title="245">          <span class="dt">href =</span> <span class="st">&#39;https://rstudio.github.io/bslib/&#39;</span>, <span class="co">#URL</span></a>
-<a class="sourceLine" id="cb45-246" title="246">          <span class="dt">target =</span> <span class="st">&quot;_blank&quot;</span> <span class="co">#I&#39;m not sure what this is... but it works</span></a>
+<a class="sourceLine" id="cb45-246" title="246">          <span class="dt">target =</span> <span class="st">&quot;_blank&quot;</span> <span class="co">#This means open the link in a new tab</span></a>
 <a class="sourceLine" id="cb45-247" title="247">        )</a>
 <a class="sourceLine" id="cb45-248" title="248">      )</a>
 <a class="sourceLine" id="cb45-249" title="249">    )</a>

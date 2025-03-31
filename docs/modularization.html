@@ -245,7 +245,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.10" data-path="bslib.html"><a href="bslib.html#additional-resources-3"><i class="fa fa-check"></i><b>4.10</b> Additional Resources</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="modularization.html"><a href="modularization.html"><i class="fa fa-check"></i><b>5</b> Modularization</a><ul>
-<li class="chapter" data-level="5.1" data-path="modularization.html"><a href="modularization.html#section"><i class="fa fa-check"></i><b>5.1</b> </a></li>
+<li class="chapter" data-level="5.1" data-path="modularization.html"><a href="modularization.html#module-basics"><i class="fa fa-check"></i><b>5.1</b> Module Basics</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="modularization.html"><a href="modularization.html#module-ui"><i class="fa fa-check"></i><b>5.1.1</b> Module UI</a></li>
+<li class="chapter" data-level="5.1.2" data-path="modularization.html"><a href="modularization.html#module-server"><i class="fa fa-check"></i><b>5.1.2</b> Module server</a></li>
+<li class="chapter" data-level="5.1.3" data-path="modularization.html"><a href="modularization.html#module-testing"><i class="fa fa-check"></i><b>5.1.3</b> Module testing</a></li>
+<li class="chapter" data-level="5.1.4" data-path="modularization.html"><a href="modularization.html#namespacing"><i class="fa fa-check"></i><b>5.1.4</b> Namespacing</a></li>
+<li class="chapter" data-level="5.1.5" data-path="modularization.html"><a href="modularization.html#naming-conventions"><i class="fa fa-check"></i><b>5.1.5</b> Naming conventions</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="modularization.html"><a href="modularization.html#advanced-inputs-and-outputs"><i class="fa fa-check"></i><b>5.2</b> Advanced Inputs and outputs</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="modularization.html"><a href="modularization.html#ui-input-and-server-output"><i class="fa fa-check"></i><b>5.2.1</b> UI input and server output</a></li>
+<li class="chapter" data-level="5.2.2" data-path="modularization.html"><a href="modularization.html#server-inputs-1"><i class="fa fa-check"></i><b>5.2.2</b> Server inputs</a></li>
+<li class="chapter" data-level="5.2.3" data-path="modularization.html"><a href="modularization.html#modules-inside-of-modules"><i class="fa fa-check"></i><b>5.2.3</b> Modules inside of modules</a></li>
+<li class="chapter" data-level="5.2.4" data-path="modularization.html"><a href="modularization.html#multiple-outputs"><i class="fa fa-check"></i><b>5.2.4</b> Multiple outputs</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="modularization.html"><a href="modularization.html#advising-against-single-object-modules"><i class="fa fa-check"></i><b>5.3</b> Advising against single object modules</a></li>
+<li class="chapter" data-level="5.4" data-path="modularization.html"><a href="modularization.html#example"><i class="fa fa-check"></i><b>5.4</b> Example</a></li>
+<li class="chapter" data-level="5.5" data-path="modularization.html"><a href="modularization.html#additional-resources-4"><i class="fa fa-check"></i><b>5.5</b> Additional Resources</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -269,9 +284,335 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="modularization" class="section level1 hasAnchor">
 <h1><span class="header-section-number">5</span> Modularization<a href="modularization.html#modularization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="section" class="section level2">
-<h2><span class="header-section-number">5.1</span> </h2>
-<p>.</p>
+<p>At the simplest level, a module is a pair of UI and server functions. The magic of modules comes because these functions are constructed in a special way that creates a “namespace”. So far, when writing an app, the names (ids) of the controls are global: all parts of your server function can see all parts of your UI. Modules give you the ability to create controls that can only be seen from within the module. This is called a namespace because it creates “spaces” of “names” that are isolated from the rest of the app.</p>
+<p>Shiny modules have two big advantages. Firstly, namespacing makes it easier to understand how your app works because you can write, analyse, and test individual components in isolation. Secondly, because modules are functions they help you reuse code; anything you can do with a function, you can do with a module.</p>
+<div id="module-basics" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.1</span> Module Basics<a href="modularization.html#module-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To showcase modularization let’s look at a very simple app:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb48-2" title="2">  <span class="kw">selectInput</span>(<span class="st">&quot;var&quot;</span>, <span class="st">&quot;Variable&quot;</span>, <span class="kw">names</span>(mtcars)),</a>
+<a class="sourceLine" id="cb48-3" title="3">  <span class="kw">numericInput</span>(<span class="st">&quot;bins&quot;</span>, <span class="st">&quot;bins&quot;</span>, <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb48-4" title="4">  <span class="kw">plotOutput</span>(<span class="st">&quot;hist&quot;</span>)</a>
+<a class="sourceLine" id="cb48-5" title="5">)</a>
+<a class="sourceLine" id="cb48-6" title="6">server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb48-7" title="7">  data &lt;-<span class="st"> </span><span class="kw">reactive</span>(mtcars[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb48-8" title="8">  output<span class="op">$</span>hist &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({</a>
+<a class="sourceLine" id="cb48-9" title="9">    <span class="kw">hist</span>(<span class="kw">data</span>(), <span class="dt">breaks =</span> input<span class="op">$</span>bins, <span class="dt">main =</span> input<span class="op">$</span>var)</a>
+<a class="sourceLine" id="cb48-10" title="10">  }, <span class="dt">res =</span> <span class="dv">96</span>)</a>
+<a class="sourceLine" id="cb48-11" title="11">}</a></code></pre></div>
+<p>A module is very similar to an app, that is, they are composed of:</p>
+<ul>
+<li>A module UI function</li>
+<li>A server function</li>
+</ul>
+<p>These functions both require an <code>id</code> argument that will namespace the module. To begin creating a module you are going to look for UI/server pairs in your app and extract them out into paired UI/server functions! In our example, this will be our inputs and plot.</p>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#module-basics">Read more!</a></p>
+<div class="notebox">
+<div class="center">
+<p><strong>NOTE</strong></p>
+</div>
+<p>In fact you can test your modules by treating them like a standalone app!</p>
+</div>
+<div id="module-ui" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.1.1</span> Module UI<a href="modularization.html#module-ui" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First the UI module. There are two steps:</p>
+<ul>
+<li>Put the UI in a function with an <code>id</code> argument<br />
+</li>
+<li>Wrap each existing ID in a <code>NS()</code> function so that each previous ID turns into <code>NS(id, "previous_id")</code></li>
+</ul>
+<p>This would look like this for our example:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">histogramUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb49-2" title="2">  <span class="kw">tagList</span>(</a>
+<a class="sourceLine" id="cb49-3" title="3">    <span class="kw">selectInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;var&quot;</span>), <span class="st">&quot;Variable&quot;</span>, <span class="dt">choices =</span> <span class="kw">names</span>(mtcars)),</a>
+<a class="sourceLine" id="cb49-4" title="4">    <span class="kw">numericInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;bins&quot;</span>), <span class="st">&quot;bins&quot;</span>, <span class="dt">value =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb49-5" title="5">    <span class="kw">plotOutput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;hist&quot;</span>))</a>
+<a class="sourceLine" id="cb49-6" title="6">  )</a>
+<a class="sourceLine" id="cb49-7" title="7">}</a></code></pre></div>
+<p>The UI components are wrapped in <code>tagList()</code>, which allows you to bundle components, which can then be placed in other functions in the app code such as <code>shiny::fluidRow()</code>, <code>bslib::layout_column_wrap()</code> or <code>bslib::sidebar()</code>. You can also wrap them in <code>shiny::fluidRow()</code> or <code>bslib::layout_column_wrap()</code> in the function itself if you’d prefer.</p>
+<p>There is another way to namespace within a UI function; if you only have one original ID, let’s use the plot for our example, you can follow this format:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">histogramUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb50-2" title="2">  </a>
+<a class="sourceLine" id="cb50-3" title="3">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
+<a class="sourceLine" id="cb50-4" title="4">  </a>
+<a class="sourceLine" id="cb50-5" title="5">  <span class="kw">plotOutput</span>(</a>
+<a class="sourceLine" id="cb50-6" title="6">    <span class="kw">ns</span>(<span class="st">&quot;hist&quot;</span>)</a>
+<a class="sourceLine" id="cb50-7" title="7">  )</a>
+<a class="sourceLine" id="cb50-8" title="8">  </a>
+<a class="sourceLine" id="cb50-9" title="9">}</a></code></pre></div>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#module-ui">Read more!</a></p>
+</div>
+<div id="module-server" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.1.2</span> Module server<a href="modularization.html#module-server" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The second part of this is the server function, which is also going to have an <code>id</code> argument. Inside of this function we call <code>moduleServer()</code> with the <code>id</code> arugment, and an additional function that looks like the typical server function:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">histogramServer &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb51-2" title="2">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb51-3" title="3">    data &lt;-<span class="st"> </span><span class="kw">reactive</span>(mtcars[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb51-4" title="4">    output<span class="op">$</span>hist &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({</a>
+<a class="sourceLine" id="cb51-5" title="5">      <span class="kw">hist</span>(<span class="kw">data</span>(), <span class="dt">breaks =</span> input<span class="op">$</span>bins, <span class="dt">main =</span> input<span class="op">$</span>var)</a>
+<a class="sourceLine" id="cb51-6" title="6">    }, <span class="dt">res =</span> <span class="dv">96</span>)</a>
+<a class="sourceLine" id="cb51-7" title="7">  })</a>
+<a class="sourceLine" id="cb51-8" title="8">}</a></code></pre></div>
+<p>These two levels help distinguish the arguments between your module and the server function. It looks complex but this is how every module is set up, so it’s really a copy and paste scenario.</p>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#module-server">Read more!</a></p>
+<div class="notebox">
+<div class="center">
+<p><strong>NOTE</strong></p>
+</div>
+<p><code>moduleServer()</code> takes care of the namespacing automatically, that is <code>input$var</code> and <code>input$bins</code> identifies the original namespaces from the UI section of the module where we had <code>NS(id, "var")</code> and <code>NS(id, "bins")</code>.</p>
+</div>
+</div>
+<div id="module-testing" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.1.3</span> Module testing<a href="modularization.html#module-testing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It’s good practice to test your module in a function that creates a simple app that only includes your module:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">histogramApp &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb52-2" title="2">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb52-3" title="3">    <span class="kw">histogramUI</span>(<span class="st">&quot;hist1&quot;</span>)</a>
+<a class="sourceLine" id="cb52-4" title="4">  )</a>
+<a class="sourceLine" id="cb52-5" title="5">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb52-6" title="6">    <span class="kw">histogramServer</span>(<span class="st">&quot;hist1&quot;</span>)</a>
+<a class="sourceLine" id="cb52-7" title="7">  }</a>
+<a class="sourceLine" id="cb52-8" title="8">  <span class="kw">shinyApp</span>(ui, server)  </a>
+<a class="sourceLine" id="cb52-9" title="9">}</a></code></pre></div>
+<div class="notebox">
+<div class="center">
+<p><strong>NOTE</strong></p>
+</div>
+<p>Just like a regular app we need to link the UI and server using the same <code>id</code> name.</p>
+</div>
+</div>
+<div id="namespacing" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.1.4</span> Namespacing<a href="modularization.html#namespacing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s circle back on namespacing. At this point of the example we have two separate namespacing situations:</p>
+<ul>
+<li>Inside of our module we have <code>NS(id, "var")</code>, <code>NS(id, "bins")</code>, and <code>NS(id, "hist")</code></li>
+<li>Outside of our module in our app function we have <code>id = 'hist1'</code></li>
+</ul>
+<p>It’s important to realize here that the namespaces that are created inside a module only exist (ie. can be referred to) within the two module functions; in other words, a module is in essence a “black box” that can’t be seen from outside of the module. This means that as an author of a module, you don’t need to worry about conflicts with namespacing with other modules or with namespacing in the app UI or server.</p>
+<p>If you’d like to refer to inputs from other places in the app in your module you’ll have to pass them to a module argument explicitly - we’ll talk about this later.</p>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#namespacing">Read more!</a></p>
+<div class="notebox">
+<div class="center">
+<p><strong>NOTE</strong></p>
+</div>
+<p>Note that the module UI and server differ in how the namespacing is expressed:</p>
+<ul>
+<li>In the module UI, the namespacing is explicit: you have to call <code>NS(id, "name")</code> every time you create an input or output.<br />
+</li>
+<li>In the module server, the namespacing is implicit. You only need to use <code>id</code> in the call to <code>moduleServer()</code> and then Shiny automatically namespaces <code>input</code> and <code>output</code> so that in your module code <code>input$name</code> means the input with name <code>NS(id, "name")</code>.<br />
+</li>
+</ul>
+</div>
+</div>
+<div id="naming-conventions" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.1.5</span> Naming conventions<a href="modularization.html#naming-conventions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A standard convention for naming can be as follows:</p>
+<ul>
+<li><code>R/histogram.R</code> holds all the code for the module.<br />
+</li>
+<li><code>histogramUI()</code> is the module UI. If it’s used primarily for <code>input</code> or <code>output</code> it can be called <code>histogramInput()</code> or <code>histogramOuput()</code> instead.<br />
+</li>
+<li><code>histogramServer()</code> is the module server.<br />
+</li>
+<li><code>histogramApp()</code> creates a complete app for interactive experimentation and more formal testing.</li>
+</ul>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#naming-conventions">Read more!</a></p>
+</div>
+</div>
+<div id="advanced-inputs-and-outputs" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.2</span> Advanced Inputs and outputs<a href="modularization.html#advanced-inputs-and-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Adding arguments beyond the <code>id</code> to the module UI gives greater control over the module, allowing you to use the same module in more places in your app.</p>
+<p>Unlike regular Shiny code, connecting modules together requires you to be explicit about inputs and outputs. Initially, this is going to feel tiresome. And it’s certainly more work than Shiny’s usual free-form association. But modules enforce specific lines of communication for a reason: they’re a little more work to create, but much easier to understand, and allow you to build substantially more complex apps.</p>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#inputs-and-outputs">Read more!</a></p>
+<div id="ui-input-and-server-output" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.2.1</span> UI input and server output<a href="modularization.html#ui-input-and-server-output" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s look at an example from the <a href="https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output">book</a> where we will have an additional argument in our input function and the server function returns a reactive value that we will use in a different element of the server.</p>
+<p>First they set up the input function:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># Two arguments, id as usual and a filter</span></a>
+<a class="sourceLine" id="cb53-2" title="2">datasetInput &lt;-<span class="st"> </span><span class="cf">function</span>(id, <span class="dt">filter =</span> <span class="ot">NULL</span>) {</a>
+<a class="sourceLine" id="cb53-3" title="3">  </a>
+<a class="sourceLine" id="cb53-4" title="4">  <span class="co"># Get list of df names</span></a>
+<a class="sourceLine" id="cb53-5" title="5">  names &lt;-<span class="st"> </span><span class="kw">ls</span>(<span class="st">&quot;package:datasets&quot;</span>)</a>
+<a class="sourceLine" id="cb53-6" title="6">  </a>
+<a class="sourceLine" id="cb53-7" title="7">  <span class="co"># If a filter is present then update the names in the list</span></a>
+<a class="sourceLine" id="cb53-8" title="8">  <span class="co"># accordingly</span></a>
+<a class="sourceLine" id="cb53-9" title="9">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(filter)) {</a>
+<a class="sourceLine" id="cb53-10" title="10">    <span class="co"># get the data to identify datasets and matrices</span></a>
+<a class="sourceLine" id="cb53-11" title="11">    data &lt;-<span class="st"> </span><span class="kw">lapply</span>(names, get, <span class="st">&quot;package:datasets&quot;</span>)</a>
+<a class="sourceLine" id="cb53-12" title="12">    <span class="co"># filter for selection, &quot;dataset&quot; or &quot;matrix&quot;</span></a>
+<a class="sourceLine" id="cb53-13" title="13">    names &lt;-<span class="st"> </span>names[<span class="kw">vapply</span>(data, filter, <span class="kw">logical</span>(<span class="dv">1</span>))]</a>
+<a class="sourceLine" id="cb53-14" title="14">  }</a>
+<a class="sourceLine" id="cb53-15" title="15">  </a>
+<a class="sourceLine" id="cb53-16" title="16">  <span class="co"># Set up the UI selections for the list of names</span></a>
+<a class="sourceLine" id="cb53-17" title="17">  <span class="kw">selectInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;dataset&quot;</span>), <span class="st">&quot;Pick a dataset&quot;</span>, <span class="dt">choices =</span> names)</a>
+<a class="sourceLine" id="cb53-18" title="18">  </a>
+<a class="sourceLine" id="cb53-19" title="19">}</a></code></pre></div>
+<p>Then the server function:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">datasetServer &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb54-2" title="2">  <span class="co"># set up the usual </span></a>
+<a class="sourceLine" id="cb54-3" title="3">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb54-4" title="4">    </a>
+<a class="sourceLine" id="cb54-5" title="5">    <span class="co"># This will return a value, the last expression in the function</span></a>
+<a class="sourceLine" id="cb54-6" title="6">    <span class="co"># will be the return value and should always be inside a reactive() wrapper</span></a>
+<a class="sourceLine" id="cb54-7" title="7">    <span class="kw">reactive</span>(<span class="kw">get</span>(input<span class="op">$</span>dataset, <span class="st">&quot;package:datasets&quot;</span>))</a>
+<a class="sourceLine" id="cb54-8" title="8">  })</a>
+<a class="sourceLine" id="cb54-9" title="9">}</a></code></pre></div>
+<p>Finally putting it all together:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># They included an argument in the larger app call</span></a>
+<a class="sourceLine" id="cb55-2" title="2"><span class="co"># it makes sense for this small example but you would probably</span></a>
+<a class="sourceLine" id="cb55-3" title="3"><span class="co"># call it in the UI itself.. at least I would</span></a>
+<a class="sourceLine" id="cb55-4" title="4">datasetApp &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">filter =</span> <span class="ot">NULL</span>) {</a>
+<a class="sourceLine" id="cb55-5" title="5">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb55-6" title="6">    <span class="co"># Set up the input portion of the module</span></a>
+<a class="sourceLine" id="cb55-7" title="7">    <span class="kw">datasetInput</span>(<span class="st">&quot;dataset&quot;</span>, <span class="dt">filter =</span> filter),</a>
+<a class="sourceLine" id="cb55-8" title="8">    <span class="co"># also include a placeholder for a table to show</span></a>
+<a class="sourceLine" id="cb55-9" title="9">    <span class="co"># the selected data from our module</span></a>
+<a class="sourceLine" id="cb55-10" title="10">    <span class="kw">tableOutput</span>(<span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb55-11" title="11">  )</a>
+<a class="sourceLine" id="cb55-12" title="12">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb55-13" title="13">    <span class="co"># Set up the server, because it&#39;s giving us a reactive value</span></a>
+<a class="sourceLine" id="cb55-14" title="14">    <span class="co"># that we want to use in the table we need to do `&lt;-` assignment</span></a>
+<a class="sourceLine" id="cb55-15" title="15">    <span class="co"># just like we would normally in R</span></a>
+<a class="sourceLine" id="cb55-16" title="16">    data &lt;-<span class="st"> </span><span class="kw">datasetServer</span>(<span class="st">&quot;dataset&quot;</span>)</a>
+<a class="sourceLine" id="cb55-17" title="17">    <span class="co"># Now call this data in our table render</span></a>
+<a class="sourceLine" id="cb55-18" title="18">    output<span class="op">$</span>data &lt;-<span class="st"> </span><span class="kw">renderTable</span>(<span class="kw">head</span>(<span class="kw">data</span>()))</a>
+<a class="sourceLine" id="cb55-19" title="19">  }</a>
+<a class="sourceLine" id="cb55-20" title="20">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb55-21" title="21">}</a></code></pre></div>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output">Read more!</a></p>
+<div class="notebox">
+<div class="center">
+<p><strong>NOTE</strong></p>
+</div>
+<p>When you are returning a value in the server portion of your app that’s reactive (ie. user input will impact it) you must assign it to a value in the environment. When you want to use that stored value you must refer to it like <code>value()</code> versus accessing it’s reactive form by calling just <code>value</code>. In the above example this is why we call the reactive <code>data</code> value as <code>data()</code>.</p>
+</div>
+</div>
+<div id="server-inputs-1" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.2.2</span> Server inputs<a href="modularization.html#server-inputs-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Given that we work with both reactive and unreactive values in an app, it can be smart to set up simple error messages in your server modules to ensure that future users know what type of value is expected in a server argument:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">selectVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, data, <span class="dt">filter =</span> is.numeric) {</a>
+<a class="sourceLine" id="cb56-2" title="2">  <span class="co"># We need data to be reactive!</span></a>
+<a class="sourceLine" id="cb56-3" title="3">  <span class="kw">stopifnot</span>(<span class="kw">is.reactive</span>(data))</a>
+<a class="sourceLine" id="cb56-4" title="4">  <span class="co"># We need the filter to be a non-reactive value!</span></a>
+<a class="sourceLine" id="cb56-5" title="5">  <span class="kw">stopifnot</span>(<span class="op">!</span><span class="kw">is.reactive</span>(filter))</a>
+<a class="sourceLine" id="cb56-6" title="6">  </a>
+<a class="sourceLine" id="cb56-7" title="7">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb56-8" title="8">    <span class="kw">observeEvent</span>(<span class="kw">data</span>(), {</a>
+<a class="sourceLine" id="cb56-9" title="9">      <span class="kw">updateSelectInput</span>(session, <span class="st">&quot;var&quot;</span>, <span class="dt">choices =</span> <span class="kw">find_vars</span>(<span class="kw">data</span>(), filter))</a>
+<a class="sourceLine" id="cb56-10" title="10">    })</a>
+<a class="sourceLine" id="cb56-11" title="11">    </a>
+<a class="sourceLine" id="cb56-12" title="12">    <span class="kw">reactive</span>(<span class="kw">data</span>()[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb56-13" title="13">  })</a>
+<a class="sourceLine" id="cb56-14" title="14">}</a></code></pre></div>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#server-inputs">Read more!</a></p>
+<div class="notebox">
+<div class="center">
+<p><strong>NOTE</strong></p>
+</div>
+<p>Another way to think about reactive or non-reactive values is when can the value change: is it fixed and constant over the life-time of the app, or is it reactive, changing as the user interacts with the app.</p>
+</div>
+</div>
+<div id="modules-inside-of-modules" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.2.3</span> Modules inside of modules<a href="modularization.html#modules-inside-of-modules" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Modules can also be nested, in that you can call a module within another module. This makes sense if you have two components that are inherently tied together in your app. Here is an example from <a href="https://mastering-shiny.org/scaling-modules.html#modules-inside-of-modules">mastering shiny</a>:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># Because the example&#39;s goal is to allow users to select</span></a>
+<a class="sourceLine" id="cb57-2" title="2"><span class="co"># a dataset and then select a variable from that dataset</span></a>
+<a class="sourceLine" id="cb57-3" title="3"><span class="co"># it made sense to just combine the individual modules into a larger</span></a>
+<a class="sourceLine" id="cb57-4" title="4"><span class="co"># module</span></a>
+<a class="sourceLine" id="cb57-5" title="5"></a>
+<a class="sourceLine" id="cb57-6" title="6">selectDataVarUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb57-7" title="7">  <span class="co"># Tag list for combining multiple components</span></a>
+<a class="sourceLine" id="cb57-8" title="8">  <span class="kw">tagList</span>(</a>
+<a class="sourceLine" id="cb57-9" title="9">    <span class="co"># This is a dataset input selection</span></a>
+<a class="sourceLine" id="cb57-10" title="10">    <span class="kw">datasetInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;data&quot;</span>), <span class="dt">filter =</span> is.data.frame),</a>
+<a class="sourceLine" id="cb57-11" title="11">    <span class="co"># This is to select the variable from the selected dataset</span></a>
+<a class="sourceLine" id="cb57-12" title="12">    <span class="kw">selectVarInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;var&quot;</span>))</a>
+<a class="sourceLine" id="cb57-13" title="13">  )</a>
+<a class="sourceLine" id="cb57-14" title="14">}</a>
+<a class="sourceLine" id="cb57-15" title="15"></a>
+<a class="sourceLine" id="cb57-16" title="16">selectDataVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, <span class="dt">filter =</span> is.numeric) {</a>
+<a class="sourceLine" id="cb57-17" title="17">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb57-18" title="18">    <span class="co"># Here we pull the data based on the selection</span></a>
+<a class="sourceLine" id="cb57-19" title="19">    data &lt;-<span class="st"> </span><span class="kw">datasetServer</span>(<span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb57-20" title="20">    <span class="co"># and here we filter the data for the variable</span></a>
+<a class="sourceLine" id="cb57-21" title="21">    var &lt;-<span class="st"> </span><span class="kw">selectVarServer</span>(<span class="st">&quot;var&quot;</span>, data, <span class="dt">filter =</span> filter)</a>
+<a class="sourceLine" id="cb57-22" title="22">    var <span class="co">#return value</span></a>
+<a class="sourceLine" id="cb57-23" title="23">  })</a>
+<a class="sourceLine" id="cb57-24" title="24">}</a>
+<a class="sourceLine" id="cb57-25" title="25"></a>
+<a class="sourceLine" id="cb57-26" title="26">selectDataVarApp &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">filter =</span> is.numeric) {</a>
+<a class="sourceLine" id="cb57-27" title="27">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb57-28" title="28">    <span class="kw">sidebarLayout</span>(</a>
+<a class="sourceLine" id="cb57-29" title="29">      <span class="co"># Now there only needs to be a single call in the UI</span></a>
+<a class="sourceLine" id="cb57-30" title="30">      <span class="kw">sidebarPanel</span>(<span class="kw">selectDataVarUI</span>(<span class="st">&quot;var&quot;</span>)),</a>
+<a class="sourceLine" id="cb57-31" title="31">      <span class="kw">mainPanel</span>(<span class="kw">verbatimTextOutput</span>(<span class="st">&quot;out&quot;</span>))</a>
+<a class="sourceLine" id="cb57-32" title="32">    )</a>
+<a class="sourceLine" id="cb57-33" title="33">  )</a>
+<a class="sourceLine" id="cb57-34" title="34">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb57-35" title="35">    <span class="co"># and a single call in the server </span></a>
+<a class="sourceLine" id="cb57-36" title="36">    var &lt;-<span class="st"> </span><span class="kw">selectDataVarServer</span>(<span class="st">&quot;var&quot;</span>, filter)</a>
+<a class="sourceLine" id="cb57-37" title="37">    output<span class="op">$</span>out &lt;-<span class="st"> </span><span class="kw">renderPrint</span>(<span class="kw">var</span>(), <span class="dt">width =</span> <span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb57-38" title="38">  }</a>
+<a class="sourceLine" id="cb57-39" title="39">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb57-40" title="40">}</a></code></pre></div>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#modules-inside-of-modules">Read more!</a></p>
+</div>
+<div id="multiple-outputs" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.2.4</span> Multiple outputs<a href="modularization.html#multiple-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sometimes it’s useful for the module’s server to return more than one value. You can easily do this the same way you would for a regular R function - return a list.
+The example from <a href="">mastering shiny</a> is:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">selectVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, data, <span class="dt">filter =</span> is.numeric) {</a>
+<a class="sourceLine" id="cb58-2" title="2">  <span class="kw">stopifnot</span>(<span class="kw">is.reactive</span>(data))</a>
+<a class="sourceLine" id="cb58-3" title="3">  <span class="kw">stopifnot</span>(<span class="op">!</span><span class="kw">is.reactive</span>(filter))</a>
+<a class="sourceLine" id="cb58-4" title="4">  </a>
+<a class="sourceLine" id="cb58-5" title="5">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb58-6" title="6">    <span class="kw">observeEvent</span>(<span class="kw">data</span>(), {</a>
+<a class="sourceLine" id="cb58-7" title="7">      <span class="kw">updateSelectInput</span>(session, <span class="st">&quot;var&quot;</span>, <span class="dt">choices =</span> <span class="kw">find_vars</span>(<span class="kw">data</span>(), filter))</a>
+<a class="sourceLine" id="cb58-8" title="8">    })</a>
+<a class="sourceLine" id="cb58-9" title="9">    </a>
+<a class="sourceLine" id="cb58-10" title="10">    <span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb58-11" title="11">      <span class="co"># Return the name and the values of the variable</span></a>
+<a class="sourceLine" id="cb58-12" title="12">      <span class="dt">name =</span> <span class="kw">reactive</span>(input<span class="op">$</span>var),</a>
+<a class="sourceLine" id="cb58-13" title="13">      <span class="dt">value =</span> <span class="kw">reactive</span>(<span class="kw">data</span>()[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb58-14" title="14">    )</a>
+<a class="sourceLine" id="cb58-15" title="15">  })</a>
+<a class="sourceLine" id="cb58-16" title="16">}</a>
+<a class="sourceLine" id="cb58-17" title="17"></a>
+<a class="sourceLine" id="cb58-18" title="18">histogramApp &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb58-19" title="19">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(...)</a>
+<a class="sourceLine" id="cb58-20" title="20"></a>
+<a class="sourceLine" id="cb58-21" title="21">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb58-22" title="22">    data &lt;-<span class="st"> </span><span class="kw">datasetServer</span>(<span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb58-23" title="23">    <span class="co"># assign the list to X</span></a>
+<a class="sourceLine" id="cb58-24" title="24">    x &lt;-<span class="st"> </span><span class="kw">selectVarServer</span>(<span class="st">&quot;var&quot;</span>, data)</a>
+<a class="sourceLine" id="cb58-25" title="25">    <span class="co"># create a histogram using the values and title it with the</span></a>
+<a class="sourceLine" id="cb58-26" title="26">    <span class="co"># variable name</span></a>
+<a class="sourceLine" id="cb58-27" title="27">    <span class="kw">histogramServer</span>(<span class="st">&quot;hist&quot;</span>, x<span class="op">$</span>value, x<span class="op">$</span>name)</a>
+<a class="sourceLine" id="cb58-28" title="28">  }</a>
+<a class="sourceLine" id="cb58-29" title="29">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb58-30" title="30">} </a></code></pre></div>
+<p><a href="https://mastering-shiny.org/scaling-modules.html#multiple-outputs">Read more!</a></p>
+<div class="warnbox">
+<div class="center">
+<p><strong>WARNING</strong></p>
+</div>
+<p>The main challenge with this sort of code is remembering when you use the reactive form (e.g. <code>x$value</code>) vs. when you use its stored value (e.g. <code>x$value()</code>). Just remember that when passing an argument to a module, you want the module to react to the value changing which means that you have to pass the reactive, not it’s current value. However, if you want to display the actual current value you would pass the stored value.</p>
+</div>
+</div>
+</div>
+<div id="advising-against-single-object-modules" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.3</span> Advising against single object modules<a href="modularization.html#advising-against-single-object-modules" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, <code>plotOutput()</code> and <code>renderPlot()</code> are connected only by shared ID. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared ID. This also allows you to make them more generalizable and allows for reactivity.</p>
+<p>For a full example <a href="https://mastering-shiny.org/scaling-modules.html#module-objects">read more here</a>.</p>
+</div>
+<div id="example" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.4</span> Example<a href="modularization.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="additional-resources-4" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.5</span> Additional Resources<a href="modularization.html#additional-resources-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><a href="https://mastering-shiny.org/scaling-modules.html#scaling-modules">Shiny Modules</a></li>
+</ul>
 
 </div>
 </div>
