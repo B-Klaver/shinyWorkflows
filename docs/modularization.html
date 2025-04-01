@@ -250,16 +250,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.2" data-path="modularization.html"><a href="modularization.html#module-server"><i class="fa fa-check"></i><b>5.1.2</b> Module server</a></li>
 <li class="chapter" data-level="5.1.3" data-path="modularization.html"><a href="modularization.html#module-testing"><i class="fa fa-check"></i><b>5.1.3</b> Module testing</a></li>
 <li class="chapter" data-level="5.1.4" data-path="modularization.html"><a href="modularization.html#namespacing"><i class="fa fa-check"></i><b>5.1.4</b> Namespacing</a></li>
-<li class="chapter" data-level="5.1.5" data-path="modularization.html"><a href="modularization.html#naming-conventions"><i class="fa fa-check"></i><b>5.1.5</b> Naming conventions</a></li>
+<li class="chapter" data-level="5.1.5" data-path="modularization.html"><a href="modularization.html#module-naming-conventions"><i class="fa fa-check"></i><b>5.1.5</b> Module naming conventions</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="modularization.html"><a href="modularization.html#advanced-inputs-and-outputs"><i class="fa fa-check"></i><b>5.2</b> Advanced Inputs and outputs</a><ul>
+<li class="chapter" data-level="5.2" data-path="modularization.html"><a href="modularization.html#advanced-inputs-and-outputs"><i class="fa fa-check"></i><b>5.2</b> Advanced inputs and outputs</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="modularization.html"><a href="modularization.html#ui-input-and-server-output"><i class="fa fa-check"></i><b>5.2.1</b> UI input and server output</a></li>
 <li class="chapter" data-level="5.2.2" data-path="modularization.html"><a href="modularization.html#server-inputs-1"><i class="fa fa-check"></i><b>5.2.2</b> Server inputs</a></li>
 <li class="chapter" data-level="5.2.3" data-path="modularization.html"><a href="modularization.html#modules-inside-of-modules"><i class="fa fa-check"></i><b>5.2.3</b> Modules inside of modules</a></li>
 <li class="chapter" data-level="5.2.4" data-path="modularization.html"><a href="modularization.html#multiple-outputs"><i class="fa fa-check"></i><b>5.2.4</b> Multiple outputs</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="modularization.html"><a href="modularization.html#advising-against-single-object-modules"><i class="fa fa-check"></i><b>5.3</b> Advising against single object modules</a></li>
-<li class="chapter" data-level="5.4" data-path="modularization.html"><a href="modularization.html#example"><i class="fa fa-check"></i><b>5.4</b> Example</a></li>
+<li class="chapter" data-level="5.4" data-path="modularization.html"><a href="modularization.html#examples-from-the-phmrsapp"><i class="fa fa-check"></i><b>5.4</b> Examples from the PHMRSapp</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="modularization.html"><a href="modularization.html#dropdown-module"><i class="fa fa-check"></i><b>5.4.1</b> Dropdown module</a></li>
+<li class="chapter" data-level="5.4.2" data-path="modularization.html"><a href="modularization.html#csv-download-module"><i class="fa fa-check"></i><b>5.4.2</b> CSV Download Module</a></li>
+<li class="chapter" data-level="5.4.3" data-path="modularization.html"><a href="modularization.html#domain-select-module"><i class="fa fa-check"></i><b>5.4.3</b> Domain select module</a></li>
+<li class="chapter" data-level="5.4.4" data-path="modularization.html"><a href="modularization.html#sidebar-select-module"><i class="fa fa-check"></i><b>5.4.4</b> Sidebar select module</a></li>
+</ul></li>
 <li class="chapter" data-level="5.5" data-path="modularization.html"><a href="modularization.html#additional-resources-4"><i class="fa fa-check"></i><b>5.5</b> Additional Resources</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -289,17 +294,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="module-basics" class="section level2 hasAnchor">
 <h2><span class="header-section-number">5.1</span> Module Basics<a href="modularization.html#module-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To showcase modularization let’s look at a very simple app:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
-<a class="sourceLine" id="cb48-2" title="2">  <span class="kw">selectInput</span>(<span class="st">&quot;var&quot;</span>, <span class="st">&quot;Variable&quot;</span>, <span class="kw">names</span>(mtcars)),</a>
-<a class="sourceLine" id="cb48-3" title="3">  <span class="kw">numericInput</span>(<span class="st">&quot;bins&quot;</span>, <span class="st">&quot;bins&quot;</span>, <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb48-4" title="4">  <span class="kw">plotOutput</span>(<span class="st">&quot;hist&quot;</span>)</a>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb48-2" title="2">  shiny<span class="op">::</span><span class="kw">selectInput</span>(<span class="st">&quot;var&quot;</span>, <span class="st">&quot;Variable&quot;</span>, <span class="kw">names</span>(datasets<span class="op">::</span>mtcars)),</a>
+<a class="sourceLine" id="cb48-3" title="3">  shiny<span class="op">::</span><span class="kw">numericInput</span>(<span class="st">&quot;bins&quot;</span>, <span class="st">&quot;bins&quot;</span>, <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb48-4" title="4">  shiny<span class="op">::</span><span class="kw">plotOutput</span>(<span class="st">&quot;hist&quot;</span>)</a>
 <a class="sourceLine" id="cb48-5" title="5">)</a>
-<a class="sourceLine" id="cb48-6" title="6">server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb48-7" title="7">  data &lt;-<span class="st"> </span><span class="kw">reactive</span>(mtcars[[input<span class="op">$</span>var]])</a>
-<a class="sourceLine" id="cb48-8" title="8">  output<span class="op">$</span>hist &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({</a>
-<a class="sourceLine" id="cb48-9" title="9">    <span class="kw">hist</span>(<span class="kw">data</span>(), <span class="dt">breaks =</span> input<span class="op">$</span>bins, <span class="dt">main =</span> input<span class="op">$</span>var)</a>
-<a class="sourceLine" id="cb48-10" title="10">  }, <span class="dt">res =</span> <span class="dv">96</span>)</a>
-<a class="sourceLine" id="cb48-11" title="11">}</a></code></pre></div>
+<a class="sourceLine" id="cb48-6" title="6"></a>
+<a class="sourceLine" id="cb48-7" title="7">server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb48-8" title="8">  data &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">reactive</span>(datasets<span class="op">::</span>mtcars[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb48-9" title="9">  output<span class="op">$</span>hist &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPlot</span>({</a>
+<a class="sourceLine" id="cb48-10" title="10">    <span class="kw">hist</span>(</a>
+<a class="sourceLine" id="cb48-11" title="11">      <span class="kw">data</span>(), </a>
+<a class="sourceLine" id="cb48-12" title="12">      <span class="dt">breaks =</span> input<span class="op">$</span>bins, </a>
+<a class="sourceLine" id="cb48-13" title="13">      <span class="dt">main =</span> input<span class="op">$</span>var</a>
+<a class="sourceLine" id="cb48-14" title="14">    )</a>
+<a class="sourceLine" id="cb48-15" title="15">  }, </a>
+<a class="sourceLine" id="cb48-16" title="16">  <span class="dt">res =</span> <span class="dv">96</span></a>
+<a class="sourceLine" id="cb48-17" title="17">  )</a>
+<a class="sourceLine" id="cb48-18" title="18">}</a></code></pre></div>
 <p>A module is very similar to an app, that is, they are composed of:</p>
 <ul>
 <li>A module UI function</li>
@@ -311,7 +323,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="center">
 <p><strong>NOTE</strong></p>
 </div>
-<p>In fact you can test your modules by treating them like a standalone app!</p>
+<p>You can test your modules by treating them like a standalone app!</p>
 </div>
 <div id="module-ui" class="section level3 hasAnchor">
 <h3><span class="header-section-number">5.1.1</span> Module UI<a href="modularization.html#module-ui" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -319,66 +331,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Put the UI in a function with an <code>id</code> argument<br />
 </li>
-<li>Wrap each existing ID in a <code>NS()</code> function so that each previous ID turns into <code>NS(id, "previous_id")</code></li>
+<li>Wrap each existing <code>id</code> in a <code>NS()</code> function so that each previous <code>id</code> turns into <code>NS(id, "previous_id")</code></li>
 </ul>
 <p>This would look like this for our example:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">histogramUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
-<a class="sourceLine" id="cb49-2" title="2">  <span class="kw">tagList</span>(</a>
-<a class="sourceLine" id="cb49-3" title="3">    <span class="kw">selectInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;var&quot;</span>), <span class="st">&quot;Variable&quot;</span>, <span class="dt">choices =</span> <span class="kw">names</span>(mtcars)),</a>
-<a class="sourceLine" id="cb49-4" title="4">    <span class="kw">numericInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;bins&quot;</span>), <span class="st">&quot;bins&quot;</span>, <span class="dt">value =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb49-5" title="5">    <span class="kw">plotOutput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;hist&quot;</span>))</a>
+<a class="sourceLine" id="cb49-2" title="2">  htmltools<span class="op">::</span><span class="kw">tagList</span>(</a>
+<a class="sourceLine" id="cb49-3" title="3">    shiny<span class="op">::</span><span class="kw">selectInput</span>(shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;var&quot;</span>), <span class="st">&quot;Variable&quot;</span>, <span class="dt">choices =</span> <span class="kw">names</span>(mtcars)),</a>
+<a class="sourceLine" id="cb49-4" title="4">    shiny<span class="op">::</span><span class="kw">numericInput</span>(shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;bins&quot;</span>), <span class="st">&quot;bins&quot;</span>, <span class="dt">value =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb49-5" title="5">    shiny<span class="op">::</span><span class="kw">plotOutput</span>(shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;hist&quot;</span>))</a>
 <a class="sourceLine" id="cb49-6" title="6">  )</a>
 <a class="sourceLine" id="cb49-7" title="7">}</a></code></pre></div>
-<p>The UI components are wrapped in <code>tagList()</code>, which allows you to bundle components, which can then be placed in other functions in the app code such as <code>shiny::fluidRow()</code>, <code>bslib::layout_column_wrap()</code> or <code>bslib::sidebar()</code>. You can also wrap them in <code>shiny::fluidRow()</code> or <code>bslib::layout_column_wrap()</code> in the function itself if you’d prefer.</p>
+<p>The UI components are wrapped in <code>tagList()</code>, which allows you to bundle components that can then be placed in other functions in the app code such as <code>shiny::fluidRow()</code>, <code>bslib::layout_column_wrap()</code> or <code>bslib::sidebar()</code>. You can also wrap them in <code>shiny::fluidRow()</code> or <code>bslib::layout_column_wrap()</code> in the function itself if you’d prefer, though that can limit the reusability.</p>
 <p>There is another way to namespace within a UI function; if you only have one original ID, let’s use the plot for our example, you can follow this format:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">histogramUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
-<a class="sourceLine" id="cb50-2" title="2">  </a>
-<a class="sourceLine" id="cb50-3" title="3">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
-<a class="sourceLine" id="cb50-4" title="4">  </a>
-<a class="sourceLine" id="cb50-5" title="5">  <span class="kw">plotOutput</span>(</a>
-<a class="sourceLine" id="cb50-6" title="6">    <span class="kw">ns</span>(<span class="st">&quot;hist&quot;</span>)</a>
-<a class="sourceLine" id="cb50-7" title="7">  )</a>
-<a class="sourceLine" id="cb50-8" title="8">  </a>
-<a class="sourceLine" id="cb50-9" title="9">}</a></code></pre></div>
+<a class="sourceLine" id="cb50-2" title="2">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
+<a class="sourceLine" id="cb50-3" title="3">  shiny<span class="op">::</span><span class="kw">plotOutput</span>(</a>
+<a class="sourceLine" id="cb50-4" title="4">    <span class="kw">ns</span>(<span class="st">&quot;hist&quot;</span>)</a>
+<a class="sourceLine" id="cb50-5" title="5">  )</a>
+<a class="sourceLine" id="cb50-6" title="6">}</a></code></pre></div>
 <p><a href="https://mastering-shiny.org/scaling-modules.html#module-ui">Read more!</a></p>
 </div>
 <div id="module-server" class="section level3 hasAnchor">
 <h3><span class="header-section-number">5.1.2</span> Module server<a href="modularization.html#module-server" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The second part of this is the server function, which is also going to have an <code>id</code> argument. Inside of this function we call <code>moduleServer()</code> with the <code>id</code> arugment, and an additional function that looks like the typical server function:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">histogramServer &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
-<a class="sourceLine" id="cb51-2" title="2">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb51-3" title="3">    data &lt;-<span class="st"> </span><span class="kw">reactive</span>(mtcars[[input<span class="op">$</span>var]])</a>
-<a class="sourceLine" id="cb51-4" title="4">    output<span class="op">$</span>hist &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({</a>
-<a class="sourceLine" id="cb51-5" title="5">      <span class="kw">hist</span>(<span class="kw">data</span>(), <span class="dt">breaks =</span> input<span class="op">$</span>bins, <span class="dt">main =</span> input<span class="op">$</span>var)</a>
-<a class="sourceLine" id="cb51-6" title="6">    }, <span class="dt">res =</span> <span class="dv">96</span>)</a>
-<a class="sourceLine" id="cb51-7" title="7">  })</a>
-<a class="sourceLine" id="cb51-8" title="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># your first line will look like this, you may have more</span></a>
+<a class="sourceLine" id="cb51-2" title="2"><span class="co"># arguments, we&#39;ll look at that later</span></a>
+<a class="sourceLine" id="cb51-3" title="3">histogramServer &lt;-<span class="st"> </span><span class="cf">function</span>(id) { </a>
+<a class="sourceLine" id="cb51-4" title="4">  <span class="co"># your second line will always look like this</span></a>
+<a class="sourceLine" id="cb51-5" title="5">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb51-6" title="6">    <span class="co"># you put your server code inside of this call</span></a>
+<a class="sourceLine" id="cb51-7" title="7">    data &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">reactive</span>(datasets<span class="op">::</span>mtcars[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb51-8" title="8">    output<span class="op">$</span>hist &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPlot</span>({</a>
+<a class="sourceLine" id="cb51-9" title="9">      <span class="kw">hist</span>(<span class="kw">data</span>(), <span class="dt">breaks =</span> input<span class="op">$</span>bins, <span class="dt">main =</span> input<span class="op">$</span>var)</a>
+<a class="sourceLine" id="cb51-10" title="10">    }, <span class="dt">res =</span> <span class="dv">96</span>)</a>
+<a class="sourceLine" id="cb51-11" title="11">  })</a>
+<a class="sourceLine" id="cb51-12" title="12">}</a></code></pre></div>
 <p>These two levels help distinguish the arguments between your module and the server function. It looks complex but this is how every module is set up, so it’s really a copy and paste scenario.</p>
 <p><a href="https://mastering-shiny.org/scaling-modules.html#module-server">Read more!</a></p>
 <div class="notebox">
 <div class="center">
 <p><strong>NOTE</strong></p>
 </div>
-<p><code>moduleServer()</code> takes care of the namespacing automatically, that is <code>input$var</code> and <code>input$bins</code> identifies the original namespaces from the UI section of the module where we had <code>NS(id, "var")</code> and <code>NS(id, "bins")</code>.</p>
+<p><code>moduleServer()</code> takes care of the namespacing automatically, that is <code>input$var</code> and <code>input$bins</code> identifies the original namespaces from the UI section of the module where we had <code>NS(id, "var")</code> and <code>NS(id, "bins")</code>. This is because of the shared <code>id</code> argument in the functions, that we will connect when we implement them in our app.</p>
 </div>
 </div>
 <div id="module-testing" class="section level3 hasAnchor">
 <h3><span class="header-section-number">5.1.3</span> Module testing<a href="modularization.html#module-testing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>It’s good practice to test your module in a function that creates a simple app that only includes your module:</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">histogramApp &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb52-2" title="2">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb52-2" title="2">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
 <a class="sourceLine" id="cb52-3" title="3">    <span class="kw">histogramUI</span>(<span class="st">&quot;hist1&quot;</span>)</a>
 <a class="sourceLine" id="cb52-4" title="4">  )</a>
 <a class="sourceLine" id="cb52-5" title="5">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
 <a class="sourceLine" id="cb52-6" title="6">    <span class="kw">histogramServer</span>(<span class="st">&quot;hist1&quot;</span>)</a>
 <a class="sourceLine" id="cb52-7" title="7">  }</a>
-<a class="sourceLine" id="cb52-8" title="8">  <span class="kw">shinyApp</span>(ui, server)  </a>
+<a class="sourceLine" id="cb52-8" title="8">  shiny<span class="op">::</span><span class="kw">shinyApp</span>(ui, server)  </a>
 <a class="sourceLine" id="cb52-9" title="9">}</a></code></pre></div>
 <div class="notebox">
 <div class="center">
 <p><strong>NOTE</strong></p>
 </div>
-<p>Just like a regular app we need to link the UI and server using the same <code>id</code> name.</p>
+<p>Just like a regular app we need to link the UI and server using the same <code>id</code> name. This will be what allows the UI and server parts of the module to talk to eachother and identify the inputs and outputs.</p>
 </div>
 </div>
 <div id="namespacing" class="section level3 hasAnchor">
@@ -404,8 +417,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 </div>
 </div>
-<div id="naming-conventions" class="section level3 hasAnchor">
-<h3><span class="header-section-number">5.1.5</span> Naming conventions<a href="modularization.html#naming-conventions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="module-naming-conventions" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.1.5</span> Module naming conventions<a href="modularization.html#module-naming-conventions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A standard convention for naming can be as follows:</p>
 <ul>
 <li><code>R/histogram.R</code> holds all the code for the module.<br />
@@ -420,41 +433,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div id="advanced-inputs-and-outputs" class="section level2 hasAnchor">
-<h2><span class="header-section-number">5.2</span> Advanced Inputs and outputs<a href="modularization.html#advanced-inputs-and-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">5.2</span> Advanced inputs and outputs<a href="modularization.html#advanced-inputs-and-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Adding arguments beyond the <code>id</code> to the module UI gives greater control over the module, allowing you to use the same module in more places in your app.</p>
-<p>Unlike regular Shiny code, connecting modules together requires you to be explicit about inputs and outputs. Initially, this is going to feel tiresome. And it’s certainly more work than Shiny’s usual free-form association. But modules enforce specific lines of communication for a reason: they’re a little more work to create, but much easier to understand, and allow you to build substantially more complex apps.</p>
+<p>Unlike regular Shiny code, connecting modules together requires you to be explicit about inputs and outputs. Initially, this is going to feel tiresome and it’s certainly more work than Shiny’s usual free-form association. But modules enforce specific lines of communication for a reason: they’re a little more work to create, but much easier to understand, and allow you to build substantially more complex apps.</p>
 <p><a href="https://mastering-shiny.org/scaling-modules.html#inputs-and-outputs">Read more!</a></p>
 <div id="ui-input-and-server-output" class="section level3 hasAnchor">
 <h3><span class="header-section-number">5.2.1</span> UI input and server output<a href="modularization.html#ui-input-and-server-output" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s look at an example from the <a href="https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output">book</a> where we will have an additional argument in our input function and the server function returns a reactive value that we will use in a different element of the server.</p>
-<p>First they set up the input function:</p>
+<p>First set up the input function:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># Two arguments, id as usual and a filter</span></a>
 <a class="sourceLine" id="cb53-2" title="2">datasetInput &lt;-<span class="st"> </span><span class="cf">function</span>(id, <span class="dt">filter =</span> <span class="ot">NULL</span>) {</a>
 <a class="sourceLine" id="cb53-3" title="3">  </a>
-<a class="sourceLine" id="cb53-4" title="4">  <span class="co"># Get list of df names</span></a>
+<a class="sourceLine" id="cb53-4" title="4">  <span class="co"># Get list of df names for user selection</span></a>
 <a class="sourceLine" id="cb53-5" title="5">  names &lt;-<span class="st"> </span><span class="kw">ls</span>(<span class="st">&quot;package:datasets&quot;</span>)</a>
 <a class="sourceLine" id="cb53-6" title="6">  </a>
 <a class="sourceLine" id="cb53-7" title="7">  <span class="co"># If a filter is present then update the names in the list</span></a>
 <a class="sourceLine" id="cb53-8" title="8">  <span class="co"># accordingly</span></a>
 <a class="sourceLine" id="cb53-9" title="9">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(filter)) {</a>
-<a class="sourceLine" id="cb53-10" title="10">    <span class="co"># get the data to identify datasets and matrices</span></a>
+<a class="sourceLine" id="cb53-10" title="10">    <span class="co"># get the data to identify datasets vs matrices</span></a>
 <a class="sourceLine" id="cb53-11" title="11">    data &lt;-<span class="st"> </span><span class="kw">lapply</span>(names, get, <span class="st">&quot;package:datasets&quot;</span>)</a>
 <a class="sourceLine" id="cb53-12" title="12">    <span class="co"># filter for selection, &quot;dataset&quot; or &quot;matrix&quot;</span></a>
 <a class="sourceLine" id="cb53-13" title="13">    names &lt;-<span class="st"> </span>names[<span class="kw">vapply</span>(data, filter, <span class="kw">logical</span>(<span class="dv">1</span>))]</a>
 <a class="sourceLine" id="cb53-14" title="14">  }</a>
 <a class="sourceLine" id="cb53-15" title="15">  </a>
 <a class="sourceLine" id="cb53-16" title="16">  <span class="co"># Set up the UI selections for the list of names</span></a>
-<a class="sourceLine" id="cb53-17" title="17">  <span class="kw">selectInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;dataset&quot;</span>), <span class="st">&quot;Pick a dataset&quot;</span>, <span class="dt">choices =</span> names)</a>
+<a class="sourceLine" id="cb53-17" title="17">  shiny<span class="op">::</span><span class="kw">selectInput</span>(shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;dataset&quot;</span>), <span class="st">&quot;Pick a dataset&quot;</span>, <span class="dt">choices =</span> names)</a>
 <a class="sourceLine" id="cb53-18" title="18">  </a>
 <a class="sourceLine" id="cb53-19" title="19">}</a></code></pre></div>
 <p>Then the server function:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">datasetServer &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
 <a class="sourceLine" id="cb54-2" title="2">  <span class="co"># set up the usual </span></a>
-<a class="sourceLine" id="cb54-3" title="3">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb54-4" title="4">    </a>
-<a class="sourceLine" id="cb54-5" title="5">    <span class="co"># This will return a value, the last expression in the function</span></a>
-<a class="sourceLine" id="cb54-6" title="6">    <span class="co"># will be the return value and should always be inside a reactive() wrapper</span></a>
-<a class="sourceLine" id="cb54-7" title="7">    <span class="kw">reactive</span>(<span class="kw">get</span>(input<span class="op">$</span>dataset, <span class="st">&quot;package:datasets&quot;</span>))</a>
+<a class="sourceLine" id="cb54-3" title="3">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb54-4" title="4">    <span class="co"># The last expression in the function</span></a>
+<a class="sourceLine" id="cb54-5" title="5">    <span class="co"># will be the return value and return values</span></a>
+<a class="sourceLine" id="cb54-6" title="6">    <span class="co"># should always be inside a reactive() wrapper</span></a>
+<a class="sourceLine" id="cb54-7" title="7">    shiny<span class="op">::</span><span class="kw">reactive</span>(<span class="kw">get</span>(input<span class="op">$</span>dataset, <span class="st">&quot;package:datasets&quot;</span>))</a>
 <a class="sourceLine" id="cb54-8" title="8">  })</a>
 <a class="sourceLine" id="cb54-9" title="9">}</a></code></pre></div>
 <p>Finally putting it all together:</p>
@@ -462,12 +475,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb55-2" title="2"><span class="co"># it makes sense for this small example but you would probably</span></a>
 <a class="sourceLine" id="cb55-3" title="3"><span class="co"># call it in the UI itself.. at least I would</span></a>
 <a class="sourceLine" id="cb55-4" title="4">datasetApp &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">filter =</span> <span class="ot">NULL</span>) {</a>
-<a class="sourceLine" id="cb55-5" title="5">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb55-5" title="5">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
 <a class="sourceLine" id="cb55-6" title="6">    <span class="co"># Set up the input portion of the module</span></a>
 <a class="sourceLine" id="cb55-7" title="7">    <span class="kw">datasetInput</span>(<span class="st">&quot;dataset&quot;</span>, <span class="dt">filter =</span> filter),</a>
 <a class="sourceLine" id="cb55-8" title="8">    <span class="co"># also include a placeholder for a table to show</span></a>
 <a class="sourceLine" id="cb55-9" title="9">    <span class="co"># the selected data from our module</span></a>
-<a class="sourceLine" id="cb55-10" title="10">    <span class="kw">tableOutput</span>(<span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb55-10" title="10">    shiny<span class="op">::</span><span class="kw">tableOutput</span>(<span class="st">&quot;data&quot;</span>)</a>
 <a class="sourceLine" id="cb55-11" title="11">  )</a>
 <a class="sourceLine" id="cb55-12" title="12">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
 <a class="sourceLine" id="cb55-13" title="13">    <span class="co"># Set up the server, because it&#39;s giving us a reactive value</span></a>
@@ -484,7 +497,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="center">
 <p><strong>NOTE</strong></p>
 </div>
-<p>When you are returning a value in the server portion of your app that’s reactive (ie. user input will impact it) you must assign it to a value in the environment. When you want to use that stored value you must refer to it like <code>value()</code> versus accessing it’s reactive form by calling just <code>value</code>. In the above example this is why we call the reactive <code>data</code> value as <code>data()</code>.</p>
+<p>When you are returning a value in the server portion of your app that’s reactive (ie. user input will impact it) you must assign it to a value in the environment, just like you would in typical R code. However, when you want to use that stored value you must refer to it like <code>value()</code> versus accessing it’s reactive form by calling just <code>value</code>. In the above example this is why we call the reactive <code>data</code> value as <code>data()</code> when rendering it into the table - we want the actual data not the reactive aspect of the data.</p>
 </div>
 </div>
 <div id="server-inputs-1" class="section level3 hasAnchor">
@@ -492,16 +505,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Given that we work with both reactive and unreactive values in an app, it can be smart to set up simple error messages in your server modules to ensure that future users know what type of value is expected in a server argument:</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">selectVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, data, <span class="dt">filter =</span> is.numeric) {</a>
 <a class="sourceLine" id="cb56-2" title="2">  <span class="co"># We need data to be reactive!</span></a>
-<a class="sourceLine" id="cb56-3" title="3">  <span class="kw">stopifnot</span>(<span class="kw">is.reactive</span>(data))</a>
+<a class="sourceLine" id="cb56-3" title="3">  <span class="kw">stopifnot</span>(shiny<span class="op">::</span><span class="kw">is.reactive</span>(data))</a>
 <a class="sourceLine" id="cb56-4" title="4">  <span class="co"># We need the filter to be a non-reactive value!</span></a>
-<a class="sourceLine" id="cb56-5" title="5">  <span class="kw">stopifnot</span>(<span class="op">!</span><span class="kw">is.reactive</span>(filter))</a>
+<a class="sourceLine" id="cb56-5" title="5">  <span class="kw">stopifnot</span>(<span class="op">!</span>shiny<span class="op">::</span><span class="kw">is.reactive</span>(filter))</a>
 <a class="sourceLine" id="cb56-6" title="6">  </a>
-<a class="sourceLine" id="cb56-7" title="7">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb56-8" title="8">    <span class="kw">observeEvent</span>(<span class="kw">data</span>(), {</a>
-<a class="sourceLine" id="cb56-9" title="9">      <span class="kw">updateSelectInput</span>(session, <span class="st">&quot;var&quot;</span>, <span class="dt">choices =</span> <span class="kw">find_vars</span>(<span class="kw">data</span>(), filter))</a>
+<a class="sourceLine" id="cb56-7" title="7">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb56-8" title="8">    shiny<span class="op">::</span><span class="kw">observeEvent</span>(<span class="kw">data</span>(), {</a>
+<a class="sourceLine" id="cb56-9" title="9">      shiny<span class="op">::</span><span class="kw">updateSelectInput</span>(session, <span class="st">&quot;var&quot;</span>, <span class="dt">choices =</span> <span class="kw">find_vars</span>(<span class="kw">data</span>(), filter))</a>
 <a class="sourceLine" id="cb56-10" title="10">    })</a>
 <a class="sourceLine" id="cb56-11" title="11">    </a>
-<a class="sourceLine" id="cb56-12" title="12">    <span class="kw">reactive</span>(<span class="kw">data</span>()[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb56-12" title="12">    shiny<span class="op">::</span><span class="kw">reactive</span>(<span class="kw">data</span>()[[input<span class="op">$</span>var]])</a>
 <a class="sourceLine" id="cb56-13" title="13">  })</a>
 <a class="sourceLine" id="cb56-14" title="14">}</a></code></pre></div>
 <p><a href="https://mastering-shiny.org/scaling-modules.html#server-inputs">Read more!</a></p>
@@ -519,42 +532,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb57-2" title="2"><span class="co"># a dataset and then select a variable from that dataset</span></a>
 <a class="sourceLine" id="cb57-3" title="3"><span class="co"># it made sense to just combine the individual modules into a larger</span></a>
 <a class="sourceLine" id="cb57-4" title="4"><span class="co"># module</span></a>
-<a class="sourceLine" id="cb57-5" title="5"></a>
-<a class="sourceLine" id="cb57-6" title="6">selectDataVarUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
-<a class="sourceLine" id="cb57-7" title="7">  <span class="co"># Tag list for combining multiple components</span></a>
-<a class="sourceLine" id="cb57-8" title="8">  <span class="kw">tagList</span>(</a>
-<a class="sourceLine" id="cb57-9" title="9">    <span class="co"># This is a dataset input selection</span></a>
-<a class="sourceLine" id="cb57-10" title="10">    <span class="kw">datasetInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;data&quot;</span>), <span class="dt">filter =</span> is.data.frame),</a>
-<a class="sourceLine" id="cb57-11" title="11">    <span class="co"># This is to select the variable from the selected dataset</span></a>
-<a class="sourceLine" id="cb57-12" title="12">    <span class="kw">selectVarInput</span>(<span class="kw">NS</span>(id, <span class="st">&quot;var&quot;</span>))</a>
-<a class="sourceLine" id="cb57-13" title="13">  )</a>
-<a class="sourceLine" id="cb57-14" title="14">}</a>
-<a class="sourceLine" id="cb57-15" title="15"></a>
-<a class="sourceLine" id="cb57-16" title="16">selectDataVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, <span class="dt">filter =</span> is.numeric) {</a>
-<a class="sourceLine" id="cb57-17" title="17">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb57-18" title="18">    <span class="co"># Here we pull the data based on the selection</span></a>
-<a class="sourceLine" id="cb57-19" title="19">    data &lt;-<span class="st"> </span><span class="kw">datasetServer</span>(<span class="st">&quot;data&quot;</span>)</a>
-<a class="sourceLine" id="cb57-20" title="20">    <span class="co"># and here we filter the data for the variable</span></a>
-<a class="sourceLine" id="cb57-21" title="21">    var &lt;-<span class="st"> </span><span class="kw">selectVarServer</span>(<span class="st">&quot;var&quot;</span>, data, <span class="dt">filter =</span> filter)</a>
-<a class="sourceLine" id="cb57-22" title="22">    var <span class="co">#return value</span></a>
-<a class="sourceLine" id="cb57-23" title="23">  })</a>
-<a class="sourceLine" id="cb57-24" title="24">}</a>
-<a class="sourceLine" id="cb57-25" title="25"></a>
-<a class="sourceLine" id="cb57-26" title="26">selectDataVarApp &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">filter =</span> is.numeric) {</a>
-<a class="sourceLine" id="cb57-27" title="27">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
-<a class="sourceLine" id="cb57-28" title="28">    <span class="kw">sidebarLayout</span>(</a>
-<a class="sourceLine" id="cb57-29" title="29">      <span class="co"># Now there only needs to be a single call in the UI</span></a>
-<a class="sourceLine" id="cb57-30" title="30">      <span class="kw">sidebarPanel</span>(<span class="kw">selectDataVarUI</span>(<span class="st">&quot;var&quot;</span>)),</a>
-<a class="sourceLine" id="cb57-31" title="31">      <span class="kw">mainPanel</span>(<span class="kw">verbatimTextOutput</span>(<span class="st">&quot;out&quot;</span>))</a>
-<a class="sourceLine" id="cb57-32" title="32">    )</a>
-<a class="sourceLine" id="cb57-33" title="33">  )</a>
-<a class="sourceLine" id="cb57-34" title="34">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb57-35" title="35">    <span class="co"># and a single call in the server </span></a>
-<a class="sourceLine" id="cb57-36" title="36">    var &lt;-<span class="st"> </span><span class="kw">selectDataVarServer</span>(<span class="st">&quot;var&quot;</span>, filter)</a>
-<a class="sourceLine" id="cb57-37" title="37">    output<span class="op">$</span>out &lt;-<span class="st"> </span><span class="kw">renderPrint</span>(<span class="kw">var</span>(), <span class="dt">width =</span> <span class="dv">40</span>)</a>
-<a class="sourceLine" id="cb57-38" title="38">  }</a>
-<a class="sourceLine" id="cb57-39" title="39">  <span class="kw">shinyApp</span>(ui, server)</a>
-<a class="sourceLine" id="cb57-40" title="40">}</a></code></pre></div>
+<a class="sourceLine" id="cb57-5" title="5">selectDataVarUI &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb57-6" title="6">  <span class="co"># Tag list for combining multiple components</span></a>
+<a class="sourceLine" id="cb57-7" title="7">  htmltools<span class="op">::</span><span class="kw">tagList</span>(</a>
+<a class="sourceLine" id="cb57-8" title="8">    <span class="co"># This is a dataset input selection</span></a>
+<a class="sourceLine" id="cb57-9" title="9">    <span class="kw">datasetInput</span>(shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;data&quot;</span>), <span class="dt">filter =</span> is.data.frame),</a>
+<a class="sourceLine" id="cb57-10" title="10">    <span class="co"># This is to select the variable from the selected dataset</span></a>
+<a class="sourceLine" id="cb57-11" title="11">    <span class="kw">selectVarInput</span>(shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;var&quot;</span>))</a>
+<a class="sourceLine" id="cb57-12" title="12">  )</a>
+<a class="sourceLine" id="cb57-13" title="13">}</a>
+<a class="sourceLine" id="cb57-14" title="14"></a>
+<a class="sourceLine" id="cb57-15" title="15">selectDataVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, <span class="dt">filter =</span> is.numeric) {</a>
+<a class="sourceLine" id="cb57-16" title="16">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb57-17" title="17">    <span class="co"># Here we pull the data based on the selection</span></a>
+<a class="sourceLine" id="cb57-18" title="18">    data &lt;-<span class="st"> </span><span class="kw">datasetServer</span>(<span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb57-19" title="19">    <span class="co"># and here we filter the data for the variable</span></a>
+<a class="sourceLine" id="cb57-20" title="20">    var &lt;-<span class="st"> </span><span class="kw">selectVarServer</span>(<span class="st">&quot;var&quot;</span>, data, <span class="dt">filter =</span> filter)</a>
+<a class="sourceLine" id="cb57-21" title="21">    var <span class="co">#return value</span></a>
+<a class="sourceLine" id="cb57-22" title="22">  })</a>
+<a class="sourceLine" id="cb57-23" title="23">}</a>
+<a class="sourceLine" id="cb57-24" title="24"></a>
+<a class="sourceLine" id="cb57-25" title="25">selectDataVarApp &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">filter =</span> is.numeric) {</a>
+<a class="sourceLine" id="cb57-26" title="26">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb57-27" title="27">    shiny<span class="op">::</span><span class="kw">sidebarLayout</span>(</a>
+<a class="sourceLine" id="cb57-28" title="28">      <span class="co"># Now there only needs to be a single call in the UI</span></a>
+<a class="sourceLine" id="cb57-29" title="29">      shiny<span class="op">::</span><span class="kw">sidebarPanel</span>(<span class="kw">selectDataVarUI</span>(<span class="st">&quot;var&quot;</span>)),</a>
+<a class="sourceLine" id="cb57-30" title="30">      shiny<span class="op">::</span><span class="kw">mainPanel</span>(shiny<span class="op">::</span><span class="kw">verbatimTextOutput</span>(<span class="st">&quot;out&quot;</span>))</a>
+<a class="sourceLine" id="cb57-31" title="31">    )</a>
+<a class="sourceLine" id="cb57-32" title="32">  )</a>
+<a class="sourceLine" id="cb57-33" title="33">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb57-34" title="34">    <span class="co"># and a single call in the server </span></a>
+<a class="sourceLine" id="cb57-35" title="35">    var &lt;-<span class="st"> </span><span class="kw">selectDataVarServer</span>(<span class="st">&quot;var&quot;</span>, filter)</a>
+<a class="sourceLine" id="cb57-36" title="36">    output<span class="op">$</span>out &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderPrint</span>(<span class="kw">var</span>(), <span class="dt">width =</span> <span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb57-37" title="37">  }</a>
+<a class="sourceLine" id="cb57-38" title="38">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb57-39" title="39">}</a></code></pre></div>
 <p><a href="https://mastering-shiny.org/scaling-modules.html#modules-inside-of-modules">Read more!</a></p>
 </div>
 <div id="multiple-outputs" class="section level3 hasAnchor">
@@ -562,24 +574,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Sometimes it’s useful for the module’s server to return more than one value. You can easily do this the same way you would for a regular R function - return a list.
 The example from <a href="">mastering shiny</a> is:</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">selectVarServer &lt;-<span class="st"> </span><span class="cf">function</span>(id, data, <span class="dt">filter =</span> is.numeric) {</a>
-<a class="sourceLine" id="cb58-2" title="2">  <span class="kw">stopifnot</span>(<span class="kw">is.reactive</span>(data))</a>
-<a class="sourceLine" id="cb58-3" title="3">  <span class="kw">stopifnot</span>(<span class="op">!</span><span class="kw">is.reactive</span>(filter))</a>
+<a class="sourceLine" id="cb58-2" title="2">  <span class="kw">stopifnot</span>(shiny<span class="op">::</span><span class="kw">is.reactive</span>(data))</a>
+<a class="sourceLine" id="cb58-3" title="3">  <span class="kw">stopifnot</span>(<span class="op">!</span>shiny<span class="op">::</span><span class="kw">is.reactive</span>(filter))</a>
 <a class="sourceLine" id="cb58-4" title="4">  </a>
 <a class="sourceLine" id="cb58-5" title="5">  <span class="kw">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</a>
-<a class="sourceLine" id="cb58-6" title="6">    <span class="kw">observeEvent</span>(<span class="kw">data</span>(), {</a>
-<a class="sourceLine" id="cb58-7" title="7">      <span class="kw">updateSelectInput</span>(session, <span class="st">&quot;var&quot;</span>, <span class="dt">choices =</span> <span class="kw">find_vars</span>(<span class="kw">data</span>(), filter))</a>
+<a class="sourceLine" id="cb58-6" title="6">    shiny<span class="op">::</span><span class="kw">observeEvent</span>(<span class="kw">data</span>(), {</a>
+<a class="sourceLine" id="cb58-7" title="7">      shiny<span class="op">::</span><span class="kw">updateSelectInput</span>(session, <span class="st">&quot;var&quot;</span>, <span class="dt">choices =</span> <span class="kw">find_vars</span>(<span class="kw">data</span>(), filter))</a>
 <a class="sourceLine" id="cb58-8" title="8">    })</a>
 <a class="sourceLine" id="cb58-9" title="9">    </a>
 <a class="sourceLine" id="cb58-10" title="10">    <span class="kw">list</span>(</a>
 <a class="sourceLine" id="cb58-11" title="11">      <span class="co"># Return the name and the values of the variable</span></a>
-<a class="sourceLine" id="cb58-12" title="12">      <span class="dt">name =</span> <span class="kw">reactive</span>(input<span class="op">$</span>var),</a>
-<a class="sourceLine" id="cb58-13" title="13">      <span class="dt">value =</span> <span class="kw">reactive</span>(<span class="kw">data</span>()[[input<span class="op">$</span>var]])</a>
+<a class="sourceLine" id="cb58-12" title="12">      <span class="dt">name =</span> shiny<span class="op">::</span><span class="kw">reactive</span>(input<span class="op">$</span>var),</a>
+<a class="sourceLine" id="cb58-13" title="13">      <span class="dt">value =</span> shiny<span class="op">::</span><span class="kw">reactive</span>(<span class="kw">data</span>()[[input<span class="op">$</span>var]])</a>
 <a class="sourceLine" id="cb58-14" title="14">    )</a>
 <a class="sourceLine" id="cb58-15" title="15">  })</a>
 <a class="sourceLine" id="cb58-16" title="16">}</a>
 <a class="sourceLine" id="cb58-17" title="17"></a>
 <a class="sourceLine" id="cb58-18" title="18">histogramApp &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb58-19" title="19">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(...)</a>
+<a class="sourceLine" id="cb58-19" title="19">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(...)</a>
 <a class="sourceLine" id="cb58-20" title="20"></a>
 <a class="sourceLine" id="cb58-21" title="21">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
 <a class="sourceLine" id="cb58-22" title="22">    data &lt;-<span class="st"> </span><span class="kw">datasetServer</span>(<span class="st">&quot;data&quot;</span>)</a>
@@ -602,11 +614,503 @@ The example from <a href="">mastering shiny</a> is:</p>
 </div>
 <div id="advising-against-single-object-modules" class="section level2 hasAnchor">
 <h2><span class="header-section-number">5.3</span> Advising against single object modules<a href="modularization.html#advising-against-single-object-modules" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, <code>plotOutput()</code> and <code>renderPlot()</code> are connected only by shared ID. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared ID. This also allows you to make them more generalizable and allows for reactivity.</p>
+<p>When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, <code>plotOutput()</code> and <code>renderPlot()</code> are connected only by shared <code>id</code>. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared <code>id</code>. This also allows you to make them more generalizable and allows for reactivity.</p>
 <p>For a full example <a href="https://mastering-shiny.org/scaling-modules.html#module-objects">read more here</a>.</p>
 </div>
-<div id="example" class="section level2 hasAnchor">
-<h2><span class="header-section-number">5.4</span> Example<a href="modularization.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="examples-from-the-phmrsapp" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.4</span> Examples from the PHMRSapp<a href="modularization.html#examples-from-the-phmrsapp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To ground some of our knowledge let’s look at examples from our very own PHMRSapp. These aren’t necessarily perfect so try to think of ways you could improve them and test out your ideas!</p>
+<div id="dropdown-module" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.4.1</span> Dropdown module<a href="modularization.html#dropdown-module" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First let’s break down a simple module that helps create a dropdown menu. We will go over the module that currently exists in the PHMRSapp and then we can look at how we’d improve it to make it better formatted to the mastering shiny documentation.</p>
+<p>Here is the original module:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># For this module we first set up the UI</span></a>
+<a class="sourceLine" id="cb59-2" title="2"><span class="co"># As always we include that id argument, but</span></a>
+<a class="sourceLine" id="cb59-3" title="3"><span class="co"># we also have a label argument so we can customize</span></a>
+<a class="sourceLine" id="cb59-4" title="4"><span class="co"># our menu title depending on what we&#39;re using it for</span></a>
+<a class="sourceLine" id="cb59-5" title="5">dropdown_ui &lt;-<span class="st"> </span><span class="cf">function</span>(id, label) {</a>
+<a class="sourceLine" id="cb59-6" title="6">  <span class="co"># Here&#39;s the alternative method, not needed for the other way</span></a>
+<a class="sourceLine" id="cb59-7" title="7">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
+<a class="sourceLine" id="cb59-8" title="8">  <span class="co"># The dropdown function from shiny</span></a>
+<a class="sourceLine" id="cb59-9" title="9">  shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb59-10" title="10">    <span class="kw">ns</span>(id), <span class="co"># we also could&#39;ve set this up by just doing shiny::NS(id, &quot;selections&quot;)</span></a>
+<a class="sourceLine" id="cb59-11" title="11">    shiny<span class="op">::</span><span class="kw">h5</span>(label), <span class="co"># here we use the label argument to title our menu</span></a>
+<a class="sourceLine" id="cb59-12" title="12">    <span class="dt">choices =</span> <span class="ot">NULL</span>, <span class="co"># chioces are set to null because they will be filled later for what we need</span></a>
+<a class="sourceLine" id="cb59-13" title="13">    <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">allowEmptyOption =</span> <span class="ot">FALSE</span>) <span class="co"># makes it so we don&#39;t have a blank option</span></a>
+<a class="sourceLine" id="cb59-14" title="14">  )</a>
+<a class="sourceLine" id="cb59-15" title="15">}</a>
+<a class="sourceLine" id="cb59-16" title="16"></a>
+<a class="sourceLine" id="cb59-17" title="17"><span class="co"># Now we set up the server end</span></a>
+<a class="sourceLine" id="cb59-18" title="18"><span class="co"># again we have our id argument, but we also have our </span></a>
+<a class="sourceLine" id="cb59-19" title="19"><span class="co"># choice_list which we can use to update our menu options</span></a>
+<a class="sourceLine" id="cb59-20" title="20">dropdown_server &lt;-<span class="st"> </span><span class="cf">function</span>(id, choice_list) {</a>
+<a class="sourceLine" id="cb59-21" title="21">  <span class="co"># the usual call to moduleServer()</span></a>
+<a class="sourceLine" id="cb59-22" title="22">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(</a>
+<a class="sourceLine" id="cb59-23" title="23">    id,</a>
+<a class="sourceLine" id="cb59-24" title="24">    <span class="cf">function</span> (input, output, session) {</a>
+<a class="sourceLine" id="cb59-25" title="25">      <span class="co"># We will update our choices here and set</span></a>
+<a class="sourceLine" id="cb59-26" title="26">      <span class="co"># the selected to be the top choice in our</span></a>
+<a class="sourceLine" id="cb59-27" title="27">      <span class="co"># list by default</span></a>
+<a class="sourceLine" id="cb59-28" title="28">      shiny<span class="op">::</span><span class="kw">updateSelectizeInput</span>(</a>
+<a class="sourceLine" id="cb59-29" title="29">        session,</a>
+<a class="sourceLine" id="cb59-30" title="30">        id,</a>
+<a class="sourceLine" id="cb59-31" title="31">        <span class="dt">choices =</span> choice_list,</a>
+<a class="sourceLine" id="cb59-32" title="32">        <span class="dt">selected =</span> choice_list[[<span class="dv">1</span>]][<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb59-33" title="33">      )</a>
+<a class="sourceLine" id="cb59-34" title="34">      <span class="co"># creating an empty list of reactive values that can be filled</span></a>
+<a class="sourceLine" id="cb59-35" title="35">      myreturn &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">reactiveValues</span>()</a>
+<a class="sourceLine" id="cb59-36" title="36">      <span class="co"># set up the return to txt in a reactive container</span></a>
+<a class="sourceLine" id="cb59-37" title="37">      shiny<span class="op">::</span><span class="kw">observe</span>({ </a>
+<a class="sourceLine" id="cb59-38" title="38">        myreturn<span class="op">$</span>txt &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>(<span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text =</span> <span class="kw">paste0</span>(<span class="st">&quot;input$&quot;</span>, id))))</a>
+<a class="sourceLine" id="cb59-39" title="39">        })</a>
+<a class="sourceLine" id="cb59-40" title="40">      <span class="kw">return</span>(myreturn)</a>
+<a class="sourceLine" id="cb59-41" title="41">    })</a>
+<a class="sourceLine" id="cb59-42" title="42">}</a>
+<a class="sourceLine" id="cb59-43" title="43"></a>
+<a class="sourceLine" id="cb59-44" title="44"><span class="co"># Finally, let&#39;s test it out</span></a>
+<a class="sourceLine" id="cb59-45" title="45">dropdown_demo &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb59-46" title="46">  <span class="co"># Set our UI</span></a>
+<a class="sourceLine" id="cb59-47" title="47">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb59-48" title="48">    <span class="co"># Call our module UI</span></a>
+<a class="sourceLine" id="cb59-49" title="49">    <span class="kw">dropdown_ui</span>(</a>
+<a class="sourceLine" id="cb59-50" title="50">      <span class="dt">id =</span> <span class="st">&quot;select&quot;</span>,</a>
+<a class="sourceLine" id="cb59-51" title="51">      <span class="dt">label =</span> shiny<span class="op">::</span><span class="kw">h5</span>(<span class="st">&quot;Select an option:&quot;</span>)</a>
+<a class="sourceLine" id="cb59-52" title="52">    ),</a>
+<a class="sourceLine" id="cb59-53" title="53">    <span class="co"># Let&#39;s create a text output to test our </span></a>
+<a class="sourceLine" id="cb59-54" title="54">    <span class="co"># module</span></a>
+<a class="sourceLine" id="cb59-55" title="55">    shiny<span class="op">::</span><span class="kw">textOutput</span>(</a>
+<a class="sourceLine" id="cb59-56" title="56">      <span class="st">&#39;select_text&#39;</span></a>
+<a class="sourceLine" id="cb59-57" title="57">    )</a>
+<a class="sourceLine" id="cb59-58" title="58">  )</a>
+<a class="sourceLine" id="cb59-59" title="59">  <span class="co"># server</span></a>
+<a class="sourceLine" id="cb59-60" title="60">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb59-61" title="61">    <span class="co"># Call our server and set the choices list</span></a>
+<a class="sourceLine" id="cb59-62" title="62">    select &lt;-<span class="st"> </span><span class="kw">dropdown_server</span>(</a>
+<a class="sourceLine" id="cb59-63" title="63">      <span class="dt">id  =</span> <span class="st">&quot;select&quot;</span>,</a>
+<a class="sourceLine" id="cb59-64" title="64">      <span class="dt">choice_list =</span> <span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb59-65" title="65">        <span class="st">&quot;A&quot;</span>,</a>
+<a class="sourceLine" id="cb59-66" title="66">        <span class="st">&quot;B&quot;</span>,</a>
+<a class="sourceLine" id="cb59-67" title="67">        <span class="st">&quot;C&quot;</span></a>
+<a class="sourceLine" id="cb59-68" title="68">      )</a>
+<a class="sourceLine" id="cb59-69" title="69">    )</a>
+<a class="sourceLine" id="cb59-70" title="70">    <span class="co"># Render our text output, which remember was stored in txt</span></a>
+<a class="sourceLine" id="cb59-71" title="71">    output<span class="op">$</span>select_text &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderText</span>(select<span class="op">$</span>txt)</a>
+<a class="sourceLine" id="cb59-72" title="72">  }</a>
+<a class="sourceLine" id="cb59-73" title="73">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb59-74" title="74">}</a>
+<a class="sourceLine" id="cb59-75" title="75"></a>
+<a class="sourceLine" id="cb59-76" title="76"><span class="kw">dropdown_demo</span>()</a></code></pre></div>
+<p>Alternatively, we can code it in a way that better reflects mastering shiny’s documentation:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">dropdown_ui &lt;-<span class="st"> </span><span class="cf">function</span>(id, label) {</a>
+<a class="sourceLine" id="cb60-2" title="2">  shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb60-3" title="3">    shiny<span class="op">::</span><span class="kw">NS</span>(id, <span class="st">&quot;select&quot;</span>), <span class="co"># changed the id to the mastering shiny method</span></a>
+<a class="sourceLine" id="cb60-4" title="4">    shiny<span class="op">::</span><span class="kw">h5</span>(label),</a>
+<a class="sourceLine" id="cb60-5" title="5">    <span class="dt">choices =</span> <span class="ot">NULL</span>, </a>
+<a class="sourceLine" id="cb60-6" title="6">    <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">allowEmptyOption =</span> <span class="ot">FALSE</span>) </a>
+<a class="sourceLine" id="cb60-7" title="7">  )</a>
+<a class="sourceLine" id="cb60-8" title="8">}</a>
+<a class="sourceLine" id="cb60-9" title="9"></a>
+<a class="sourceLine" id="cb60-10" title="10">dropdown_server &lt;-<span class="st"> </span><span class="cf">function</span>(id, choice_list) {</a>
+<a class="sourceLine" id="cb60-11" title="11">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(</a>
+<a class="sourceLine" id="cb60-12" title="12">    id,</a>
+<a class="sourceLine" id="cb60-13" title="13">    <span class="cf">function</span> (input, output, session) {</a>
+<a class="sourceLine" id="cb60-14" title="14">      shiny<span class="op">::</span><span class="kw">updateSelectizeInput</span>(</a>
+<a class="sourceLine" id="cb60-15" title="15">        session,</a>
+<a class="sourceLine" id="cb60-16" title="16">        id,</a>
+<a class="sourceLine" id="cb60-17" title="17">        <span class="dt">choices =</span> choice_list,</a>
+<a class="sourceLine" id="cb60-18" title="18">        <span class="dt">selected =</span> choice_list[[<span class="dv">1</span>]][<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb60-19" title="19">      )</a>
+<a class="sourceLine" id="cb60-20" title="20">      <span class="co"># We changed this to use a reactive container and call the select</span></a>
+<a class="sourceLine" id="cb60-21" title="21">      <span class="co"># input we set in the UI</span></a>
+<a class="sourceLine" id="cb60-22" title="22">      shiny<span class="op">::</span><span class="kw">reactive</span>(input<span class="op">$</span>select)</a>
+<a class="sourceLine" id="cb60-23" title="23">    })</a>
+<a class="sourceLine" id="cb60-24" title="24">}</a>
+<a class="sourceLine" id="cb60-25" title="25"></a>
+<a class="sourceLine" id="cb60-26" title="26"></a>
+<a class="sourceLine" id="cb60-27" title="27"><span class="co"># Finally, let&#39;s test it out</span></a>
+<a class="sourceLine" id="cb60-28" title="28">dropdown_demo &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb60-29" title="29">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb60-30" title="30">    <span class="kw">dropdown_ui</span>(</a>
+<a class="sourceLine" id="cb60-31" title="31">      <span class="dt">id =</span> <span class="st">&quot;select&quot;</span>,</a>
+<a class="sourceLine" id="cb60-32" title="32">      <span class="dt">label =</span> shiny<span class="op">::</span><span class="kw">h5</span>(<span class="st">&quot;Select an option:&quot;</span>)</a>
+<a class="sourceLine" id="cb60-33" title="33">    ),</a>
+<a class="sourceLine" id="cb60-34" title="34">    shiny<span class="op">::</span><span class="kw">textOutput</span>(</a>
+<a class="sourceLine" id="cb60-35" title="35">      <span class="st">&#39;select_text&#39;</span></a>
+<a class="sourceLine" id="cb60-36" title="36">    )</a>
+<a class="sourceLine" id="cb60-37" title="37">  )</a>
+<a class="sourceLine" id="cb60-38" title="38">  <span class="co"># server</span></a>
+<a class="sourceLine" id="cb60-39" title="39">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb60-40" title="40">    select &lt;-<span class="st"> </span><span class="kw">dropdown_server</span>(</a>
+<a class="sourceLine" id="cb60-41" title="41">      <span class="dt">id  =</span> <span class="st">&quot;select&quot;</span>,</a>
+<a class="sourceLine" id="cb60-42" title="42">      <span class="dt">choice_list =</span> <span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb60-43" title="43">        <span class="st">&quot;A&quot;</span>,</a>
+<a class="sourceLine" id="cb60-44" title="44">        <span class="st">&quot;B&quot;</span>,</a>
+<a class="sourceLine" id="cb60-45" title="45">        <span class="st">&quot;C&quot;</span></a>
+<a class="sourceLine" id="cb60-46" title="46">      )</a>
+<a class="sourceLine" id="cb60-47" title="47">    )</a>
+<a class="sourceLine" id="cb60-48" title="48">    <span class="co"># we call the actual value using select() to fill our text output</span></a>
+<a class="sourceLine" id="cb60-49" title="49">    <span class="co"># unlike the previous method</span></a>
+<a class="sourceLine" id="cb60-50" title="50">    output<span class="op">$</span>select_text &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderText</span>(<span class="kw">select</span>()) </a>
+<a class="sourceLine" id="cb60-51" title="51">  }</a>
+<a class="sourceLine" id="cb60-52" title="52">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb60-53" title="53">}</a>
+<a class="sourceLine" id="cb60-54" title="54"></a>
+<a class="sourceLine" id="cb60-55" title="55"><span class="kw">dropdown_demo</span>()</a></code></pre></div>
+</div>
+<div id="csv-download-module" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.4.2</span> CSV Download Module<a href="modularization.html#csv-download-module" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Next let’s look at a module that allows for a CSV to be downloaded:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># UI set up, the typical id argument and we</span></a>
+<a class="sourceLine" id="cb61-2" title="2"><span class="co"># add a label argument</span></a>
+<a class="sourceLine" id="cb61-3" title="3">csv_download_ui &lt;-<span class="st"> </span><span class="cf">function</span>(id, label) {</a>
+<a class="sourceLine" id="cb61-4" title="4">  </a>
+<a class="sourceLine" id="cb61-5" title="5">  <span class="co"># Alternative method, could use the standard if we wanted</span></a>
+<a class="sourceLine" id="cb61-6" title="6">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
+<a class="sourceLine" id="cb61-7" title="7">  </a>
+<a class="sourceLine" id="cb61-8" title="8">  <span class="co"># for a download we just use a button</span></a>
+<a class="sourceLine" id="cb61-9" title="9">  shiny<span class="op">::</span><span class="kw">downloadButton</span>(</a>
+<a class="sourceLine" id="cb61-10" title="10">    <span class="dt">outputId =</span> <span class="kw">ns</span>(<span class="st">&#39;download&#39;</span>), <span class="co"># setting the id</span></a>
+<a class="sourceLine" id="cb61-11" title="11">    <span class="dt">label =</span> label, <span class="co"># our download title</span></a>
+<a class="sourceLine" id="cb61-12" title="12">    <span class="dt">icon =</span> shiny<span class="op">::</span><span class="kw">icon</span>(<span class="st">&quot;download&quot;</span>) <span class="co"># add in a download icon</span></a>
+<a class="sourceLine" id="cb61-13" title="13">    )</a>
+<a class="sourceLine" id="cb61-14" title="14">  </a>
+<a class="sourceLine" id="cb61-15" title="15">}</a>
+<a class="sourceLine" id="cb61-16" title="16"></a>
+<a class="sourceLine" id="cb61-17" title="17"><span class="co"># server setup, two arguments: one for the id, and one for</span></a>
+<a class="sourceLine" id="cb61-18" title="18"><span class="co"># the data that will be downloaded</span></a>
+<a class="sourceLine" id="cb61-19" title="19">csv_download_serv &lt;-<span class="st"> </span><span class="cf">function</span>(id, data_name) {</a>
+<a class="sourceLine" id="cb61-20" title="20">  </a>
+<a class="sourceLine" id="cb61-21" title="21">  <span class="co"># the standard copy and paste start</span></a>
+<a class="sourceLine" id="cb61-22" title="22">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(</a>
+<a class="sourceLine" id="cb61-23" title="23">    id, </a>
+<a class="sourceLine" id="cb61-24" title="24">    <span class="cf">function</span>(input, output, session){</a>
+<a class="sourceLine" id="cb61-25" title="25">       </a>
+<a class="sourceLine" id="cb61-26" title="26">      <span class="co"># here is our download handler</span></a>
+<a class="sourceLine" id="cb61-27" title="27">      output<span class="op">$</span>download &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">downloadHandler</span>(</a>
+<a class="sourceLine" id="cb61-28" title="28">        <span class="co"># this is the format for the download handler</span></a>
+<a class="sourceLine" id="cb61-29" title="29">        <span class="dt">filename =</span> <span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb61-30" title="30">          <span class="co"># set up our file name</span></a>
+<a class="sourceLine" id="cb61-31" title="31">          <span class="kw">paste0</span>(data_name, <span class="st">&quot;.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb61-32" title="32">        },</a>
+<a class="sourceLine" id="cb61-33" title="33">        <span class="co"># this is the format for the download handler as well</span></a>
+<a class="sourceLine" id="cb61-34" title="34">        <span class="dt">content =</span> <span class="cf">function</span>(file) {</a>
+<a class="sourceLine" id="cb61-35" title="35">          <span class="co"># Write the dataset to the `file` that will be downloaded</span></a>
+<a class="sourceLine" id="cb61-36" title="36">          <span class="kw">write.csv</span>(<span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text =</span> data_name)), file)</a>
+<a class="sourceLine" id="cb61-37" title="37">        }</a>
+<a class="sourceLine" id="cb61-38" title="38">        </a>
+<a class="sourceLine" id="cb61-39" title="39">      )</a>
+<a class="sourceLine" id="cb61-40" title="40"></a>
+<a class="sourceLine" id="cb61-41" title="41">  })</a>
+<a class="sourceLine" id="cb61-42" title="42">}</a>
+<a class="sourceLine" id="cb61-43" title="43"></a>
+<a class="sourceLine" id="cb61-44" title="44"><span class="co"># test ------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb61-45" title="45"></a>
+<a class="sourceLine" id="cb61-46" title="46">download_demo &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb61-47" title="47">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb61-48" title="48">    <span class="kw">csv_download_ui</span>(<span class="dt">id =</span> <span class="st">&quot;download&quot;</span>, <span class="dt">label =</span> <span class="st">&quot;Download csv&quot;</span>)</a>
+<a class="sourceLine" id="cb61-49" title="49">  )</a>
+<a class="sourceLine" id="cb61-50" title="50">  <span class="co"># server</span></a>
+<a class="sourceLine" id="cb61-51" title="51">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb61-52" title="52">    <span class="kw">csv_download_serv</span>(<span class="dt">id  =</span> <span class="st">&quot;download&quot;</span>, <span class="dt">data_name =</span> <span class="st">&quot;mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb61-53" title="53">  }</a>
+<a class="sourceLine" id="cb61-54" title="54">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb61-55" title="55">}</a>
+<a class="sourceLine" id="cb61-56" title="56"></a>
+<a class="sourceLine" id="cb61-57" title="57"><span class="kw">download_demo</span>()</a></code></pre></div>
+</div>
+<div id="domain-select-module" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.4.3</span> Domain select module<a href="modularization.html#domain-select-module" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This next module looks at doing something similar to the dropdown module:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">domain_list &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb62-2" title="2">  <span class="st">&quot;Demographics&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Population projection&quot;</span>, <span class="st">&quot;Housing&quot;</span>),</a>
+<a class="sourceLine" id="cb62-3" title="3">  <span class="st">&quot;Factors that affect health&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Body mass index adult&quot;</span>, <span class="st">&quot;Body mass index youth&quot;</span>)</a>
+<a class="sourceLine" id="cb62-4" title="4">)</a>
+<a class="sourceLine" id="cb62-5" title="5"></a>
+<a class="sourceLine" id="cb62-6" title="6"><span class="co"># Setting up the UI with just an id argument</span></a>
+<a class="sourceLine" id="cb62-7" title="7"><span class="co"># hmm.. there </span></a>
+<a class="sourceLine" id="cb62-8" title="8">domain_select_ui &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb62-9" title="9">  <span class="co"># The other way!</span></a>
+<a class="sourceLine" id="cb62-10" title="10">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
+<a class="sourceLine" id="cb62-11" title="11">  <span class="co"># Setting this up in a container</span></a>
+<a class="sourceLine" id="cb62-12" title="12">  <span class="co"># this is fine but also can restrict it&#39;s resuability in the future</span></a>
+<a class="sourceLine" id="cb62-13" title="13">  shiny<span class="op">::</span><span class="kw">fluidRow</span>(</a>
+<a class="sourceLine" id="cb62-14" title="14">    <span class="co"># Domain selection dropdown</span></a>
+<a class="sourceLine" id="cb62-15" title="15">    shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb62-16" title="16">      <span class="kw">ns</span>(<span class="st">&quot;domain&quot;</span>),</a>
+<a class="sourceLine" id="cb62-17" title="17">      <span class="st">&quot;Select domain&quot;</span>, <span class="co"># the title</span></a>
+<a class="sourceLine" id="cb62-18" title="18">      <span class="dt">choices =</span> <span class="kw">names</span>(domain_list), <span class="co"># initial list</span></a>
+<a class="sourceLine" id="cb62-19" title="19">      <span class="dt">selected =</span> <span class="kw">names</span>(domain_list)[<span class="dv">1</span>] <span class="co">#the initial selection</span></a>
+<a class="sourceLine" id="cb62-20" title="20">    ),</a>
+<a class="sourceLine" id="cb62-21" title="21">    <span class="co"># Second dropdown for selection</span></a>
+<a class="sourceLine" id="cb62-22" title="22">    shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb62-23" title="23">      <span class="kw">ns</span>(<span class="st">&quot;sub_domain&quot;</span>), </a>
+<a class="sourceLine" id="cb62-24" title="24">      <span class="st">&quot;Select subdomain&quot;</span>, <span class="co"># the title</span></a>
+<a class="sourceLine" id="cb62-25" title="25">      <span class="dt">choices =</span> <span class="ot">NULL</span> <span class="co"># empty because updating later on</span></a>
+<a class="sourceLine" id="cb62-26" title="26">    )</a>
+<a class="sourceLine" id="cb62-27" title="27">  )</a>
+<a class="sourceLine" id="cb62-28" title="28">}</a>
+<a class="sourceLine" id="cb62-29" title="29"></a>
+<a class="sourceLine" id="cb62-30" title="30"></a>
+<a class="sourceLine" id="cb62-31" title="31"><span class="co">## Server setup, we are looking to link our top level selection with the lower level</span></a>
+<a class="sourceLine" id="cb62-32" title="32">domain_select_server &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb62-33" title="33">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(</a>
+<a class="sourceLine" id="cb62-34" title="34">    id,</a>
+<a class="sourceLine" id="cb62-35" title="35">    <span class="cf">function</span> (input, output, session) {</a>
+<a class="sourceLine" id="cb62-36" title="36">      <span class="co"># Update HSDA selectizeInput list when</span></a>
+<a class="sourceLine" id="cb62-37" title="37">      <span class="co"># a new domain is selected</span></a>
+<a class="sourceLine" id="cb62-38" title="38">      shiny<span class="op">::</span><span class="kw">observeEvent</span>(input<span class="op">$</span>domain, {</a>
+<a class="sourceLine" id="cb62-39" title="39">        <span class="co"># Look at the list and extract the sub contents</span></a>
+<a class="sourceLine" id="cb62-40" title="40">        <span class="co"># based on the domain</span></a>
+<a class="sourceLine" id="cb62-41" title="41">        choices &lt;-<span class="st"> </span>domain_list[[input<span class="op">$</span>domain]]</a>
+<a class="sourceLine" id="cb62-42" title="42">        <span class="co"># Update the sub domain list based on this selection</span></a>
+<a class="sourceLine" id="cb62-43" title="43">        shiny<span class="op">::</span><span class="kw">updateSelectizeInput</span>(</a>
+<a class="sourceLine" id="cb62-44" title="44">          session,</a>
+<a class="sourceLine" id="cb62-45" title="45">          <span class="st">&quot;sub_domain&quot;</span>,</a>
+<a class="sourceLine" id="cb62-46" title="46">          <span class="dt">choices =</span> shiny<span class="op">::</span><span class="kw">isolate</span>(choices), <span class="co"># I&#39;m not sure we actually need this isolate() call.. try it without!</span></a>
+<a class="sourceLine" id="cb62-47" title="47">          <span class="dt">server =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb62-48" title="48">          <span class="dt">selected =</span> choices[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb62-49" title="49">        )</a>
+<a class="sourceLine" id="cb62-50" title="50">      })</a>
+<a class="sourceLine" id="cb62-51" title="51">      <span class="co"># return a list of values</span></a>
+<a class="sourceLine" id="cb62-52" title="52">      return &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">reactiveValues</span>()</a>
+<a class="sourceLine" id="cb62-53" title="53">      shiny<span class="op">::</span><span class="kw">observe</span>({</a>
+<a class="sourceLine" id="cb62-54" title="54">        return<span class="op">$</span>domain &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>(input<span class="op">$</span>domain) </a>
+<a class="sourceLine" id="cb62-55" title="55">        return<span class="op">$</span>sub_domain &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>(input<span class="op">$</span>sub_domain)</a>
+<a class="sourceLine" id="cb62-56" title="56">      })</a>
+<a class="sourceLine" id="cb62-57" title="57">      <span class="kw">return</span>(return)</a>
+<a class="sourceLine" id="cb62-58" title="58">    })</a>
+<a class="sourceLine" id="cb62-59" title="59">}</a>
+<a class="sourceLine" id="cb62-60" title="60"></a>
+<a class="sourceLine" id="cb62-61" title="61"></a>
+<a class="sourceLine" id="cb62-62" title="62"><span class="co">## Test demo --------------------------------------------------</span></a>
+<a class="sourceLine" id="cb62-63" title="63">domain_select_demo &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb62-64" title="64">  ui &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb62-65" title="65">    <span class="kw">domain_select_ui</span>(</a>
+<a class="sourceLine" id="cb62-66" title="66">      <span class="dt">id =</span> <span class="st">&quot;domain_select&quot;</span></a>
+<a class="sourceLine" id="cb62-67" title="67">    ),</a>
+<a class="sourceLine" id="cb62-68" title="68">    shiny<span class="op">::</span><span class="kw">htmlOutput</span>(<span class="st">&quot;domain&quot;</span>),</a>
+<a class="sourceLine" id="cb62-69" title="69">    shiny<span class="op">::</span><span class="kw">htmlOutput</span>(<span class="st">&quot;sub_domain&quot;</span>)</a>
+<a class="sourceLine" id="cb62-70" title="70">  )</a>
+<a class="sourceLine" id="cb62-71" title="71">  <span class="co"># server</span></a>
+<a class="sourceLine" id="cb62-72" title="72">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb62-73" title="73">    domain &lt;-<span class="st"> </span><span class="kw">domain_select_server</span>(</a>
+<a class="sourceLine" id="cb62-74" title="74">      <span class="dt">id  =</span> <span class="st">&quot;domain_select&quot;</span></a>
+<a class="sourceLine" id="cb62-75" title="75">    )</a>
+<a class="sourceLine" id="cb62-76" title="76">    shiny<span class="op">::</span><span class="kw">observeEvent</span>(domain, {</a>
+<a class="sourceLine" id="cb62-77" title="77">      output<span class="op">$</span>domain &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderText</span>({domain<span class="op">$</span>domain})</a>
+<a class="sourceLine" id="cb62-78" title="78">      output<span class="op">$</span>sub_domain &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">renderText</span>({domain<span class="op">$</span>sub_domain})</a>
+<a class="sourceLine" id="cb62-79" title="79">    })</a>
+<a class="sourceLine" id="cb62-80" title="80">  }</a>
+<a class="sourceLine" id="cb62-81" title="81">  shiny<span class="op">::</span><span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb62-82" title="82">}</a>
+<a class="sourceLine" id="cb62-83" title="83"></a>
+<a class="sourceLine" id="cb62-84" title="84"><span class="kw">domain_select_demo</span>()</a></code></pre></div>
+</div>
+<div id="sidebar-select-module" class="section level3 hasAnchor">
+<h3><span class="header-section-number">5.4.4</span> Sidebar select module<a href="modularization.html#sidebar-select-module" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Lastly, we can look at one of the more complex modules that looks to create conditional panels based on the geography selection:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1">region_list &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-2" title="2">  <span class="st">&quot;1 Interior&quot;</span> =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-3" title="3">    <span class="st">&quot;11 East Kootenay&quot;</span> =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-4" title="4">      <span class="st">&quot;111 Fernie&quot;</span> =<span class="st"> &quot;1110 Fernie&quot;</span>,</a>
+<a class="sourceLine" id="cb63-5" title="5">      <span class="st">&quot;112 Cranbrook&quot;</span> =<span class="st"> &quot;1120 Cranbrook&quot;</span></a>
+<a class="sourceLine" id="cb63-6" title="6">    ),</a>
+<a class="sourceLine" id="cb63-7" title="7">    <span class="st">&quot;12 Kootenay Boundary&quot;</span> =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-8" title="8">      <span class="st">&quot;121 Kootenay Lake&quot;</span> =<span class="st"> &quot;1210 Kootenay Lake&quot;</span>,</a>
+<a class="sourceLine" id="cb63-9" title="9">      <span class="st">&quot;122 Nelson&quot;</span> =<span class="st"> &quot;1220 Nelson&quot;</span></a>
+<a class="sourceLine" id="cb63-10" title="10">    )</a>
+<a class="sourceLine" id="cb63-11" title="11">  ),</a>
+<a class="sourceLine" id="cb63-12" title="12">  <span class="st">&quot;2 Fraser&quot;</span> =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-13" title="13">    <span class="st">&quot;21 Fraser East&quot;</span> =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-14" title="14">      <span class="st">&quot;211 Hope&quot;</span> =<span class="st"> &quot;2110 Hope&quot;</span>,</a>
+<a class="sourceLine" id="cb63-15" title="15">      <span class="st">&quot;212 Chilliwack&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2120 South Chilliwack&quot;</span>, <span class="st">&quot;2122 North Chilliwack&quot;</span>)</a>
+<a class="sourceLine" id="cb63-16" title="16">    ),</a>
+<a class="sourceLine" id="cb63-17" title="17">    <span class="st">&quot;22 Fraser North&quot;</span> =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-18" title="18">      <span class="st">&quot;221 New Westminster&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2211 New Westminster - East&quot;</span>, <span class="st">&quot;2212 New Westminster - Central&quot;</span>),</a>
+<a class="sourceLine" id="cb63-19" title="19">      <span class="st">&quot;222 Burnaby&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2221 Burnaby Heights/Capital Hill&quot;</span>, <span class="st">&quot;2222 Brentwood/Willingdon/Parkcrest&quot;</span>)</a>
+<a class="sourceLine" id="cb63-20" title="20">    )</a>
+<a class="sourceLine" id="cb63-21" title="21">  )</a>
+<a class="sourceLine" id="cb63-22" title="22">)</a>
+<a class="sourceLine" id="cb63-23" title="23"></a>
+<a class="sourceLine" id="cb63-24" title="24"><span class="co"># UI set up</span></a>
+<a class="sourceLine" id="cb63-25" title="25">sidebar_select_ui &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb63-26" title="26">  <span class="co"># You know the drill</span></a>
+<a class="sourceLine" id="cb63-27" title="27">  ns &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">NS</span>(id)</a>
+<a class="sourceLine" id="cb63-28" title="28">  <span class="co"># Container wrapper</span></a>
+<a class="sourceLine" id="cb63-29" title="29">  shiny<span class="op">::</span><span class="kw">fluidRow</span>(</a>
+<a class="sourceLine" id="cb63-30" title="30">    <span class="co">#First level of the geography selection</span></a>
+<a class="sourceLine" id="cb63-31" title="31">    shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-32" title="32">      <span class="kw">ns</span>(<span class="st">&quot;geography_level&quot;</span>),</a>
+<a class="sourceLine" id="cb63-33" title="33">      <span class="st">&quot;Select geography level&quot;</span>,</a>
+<a class="sourceLine" id="cb63-34" title="34">      <span class="dt">choices =</span> <span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-35" title="35">        <span class="st">&quot;British Columbia&quot;</span> =<span class="st"> &quot;BC&quot;</span>,</a>
+<a class="sourceLine" id="cb63-36" title="36">        <span class="st">&quot;Health Authority&quot;</span> =<span class="st"> &quot;HA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-37" title="37">        <span class="st">&quot;Health Service Delivery Areas&quot;</span> =<span class="st"> &quot;HSDA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-38" title="38">        <span class="st">&quot;Local Health Area&quot;</span> =<span class="st"> &quot;LHA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-39" title="39">        <span class="st">&quot;Community Health Service Area&quot;</span> =<span class="st"> &quot;CHSA&quot;</span>)</a>
+<a class="sourceLine" id="cb63-40" title="40">    ),</a>
+<a class="sourceLine" id="cb63-41" title="41">    <span class="co"># Second level, this is for HA</span></a>
+<a class="sourceLine" id="cb63-42" title="42">    <span class="co"># we have a conditoinal panel as we only</span></a>
+<a class="sourceLine" id="cb63-43" title="43">    <span class="co"># want it to show up if we have a geography</span></a>
+<a class="sourceLine" id="cb63-44" title="44">    <span class="co"># level below BC</span></a>
+<a class="sourceLine" id="cb63-45" title="45">    shiny<span class="op">::</span><span class="kw">conditionalPanel</span>(</a>
+<a class="sourceLine" id="cb63-46" title="46">      <span class="dt">condition =</span> <span class="st">&quot;input.geography_level == &#39;HA&#39; ||</span></a>
+<a class="sourceLine" id="cb63-47" title="47"><span class="st">                   input.geography_level == &#39;HSDA&#39; ||</span></a>
+<a class="sourceLine" id="cb63-48" title="48"><span class="st">                   input.geography_level == &#39;LHA&#39; ||</span></a>
+<a class="sourceLine" id="cb63-49" title="49"><span class="st">                   input.geography_level == &#39;CHSA&#39;&quot;</span>,</a>
+<a class="sourceLine" id="cb63-50" title="50">      <span class="dt">ns =</span> ns,</a>
+<a class="sourceLine" id="cb63-51" title="51">      shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-52" title="52">        <span class="kw">ns</span>(<span class="st">&quot;HA&quot;</span>),</a>
+<a class="sourceLine" id="cb63-53" title="53">        <span class="st">&quot;Select HA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-54" title="54">        <span class="co"># This is hard coded, means it&#39;s not reusable, we could&#39;ve</span></a>
+<a class="sourceLine" id="cb63-55" title="55">        <span class="co"># made this an argument to make reusable</span></a>
+<a class="sourceLine" id="cb63-56" title="56">        <span class="dt">choices =</span> <span class="kw">names</span>(region_list)</a>
+<a class="sourceLine" id="cb63-57" title="57">      ),</a>
+<a class="sourceLine" id="cb63-58" title="58">    ),</a>
+<a class="sourceLine" id="cb63-59" title="59">    <span class="co"># Third level, for HSDA</span></a>
+<a class="sourceLine" id="cb63-60" title="60">    <span class="co"># Anything HSDA or lower show this selection menu</span></a>
+<a class="sourceLine" id="cb63-61" title="61">    shiny<span class="op">::</span><span class="kw">conditionalPanel</span>(</a>
+<a class="sourceLine" id="cb63-62" title="62">      <span class="dt">condition =</span> <span class="st">&quot;input.geography_level == &#39;HSDA&#39;||</span></a>
+<a class="sourceLine" id="cb63-63" title="63"><span class="st">                   input.geography_level == &#39;LHA&#39; ||</span></a>
+<a class="sourceLine" id="cb63-64" title="64"><span class="st">                   input.geography_level == &#39;CHSA&#39;&quot;</span>,</a>
+<a class="sourceLine" id="cb63-65" title="65">      <span class="dt">ns =</span> ns,</a>
+<a class="sourceLine" id="cb63-66" title="66">      shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-67" title="67">        <span class="kw">ns</span>(<span class="st">&quot;HSDA&quot;</span>),</a>
+<a class="sourceLine" id="cb63-68" title="68">        <span class="st">&quot;Select HSDA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-69" title="69">        <span class="dt">choices =</span> <span class="ot">NULL</span>, <span class="co"># we will update this later</span></a>
+<a class="sourceLine" id="cb63-70" title="70">        <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">allowEmptyOption =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb63-71" title="71">      )</a>
+<a class="sourceLine" id="cb63-72" title="72">    ),</a>
+<a class="sourceLine" id="cb63-73" title="73">    <span class="co"># Fourth level, for LHA</span></a>
+<a class="sourceLine" id="cb63-74" title="74">    <span class="co"># Anything LHA or lower show this menu</span></a>
+<a class="sourceLine" id="cb63-75" title="75">    shiny<span class="op">::</span><span class="kw">conditionalPanel</span>(</a>
+<a class="sourceLine" id="cb63-76" title="76">      <span class="dt">condition =</span> <span class="st">&quot;input.geography_level == &#39;LHA&#39; ||</span></a>
+<a class="sourceLine" id="cb63-77" title="77"><span class="st">                   input.geography_level == &#39;CHSA&#39;&quot;</span>,</a>
+<a class="sourceLine" id="cb63-78" title="78">      <span class="dt">ns =</span> ns,</a>
+<a class="sourceLine" id="cb63-79" title="79">      shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-80" title="80">        <span class="kw">ns</span>(<span class="st">&quot;LHA&quot;</span>),</a>
+<a class="sourceLine" id="cb63-81" title="81">        <span class="st">&quot;Select LHA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-82" title="82">        <span class="dt">choices =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb63-83" title="83">        <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">allowEmptyOption =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb63-84" title="84">      )</a>
+<a class="sourceLine" id="cb63-85" title="85">    ),</a>
+<a class="sourceLine" id="cb63-86" title="86">    <span class="co"># Fifth level, for CHSA</span></a>
+<a class="sourceLine" id="cb63-87" title="87">    <span class="co"># Anything CHSA how this menu</span></a>
+<a class="sourceLine" id="cb63-88" title="88">    shiny<span class="op">::</span><span class="kw">conditionalPanel</span>(</a>
+<a class="sourceLine" id="cb63-89" title="89">      <span class="dt">condition =</span> <span class="st">&quot;input.geography_level == &#39;CHSA&#39;&quot;</span>,</a>
+<a class="sourceLine" id="cb63-90" title="90">      <span class="dt">ns =</span> ns,</a>
+<a class="sourceLine" id="cb63-91" title="91">      shiny<span class="op">::</span><span class="kw">selectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-92" title="92">        <span class="kw">ns</span>(<span class="st">&quot;CHSA&quot;</span>),</a>
+<a class="sourceLine" id="cb63-93" title="93">        <span class="st">&quot;Select CHSA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-94" title="94">        <span class="dt">choices =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb63-95" title="95">        <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">allowEmptyOption =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb63-96" title="96">      )</a>
+<a class="sourceLine" id="cb63-97" title="97">    ),</a>
+<a class="sourceLine" id="cb63-98" title="98">    <span class="co"># A button for generating the profile</span></a>
+<a class="sourceLine" id="cb63-99" title="99">    <span class="co"># again this is geared for this app only, we could&#39;ve just had this outside</span></a>
+<a class="sourceLine" id="cb63-100" title="100">    <span class="co"># to make this function a bit more generalizable</span></a>
+<a class="sourceLine" id="cb63-101" title="101">    shiny<span class="op">::</span><span class="kw">actionButton</span>(<span class="kw">ns</span>(<span class="st">&quot;generate_profile&quot;</span>), <span class="st">&quot;Generate Profile&quot;</span>)</a>
+<a class="sourceLine" id="cb63-102" title="102">    </a>
+<a class="sourceLine" id="cb63-103" title="103">  )</a>
+<a class="sourceLine" id="cb63-104" title="104">}</a>
+<a class="sourceLine" id="cb63-105" title="105"><span class="co"># Server set up time, standard id argument</span></a>
+<a class="sourceLine" id="cb63-106" title="106">sidebar_select_server &lt;-<span class="st"> </span><span class="cf">function</span>(id) {</a>
+<a class="sourceLine" id="cb63-107" title="107">  <span class="co"># The usual setup</span></a>
+<a class="sourceLine" id="cb63-108" title="108">  shiny<span class="op">::</span><span class="kw">moduleServer</span>(</a>
+<a class="sourceLine" id="cb63-109" title="109">    id,</a>
+<a class="sourceLine" id="cb63-110" title="110">    <span class="cf">function</span> (input, output, session) {</a>
+<a class="sourceLine" id="cb63-111" title="111">      <span class="co"># When we have an HA input we update the according HSDAs  </span></a>
+<a class="sourceLine" id="cb63-112" title="112">      shiny<span class="op">::</span><span class="kw">observeEvent</span>(input<span class="op">$</span>HA, {</a>
+<a class="sourceLine" id="cb63-113" title="113">        shiny<span class="op">::</span><span class="kw">updateSelectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-114" title="114">          session,</a>
+<a class="sourceLine" id="cb63-115" title="115">          <span class="st">&quot;HSDA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-116" title="116">          <span class="dt">choices =</span> shiny<span class="op">::</span><span class="kw">isolate</span>(<span class="kw">names</span>(region_list[[input<span class="op">$</span>HA]])), <span class="co"># Hmm.. again maybe we don&#39;t need this isolate(), we can test it!</span></a>
+<a class="sourceLine" id="cb63-117" title="117">          <span class="dt">server =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb63-118" title="118">        )</a>
+<a class="sourceLine" id="cb63-119" title="119">        <span class="co"># When we have an HSDA input we update the according LHAs  </span></a>
+<a class="sourceLine" id="cb63-120" title="120">        <span class="kw">observeEvent</span>(input<span class="op">$</span>HSDA, {</a>
+<a class="sourceLine" id="cb63-121" title="121">          shiny<span class="op">::</span><span class="kw">updateSelectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-122" title="122">            session,</a>
+<a class="sourceLine" id="cb63-123" title="123">            <span class="st">&quot;LHA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-124" title="124">            <span class="co"># Hard coded list again.. could be an argument then we can use it for other apps!</span></a>
+<a class="sourceLine" id="cb63-125" title="125">            <span class="dt">choices =</span> shiny<span class="op">::</span><span class="kw">isolate</span>(<span class="kw">names</span>(region_list[[input<span class="op">$</span>HA]][[input<span class="op">$</span>HSDA]])),</a>
+<a class="sourceLine" id="cb63-126" title="126">            <span class="dt">server =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb63-127" title="127">          )</a>
+<a class="sourceLine" id="cb63-128" title="128">          <span class="co"># When we have an LHA input we update the according CHSAs  </span></a>
+<a class="sourceLine" id="cb63-129" title="129">          shiny<span class="op">::</span><span class="kw">observeEvent</span>(input<span class="op">$</span>LHA, {</a>
+<a class="sourceLine" id="cb63-130" title="130">            shiny<span class="op">::</span><span class="kw">updateSelectizeInput</span>(</a>
+<a class="sourceLine" id="cb63-131" title="131">              session,</a>
+<a class="sourceLine" id="cb63-132" title="132">              <span class="st">&quot;CHSA&quot;</span>,</a>
+<a class="sourceLine" id="cb63-133" title="133">              <span class="dt">choices =</span> shiny<span class="op">::</span><span class="kw">isolate</span>(region_list[[input<span class="op">$</span>HA]][[input<span class="op">$</span>HSDA]][[input<span class="op">$</span>LHA]]),</a>
+<a class="sourceLine" id="cb63-134" title="134">              <span class="dt">server =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb63-135" title="135">          })</a>
+<a class="sourceLine" id="cb63-136" title="136">        })</a>
+<a class="sourceLine" id="cb63-137" title="137">      })</a>
+<a class="sourceLine" id="cb63-138" title="138">      <span class="co"># Create a list of values when we click the button!</span></a>
+<a class="sourceLine" id="cb63-139" title="139">      sidebar_input &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">eventReactive</span>(input<span class="op">$</span>generate_profile, {</a>
+<a class="sourceLine" id="cb63-140" title="140">        </a>
+<a class="sourceLine" id="cb63-141" title="141">        <span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb63-142" title="142">          <span class="dt">geography_level =</span> input<span class="op">$</span>geography_level,</a>
+<a class="sourceLine" id="cb63-143" title="143">          <span class="dt">ha =</span> input<span class="op">$</span>HA,</a>
+<a class="sourceLine" id="cb63-144" title="144">          <span class="dt">hsda =</span> input<span class="op">$</span>HSDA,</a>
+<a class="sourceLine" id="cb63-145" title="145">          <span class="dt">lha =</span> input<span class="op">$</span>LHA,</a>
+<a class="sourceLine" id="cb63-146" title="146">          <span class="dt">chsa =</span> input<span class="op">$</span>CHSA)</a>
+<a class="sourceLine" id="cb63-147" title="147">      })</a>
+<a class="sourceLine" id="cb63-148" title="148">      <span class="co"># return values for use in other parts of our app!</span></a>
+<a class="sourceLine" id="cb63-149" title="149">      <span class="co"># Remember we actually have other ways to return lists</span></a>
+<a class="sourceLine" id="cb63-150" title="150">      <span class="co"># that might make this a bit more clean... interesting</span></a>
+<a class="sourceLine" id="cb63-151" title="151">      <span class="co"># how there are different ways to do the same thing!</span></a>
+<a class="sourceLine" id="cb63-152" title="152">      sidebar_return &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">reactiveValues</span>()</a>
+<a class="sourceLine" id="cb63-153" title="153">      <span class="kw">observeEvent</span>(input<span class="op">$</span>generate_profile, {</a>
+<a class="sourceLine" id="cb63-154" title="154">        sidebar_return<span class="op">$</span>level &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>({ <span class="kw">sidebar_input</span>()<span class="op">$</span>geography_level })</a>
+<a class="sourceLine" id="cb63-155" title="155">        sidebar_return<span class="op">$</span>ha &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>({ <span class="kw">sidebar_input</span>()<span class="op">$</span>ha })</a>
+<a class="sourceLine" id="cb63-156" title="156">        sidebar_return<span class="op">$</span>hsda &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>({ <span class="kw">sidebar_input</span>()<span class="op">$</span>hsda })</a>
+<a class="sourceLine" id="cb63-157" title="157">        sidebar_return<span class="op">$</span>lha &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>({ <span class="kw">sidebar_input</span>()<span class="op">$</span>lha })</a>
+<a class="sourceLine" id="cb63-158" title="158">        sidebar_return<span class="op">$</span>chsa &lt;-<span class="st"> </span>shiny<span class="op">::</span><span class="kw">req</span>({ <span class="kw">sidebar_input</span>()<span class="op">$</span>chsa })</a>
+<a class="sourceLine" id="cb63-159" title="159">      })</a>
+<a class="sourceLine" id="cb63-160" title="160">      <span class="kw">return</span>(sidebar_return)</a>
+<a class="sourceLine" id="cb63-161" title="161">    }</a>
+<a class="sourceLine" id="cb63-162" title="162">  )</a>
+<a class="sourceLine" id="cb63-163" title="163">}</a>
+<a class="sourceLine" id="cb63-164" title="164"></a>
+<a class="sourceLine" id="cb63-165" title="165"><span class="co"># Test! ------------------------------------</span></a>
+<a class="sourceLine" id="cb63-166" title="166"></a>
+<a class="sourceLine" id="cb63-167" title="167">sidebar_select_demo &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb63-168" title="168">  </a>
+<a class="sourceLine" id="cb63-169" title="169">  ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</a>
+<a class="sourceLine" id="cb63-170" title="170">    <span class="kw">sidebar_select_ui</span>(<span class="dt">id =</span> <span class="st">&quot;region_select&quot;</span>),</a>
+<a class="sourceLine" id="cb63-171" title="171">    <span class="kw">textOutput</span>(<span class="st">&quot;level&quot;</span>),</a>
+<a class="sourceLine" id="cb63-172" title="172">    <span class="kw">textOutput</span>(<span class="st">&quot;ha&quot;</span>),</a>
+<a class="sourceLine" id="cb63-173" title="173">    <span class="kw">textOutput</span>(<span class="st">&quot;hsda&quot;</span>),</a>
+<a class="sourceLine" id="cb63-174" title="174">    <span class="kw">textOutput</span>(<span class="st">&quot;lha&quot;</span>),</a>
+<a class="sourceLine" id="cb63-175" title="175">    <span class="kw">textOutput</span>(<span class="st">&quot;chsa&quot;</span>),</a>
+<a class="sourceLine" id="cb63-176" title="176">  )</a>
+<a class="sourceLine" id="cb63-177" title="177">  <span class="co"># server</span></a>
+<a class="sourceLine" id="cb63-178" title="178">  server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</a>
+<a class="sourceLine" id="cb63-179" title="179">    <span class="co"># If we returned a different list format than the one up there</span></a>
+<a class="sourceLine" id="cb63-180" title="180">    <span class="co"># we probably wouldn&#39;t need these initial `myvals &lt;-` or `mytxt &lt;-`. </span></a>
+<a class="sourceLine" id="cb63-181" title="181">    <span class="co">#Something to consider!</span></a>
+<a class="sourceLine" id="cb63-182" title="182">    myvals &lt;-<span class="st"> </span><span class="kw">reactiveValues</span>()</a>
+<a class="sourceLine" id="cb63-183" title="183">    mytxt &lt;-<span class="st"> </span><span class="kw">reactiveValues</span>()</a>
+<a class="sourceLine" id="cb63-184" title="184">    mytxt &lt;-<span class="st"> </span><span class="kw">sidebar_select_server</span>(<span class="dt">id  =</span> <span class="st">&quot;region_select&quot;</span>)</a>
+<a class="sourceLine" id="cb63-185" title="185">    <span class="kw">observe</span>({</a>
+<a class="sourceLine" id="cb63-186" title="186">      myvals<span class="op">$</span>level &lt;-<span class="st"> </span>mytxt<span class="op">$</span>level</a>
+<a class="sourceLine" id="cb63-187" title="187">      myvals<span class="op">$</span>ha &lt;-<span class="st"> </span>mytxt<span class="op">$</span>ha</a>
+<a class="sourceLine" id="cb63-188" title="188">      myvals<span class="op">$</span>hsda &lt;-<span class="st"> </span>mytxt<span class="op">$</span>hsda</a>
+<a class="sourceLine" id="cb63-189" title="189">      myvals<span class="op">$</span>lha &lt;-<span class="st"> </span>mytxt<span class="op">$</span>lha</a>
+<a class="sourceLine" id="cb63-190" title="190">      myvals<span class="op">$</span>chsa &lt;-<span class="st"> </span>mytxt<span class="op">$</span>chsa</a>
+<a class="sourceLine" id="cb63-191" title="191">      output<span class="op">$</span>level &lt;-<span class="st"> </span><span class="kw">renderText</span>({ myvals<span class="op">$</span>level })</a>
+<a class="sourceLine" id="cb63-192" title="192">      output<span class="op">$</span>ha &lt;-<span class="st"> </span><span class="kw">renderText</span>({ myvals<span class="op">$</span>ha })</a>
+<a class="sourceLine" id="cb63-193" title="193">      output<span class="op">$</span>hsda &lt;-<span class="st"> </span><span class="kw">renderText</span>({ myvals<span class="op">$</span>hsda })</a>
+<a class="sourceLine" id="cb63-194" title="194">      output<span class="op">$</span>lha &lt;-<span class="st"> </span><span class="kw">renderText</span>({ myvals<span class="op">$</span>lha })</a>
+<a class="sourceLine" id="cb63-195" title="195">      output<span class="op">$</span>chsa &lt;-<span class="st"> </span><span class="kw">renderText</span>({ myvals<span class="op">$</span>chsa })</a>
+<a class="sourceLine" id="cb63-196" title="196">    })</a>
+<a class="sourceLine" id="cb63-197" title="197">  }</a>
+<a class="sourceLine" id="cb63-198" title="198">  <span class="kw">shinyApp</span>(ui, server)</a>
+<a class="sourceLine" id="cb63-199" title="199">}</a>
+<a class="sourceLine" id="cb63-200" title="200"></a>
+<a class="sourceLine" id="cb63-201" title="201"><span class="kw">sidebar_select_demo</span>()</a></code></pre></div>
+</div>
 </div>
 <div id="additional-resources-4" class="section level2 hasAnchor">
 <h2><span class="header-section-number">5.5</span> Additional Resources<a href="modularization.html#additional-resources-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>

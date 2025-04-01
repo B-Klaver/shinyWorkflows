@@ -9,17 +9,26 @@ Shiny modules have two big advantages. Firstly, namespacing makes it easier to u
 To showcase modularization let's look at a very simple app:
 
 ``` {r eval=F}
-ui <- fluidPage(
-  selectInput("var", "Variable", names(mtcars)),
-  numericInput("bins", "bins", 10, min = 1),
-  plotOutput("hist")
+
+ui <- shiny::fluidPage(
+  shiny::selectInput("var", "Variable", names(datasets::mtcars)),
+  shiny::numericInput("bins", "bins", 10, min = 1),
+  shiny::plotOutput("hist")
 )
+
 server <- function(input, output, session) {
-  data <- reactive(mtcars[[input$var]])
-  output$hist <- renderPlot({
-    hist(data(), breaks = input$bins, main = input$var)
-  }, res = 96)
+  data <- shiny::reactive(datasets::mtcars[[input$var]])
+  output$hist <- shiny::renderPlot({
+    hist(
+      data(), 
+      breaks = input$bins, 
+      main = input$var
+    )
+  }, 
+  res = 96
+  )
 }
+
 ```
 
 A module is very similar to an app, that is, they are composed of:    
@@ -35,7 +44,7 @@ These functions both require an `id` argument that will namespace the module. To
 :::{.center}
 **NOTE**
 :::
-In fact you can test your modules by treating them like a standalone app!
+You can test your modules by treating them like a standalone app!
 ::::
 
 ### Module UI
@@ -43,34 +52,31 @@ In fact you can test your modules by treating them like a standalone app!
 First the UI module. There are two steps:   
 
 - Put the UI in a function with an `id` argument   
-- Wrap each existing ID in a `NS()` function so that each previous ID turns into `NS(id, "previous_id")`
+- Wrap each existing `id` in a `NS()` function so that each previous `id` turns into `NS(id, "previous_id")`
 
 This would look like this for our example:
 
 ``` {r eval=F}
 histogramUI <- function(id) {
-  tagList(
-    selectInput(NS(id, "var"), "Variable", choices = names(mtcars)),
-    numericInput(NS(id, "bins"), "bins", value = 10, min = 1),
-    plotOutput(NS(id, "hist"))
+  htmltools::tagList(
+    shiny::selectInput(shiny::NS(id, "var"), "Variable", choices = names(mtcars)),
+    shiny::numericInput(shiny::NS(id, "bins"), "bins", value = 10, min = 1),
+    shiny::plotOutput(shiny::NS(id, "hist"))
   )
 }
 ```
 
-The UI components are wrapped in `tagList()`, which allows you to bundle components, which can then be placed in other functions in the app code such as `shiny::fluidRow()`, `bslib::layout_column_wrap()` or `bslib::sidebar()`. You can also wrap them in `shiny::fluidRow()` or `bslib::layout_column_wrap()` in the function itself if you'd prefer.
+The UI components are wrapped in `tagList()`, which allows you to bundle components that can then be placed in other functions in the app code such as `shiny::fluidRow()`, `bslib::layout_column_wrap()` or `bslib::sidebar()`. You can also wrap them in `shiny::fluidRow()` or `bslib::layout_column_wrap()` in the function itself if you'd prefer, though that can limit the reusability.
 
 There is another way to namespace within a UI function; if you only have one original ID, let's use the plot for our example, you can follow this format:
 
 ``` {r eval=F}
 
 histogramUI <- function(id) {
-  
   ns <- shiny::NS(id)
-  
-  plotOutput(
+  shiny::plotOutput(
     ns("hist")
   )
-  
 }
 
 ```
@@ -82,10 +88,14 @@ histogramUI <- function(id) {
 The second part of this is the server function, which is also going to have an `id` argument. Inside of this function we call `moduleServer()` with the `id` arugment, and an additional function that looks like the typical server function:
 
 ``` {r eval=F}
-histogramServer <- function(id) {
-  moduleServer(id, function(input, output, session) {
-    data <- reactive(mtcars[[input$var]])
-    output$hist <- renderPlot({
+# your first line will look like this, you may have more
+# arguments, we'll look at that later
+histogramServer <- function(id) { 
+  # your second line will always look like this
+  shiny::moduleServer(id, function(input, output, session) {
+    # you put your server code inside of this call
+    data <- shiny::reactive(datasets::mtcars[[input$var]])
+    output$hist <- shiny::renderPlot({
       hist(data(), breaks = input$bins, main = input$var)
     }, res = 96)
   })
@@ -100,7 +110,7 @@ These two levels help distinguish the arguments between your module and the serv
 :::{.center}
 **NOTE**
 :::
-`moduleServer()` takes care of the namespacing automatically, that is `input$var` and `input$bins` identifies the original namespaces from the UI section of the module where we had `NS(id, "var")` and `NS(id, "bins")`.
+`moduleServer()` takes care of the namespacing automatically, that is `input$var` and `input$bins` identifies the original namespaces from the UI section of the module where we had `NS(id, "var")` and `NS(id, "bins")`. This is because of the shared `id` argument in the functions, that we will connect when we implement them in our app.
 ::::
 
 ### Module testing
@@ -109,13 +119,13 @@ It's good practice to test your module in a function that creates a simple app t
 
 ``` {r eval=F}
 histogramApp <- function() {
-  ui <- fluidPage(
+  ui <- shiny::fluidPage(
     histogramUI("hist1")
   )
   server <- function(input, output, session) {
     histogramServer("hist1")
   }
-  shinyApp(ui, server)  
+  shiny::shinyApp(ui, server)  
 }
 ```
 
@@ -123,7 +133,7 @@ histogramApp <- function() {
 :::{.center}
 **NOTE**
 :::
-Just like a regular app we need to link the UI and server using the same `id` name.
+Just like a regular app we need to link the UI and server using the same `id` name. This will be what allows the UI and server parts of the module to talk to eachother and identify the inputs and outputs. 
 ::::
 
 ### Namespacing
@@ -149,7 +159,7 @@ Note that the module UI and server differ in how the namespacing is expressed:
 - In the module server, the namespacing is implicit. You only need to use `id` in the call to `moduleServer()` and then Shiny automatically namespaces `input` and `output` so that in your module code `input$name` means the input with name `NS(id, "name")`.   
 ::::
 
-### Naming conventions
+### Module naming conventions
 
 A standard convention for naming can be as follows:
 
@@ -160,11 +170,11 @@ A standard convention for naming can be as follows:
 
 [Read more!](https://mastering-shiny.org/scaling-modules.html#naming-conventions)
 
-## Advanced Inputs and outputs
+## Advanced inputs and outputs
 
 Adding arguments beyond the `id` to the module UI gives greater control over the module, allowing you to use the same module in more places in your app.
 
-Unlike regular Shiny code, connecting modules together requires you to be explicit about inputs and outputs. Initially, this is going to feel tiresome. And it’s certainly more work than Shiny’s usual free-form association. But modules enforce specific lines of communication for a reason: they’re a little more work to create, but much easier to understand, and allow you to build substantially more complex apps.
+Unlike regular Shiny code, connecting modules together requires you to be explicit about inputs and outputs. Initially, this is going to feel tiresome and it’s certainly more work than Shiny’s usual free-form association. But modules enforce specific lines of communication for a reason: they’re a little more work to create, but much easier to understand, and allow you to build substantially more complex apps.
 
 [Read more!](https://mastering-shiny.org/scaling-modules.html#inputs-and-outputs)
 
@@ -172,26 +182,26 @@ Unlike regular Shiny code, connecting modules together requires you to be explic
 
 Let's look at an example from the [book](https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output) where we will have an additional argument in our input function and the server function returns a reactive value that we will use in a different element of the server.
 
-First they set up the input function:
+First set up the input function:
 
 ``` {r eval=F}
 # Two arguments, id as usual and a filter
 datasetInput <- function(id, filter = NULL) {
   
-  # Get list of df names
+  # Get list of df names for user selection
   names <- ls("package:datasets")
   
   # If a filter is present then update the names in the list
   # accordingly
   if (!is.null(filter)) {
-    # get the data to identify datasets and matrices
+    # get the data to identify datasets vs matrices
     data <- lapply(names, get, "package:datasets")
     # filter for selection, "dataset" or "matrix"
     names <- names[vapply(data, filter, logical(1))]
   }
   
   # Set up the UI selections for the list of names
-  selectInput(NS(id, "dataset"), "Pick a dataset", choices = names)
+  shiny::selectInput(shiny::NS(id, "dataset"), "Pick a dataset", choices = names)
   
 }
 ```
@@ -201,11 +211,11 @@ Then the server function:
 ``` {r eval=F}
 datasetServer <- function(id) {
   # set up the usual 
-  moduleServer(id, function(input, output, session) {
-    
-    # This will return a value, the last expression in the function
-    # will be the return value and should always be inside a reactive() wrapper
-    reactive(get(input$dataset, "package:datasets"))
+  shiny::moduleServer(id, function(input, output, session) {
+    # The last expression in the function
+    # will be the return value and return values
+    # should always be inside a reactive() wrapper
+    shiny::reactive(get(input$dataset, "package:datasets"))
   })
 }
 ```
@@ -218,12 +228,12 @@ Finally putting it all together:
 # it makes sense for this small example but you would probably
 # call it in the UI itself.. at least I would
 datasetApp <- function(filter = NULL) {
-  ui <- fluidPage(
+  ui <- shiny::fluidPage(
     # Set up the input portion of the module
     datasetInput("dataset", filter = filter),
     # also include a placeholder for a table to show
     # the selected data from our module
-    tableOutput("data")
+    shiny::tableOutput("data")
   )
   server <- function(input, output, session) {
     # Set up the server, because it's giving us a reactive value
@@ -243,7 +253,7 @@ datasetApp <- function(filter = NULL) {
 :::{.center}
 **NOTE**
 :::
-When you are returning a value in the server portion of your app that's reactive (ie. user input will impact it) you must assign it to a value in the environment. When you want to use that stored value you must refer to it like `value()` versus accessing it's reactive form by calling just `value`. In the above example this is why we call the reactive `data` value as `data()`.
+When you are returning a value in the server portion of your app that's reactive (ie. user input will impact it) you must assign it to a value in the environment, just like you would in typical R code. However, when you want to use that stored value you must refer to it like `value()` versus accessing it's reactive form by calling just `value`. In the above example this is why we call the reactive `data` value as `data()` when rendering it into the table - we want the actual data not the reactive aspect of the data.
 ::::
 
 ### Server inputs
@@ -253,16 +263,16 @@ Given that we work with both reactive and unreactive values in an app, it can be
 ``` {r eval=F}
 selectVarServer <- function(id, data, filter = is.numeric) {
   # We need data to be reactive!
-  stopifnot(is.reactive(data))
+  stopifnot(shiny::is.reactive(data))
   # We need the filter to be a non-reactive value!
-  stopifnot(!is.reactive(filter))
+  stopifnot(!shiny::is.reactive(filter))
   
-  moduleServer(id, function(input, output, session) {
-    observeEvent(data(), {
-      updateSelectInput(session, "var", choices = find_vars(data(), filter))
+  shiny::moduleServer(id, function(input, output, session) {
+    shiny::observeEvent(data(), {
+      shiny::updateSelectInput(session, "var", choices = find_vars(data(), filter))
     })
     
-    reactive(data()[[input$var]])
+    shiny::reactive(data()[[input$var]])
   })
 }
 ```
@@ -286,19 +296,18 @@ Modules can also be nested, in that you can call a module within another module.
 # a dataset and then select a variable from that dataset
 # it made sense to just combine the individual modules into a larger
 # module
-
 selectDataVarUI <- function(id) {
   # Tag list for combining multiple components
-  tagList(
+  htmltools::tagList(
     # This is a dataset input selection
-    datasetInput(NS(id, "data"), filter = is.data.frame),
+    datasetInput(shiny::NS(id, "data"), filter = is.data.frame),
     # This is to select the variable from the selected dataset
-    selectVarInput(NS(id, "var"))
+    selectVarInput(shiny::NS(id, "var"))
   )
 }
 
 selectDataVarServer <- function(id, filter = is.numeric) {
-  moduleServer(id, function(input, output, session) {
+  shiny::moduleServer(id, function(input, output, session) {
     # Here we pull the data based on the selection
     data <- datasetServer("data")
     # and here we filter the data for the variable
@@ -308,17 +317,17 @@ selectDataVarServer <- function(id, filter = is.numeric) {
 }
 
 selectDataVarApp <- function(filter = is.numeric) {
-  ui <- fluidPage(
-    sidebarLayout(
+  ui <- shiny::fluidPage(
+    shiny::sidebarLayout(
       # Now there only needs to be a single call in the UI
-      sidebarPanel(selectDataVarUI("var")),
-      mainPanel(verbatimTextOutput("out"))
+      shiny::sidebarPanel(selectDataVarUI("var")),
+      shiny::mainPanel(shiny::verbatimTextOutput("out"))
     )
   )
   server <- function(input, output, session) {
     # and a single call in the server 
     var <- selectDataVarServer("var", filter)
-    output$out <- renderPrint(var(), width = 40)
+    output$out <- shiny::renderPrint(var(), width = 40)
   }
   shinyApp(ui, server)
 }
@@ -334,24 +343,24 @@ The example from [mastering shiny]() is:
 ``` {r eval=F}
 
 selectVarServer <- function(id, data, filter = is.numeric) {
-  stopifnot(is.reactive(data))
-  stopifnot(!is.reactive(filter))
+  stopifnot(shiny::is.reactive(data))
+  stopifnot(!shiny::is.reactive(filter))
   
   moduleServer(id, function(input, output, session) {
-    observeEvent(data(), {
-      updateSelectInput(session, "var", choices = find_vars(data(), filter))
+    shiny::observeEvent(data(), {
+      shiny::updateSelectInput(session, "var", choices = find_vars(data(), filter))
     })
     
     list(
       # Return the name and the values of the variable
-      name = reactive(input$var),
-      value = reactive(data()[[input$var]])
+      name = shiny::reactive(input$var),
+      value = shiny::reactive(data()[[input$var]])
     )
   })
 }
 
 histogramApp <- function() {
-  ui <- fluidPage(...)
+  ui <- shiny::fluidPage(...)
 
   server <- function(input, output, session) {
     data <- datasetServer("data")
@@ -377,11 +386,527 @@ The main challenge with this sort of code is remembering when you use the reacti
 
 ## Advising against single object modules
 
-When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, `plotOutput()` and `renderPlot()` are connected only by shared ID. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared ID. This also allows you to make them more generalizable and allows for reactivity.
+When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, `plotOutput()` and `renderPlot()` are connected only by shared `id`. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared `id`. This also allows you to make them more generalizable and allows for reactivity.
 
 For a full example [read more here](https://mastering-shiny.org/scaling-modules.html#module-objects).
 
-## Example
+## Examples from the PHMRSapp
+
+To ground some of our knowledge let's look at examples from our very own PHMRSapp. These aren't necessarily perfect so try to think of ways you could improve them and test out your ideas! 
+
+### Dropdown module
+
+First let's break down a simple module that helps create a dropdown menu. We will go over the module that currently exists in the PHMRSapp and then we can look at how we'd improve it to make it better formatted to the mastering shiny documentation.
+
+Here is the original module:
+
+``` {r eval=F}
+
+# For this module we first set up the UI
+# As always we include that id argument, but
+# we also have a label argument so we can customize
+# our menu title depending on what we're using it for
+dropdown_ui <- function(id, label) {
+  # Here's the alternative method, not needed for the other way
+  ns <- shiny::NS(id)
+  # The dropdown function from shiny
+  shiny::selectizeInput(
+    ns(id), # we also could've set this up by just doing shiny::NS(id, "selections")
+    shiny::h5(label), # here we use the label argument to title our menu
+    choices = NULL, # chioces are set to null because they will be filled later for what we need
+    options = list(allowEmptyOption = FALSE) # makes it so we don't have a blank option
+  )
+}
+
+# Now we set up the server end
+# again we have our id argument, but we also have our 
+# choice_list which we can use to update our menu options
+dropdown_server <- function(id, choice_list) {
+  # the usual call to moduleServer()
+  shiny::moduleServer(
+    id,
+    function (input, output, session) {
+      # We will update our choices here and set
+      # the selected to be the top choice in our
+      # list by default
+      shiny::updateSelectizeInput(
+        session,
+        id,
+        choices = choice_list,
+        selected = choice_list[[1]][1]
+      )
+      # creating an empty list of reactive values that can be filled
+      myreturn <- shiny::reactiveValues()
+      # set up the return to txt in a reactive container
+      shiny::observe({ 
+        myreturn$txt <- shiny::req(eval(parse(text = paste0("input$", id))))
+        })
+      return(myreturn)
+    })
+}
+
+# Finally, let's test it out
+dropdown_demo <- function() {
+  # Set our UI
+  ui <- shiny::fluidPage(
+    # Call our module UI
+    dropdown_ui(
+      id = "select",
+      label = shiny::h5("Select an option:")
+    ),
+    # Let's create a text output to test our 
+    # module
+    shiny::textOutput(
+      'select_text'
+    )
+  )
+  # server
+  server <- function(input, output, session) {
+    # Call our server and set the choices list
+    select <- dropdown_server(
+      id  = "select",
+      choice_list = c(
+        "A",
+        "B",
+        "C"
+      )
+    )
+    # Render our text output, which remember was stored in txt
+    output$select_text <- shiny::renderText(select$txt)
+  }
+  shinyApp(ui, server)
+}
+
+dropdown_demo()
+```
+
+Alternatively, we can code it in a way that better reflects mastering shiny's documentation:
+
+``` {r eval=F}
+
+dropdown_ui <- function(id, label) {
+  shiny::selectizeInput(
+    shiny::NS(id, "select"), # changed the id to the mastering shiny method
+    shiny::h5(label),
+    choices = NULL, 
+    options = list(allowEmptyOption = FALSE) 
+  )
+}
+
+dropdown_server <- function(id, choice_list) {
+  shiny::moduleServer(
+    id,
+    function (input, output, session) {
+      shiny::updateSelectizeInput(
+        session,
+        id,
+        choices = choice_list,
+        selected = choice_list[[1]][1]
+      )
+      # We changed this to use a reactive container and call the select
+      # input we set in the UI
+      shiny::reactive(input$select)
+    })
+}
+
+
+# Finally, let's test it out
+dropdown_demo <- function() {
+  ui <- shiny::fluidPage(
+    dropdown_ui(
+      id = "select",
+      label = shiny::h5("Select an option:")
+    ),
+    shiny::textOutput(
+      'select_text'
+    )
+  )
+  # server
+  server <- function(input, output, session) {
+    select <- dropdown_server(
+      id  = "select",
+      choice_list = c(
+        "A",
+        "B",
+        "C"
+      )
+    )
+    # we call the actual value using select() to fill our text output
+    # unlike the previous method
+    output$select_text <- shiny::renderText(select()) 
+  }
+  shinyApp(ui, server)
+}
+
+dropdown_demo()
+```
+
+### CSV Download Module
+
+Next let's look at a module that allows for a CSV to be downloaded:
+
+``` {r eval=F}
+# UI set up, the typical id argument and we
+# add a label argument
+csv_download_ui <- function(id, label) {
+  
+  # Alternative method, could use the standard if we wanted
+  ns <- shiny::NS(id)
+  
+  # for a download we just use a button
+  shiny::downloadButton(
+    outputId = ns('download'), # setting the id
+    label = label, # our download title
+    icon = shiny::icon("download") # add in a download icon
+    )
+  
+}
+
+# server setup, two arguments: one for the id, and one for
+# the data that will be downloaded
+csv_download_serv <- function(id, data_name) {
+  
+  # the standard copy and paste start
+  shiny::moduleServer(
+    id, 
+    function(input, output, session){
+       
+      # here is our download handler
+      output$download <- shiny::downloadHandler(
+        # this is the format for the download handler
+        filename = function() {
+          # set up our file name
+          paste0(data_name, ".csv")
+        },
+        # this is the format for the download handler as well
+        content = function(file) {
+          # Write the dataset to the `file` that will be downloaded
+          write.csv(eval(parse(text = data_name)), file)
+        }
+        
+      )
+
+  })
+}
+
+# test ------------------------------------------------------------
+
+download_demo <- function() {
+  ui <- shiny::fluidPage(
+    csv_download_ui(id = "download", label = "Download csv")
+  )
+  # server
+  server <- function(input, output, session) {
+    csv_download_serv(id  = "download", data_name = "mtcars")
+  }
+  shinyApp(ui, server)
+}
+
+download_demo()
+
+```
+
+### Domain select module
+
+This next module looks at doing something similar to the dropdown module:
+
+``` {r eval=F}
+domain_list <- list(
+  "Demographics" = c("Population projection", "Housing"),
+  "Factors that affect health" = c("Body mass index adult", "Body mass index youth")
+)
+
+# Setting up the UI with just an id argument
+# hmm.. there 
+domain_select_ui <- function(id) {
+  # The other way!
+  ns <- shiny::NS(id)
+  # Setting this up in a container
+  # this is fine but also can restrict it's resuability in the future
+  shiny::fluidRow(
+    # Domain selection dropdown
+    shiny::selectizeInput(
+      ns("domain"),
+      "Select domain", # the title
+      choices = names(domain_list), # initial list
+      selected = names(domain_list)[1] #the initial selection
+    ),
+    # Second dropdown for selection
+    shiny::selectizeInput(
+      ns("sub_domain"), 
+      "Select subdomain", # the title
+      choices = NULL # empty because updating later on
+    )
+  )
+}
+
+
+## Server setup, we are looking to link our top level selection with the lower level
+domain_select_server <- function(id) {
+  shiny::moduleServer(
+    id,
+    function (input, output, session) {
+      # Update HSDA selectizeInput list when
+      # a new domain is selected
+      shiny::observeEvent(input$domain, {
+        # Look at the list and extract the sub contents
+        # based on the domain
+        choices <- domain_list[[input$domain]]
+        # Update the sub domain list based on this selection
+        shiny::updateSelectizeInput(
+          session,
+          "sub_domain",
+          choices = shiny::isolate(choices), # I'm not sure we actually need this isolate() call.. try it without!
+          server = FALSE,
+          selected = choices[1]
+        )
+      })
+      # return a list of values
+      return <- shiny::reactiveValues()
+      shiny::observe({
+        return$domain <- shiny::req(input$domain) 
+        return$sub_domain <- shiny::req(input$sub_domain)
+      })
+      return(return)
+    })
+}
+
+
+## Test demo --------------------------------------------------
+domain_select_demo <- function() {
+  ui <- shiny::fluidPage(
+    domain_select_ui(
+      id = "domain_select"
+    ),
+    shiny::htmlOutput("domain"),
+    shiny::htmlOutput("sub_domain")
+  )
+  # server
+  server <- function(input, output, session) {
+    domain <- domain_select_server(
+      id  = "domain_select"
+    )
+    shiny::observeEvent(domain, {
+      output$domain <- shiny::renderText({domain$domain})
+      output$sub_domain <- shiny::renderText({domain$sub_domain})
+    })
+  }
+  shiny::shinyApp(ui, server)
+}
+
+domain_select_demo()
+
+```
+
+### Sidebar select module
+
+Lastly, we can look at one of the more complex modules that looks to create conditional panels based on the geography selection:
+
+``` {r eval=F}
+
+region_list <- list(
+  "1 Interior" = list(
+    "11 East Kootenay" = list(
+      "111 Fernie" = "1110 Fernie",
+      "112 Cranbrook" = "1120 Cranbrook"
+    ),
+    "12 Kootenay Boundary" = list(
+      "121 Kootenay Lake" = "1210 Kootenay Lake",
+      "122 Nelson" = "1220 Nelson"
+    )
+  ),
+  "2 Fraser" = list(
+    "21 Fraser East" = list(
+      "211 Hope" = "2110 Hope",
+      "212 Chilliwack" = c("2120 South Chilliwack", "2122 North Chilliwack")
+    ),
+    "22 Fraser North" = list(
+      "221 New Westminster" = c("2211 New Westminster - East", "2212 New Westminster - Central"),
+      "222 Burnaby" = c("2221 Burnaby Heights/Capital Hill", "2222 Brentwood/Willingdon/Parkcrest")
+    )
+  )
+)
+
+# UI set up
+sidebar_select_ui <- function(id) {
+  # You know the drill
+  ns <- shiny::NS(id)
+  # Container wrapper
+  shiny::fluidRow(
+    #First level of the geography selection
+    shiny::selectizeInput(
+      ns("geography_level"),
+      "Select geography level",
+      choices = list(
+        "British Columbia" = "BC",
+        "Health Authority" = "HA",
+        "Health Service Delivery Areas" = "HSDA",
+        "Local Health Area" = "LHA",
+        "Community Health Service Area" = "CHSA")
+    ),
+    # Second level, this is for HA
+    # we have a conditoinal panel as we only
+    # want it to show up if we have a geography
+    # level below BC
+    shiny::conditionalPanel(
+      condition = "input.geography_level == 'HA' ||
+                   input.geography_level == 'HSDA' ||
+                   input.geography_level == 'LHA' ||
+                   input.geography_level == 'CHSA'",
+      ns = ns,
+      shiny::selectizeInput(
+        ns("HA"),
+        "Select HA",
+        # This is hard coded, means it's not reusable, we could've
+        # made this an argument to make reusable
+        choices = names(region_list)
+      ),
+    ),
+    # Third level, for HSDA
+    # Anything HSDA or lower show this selection menu
+    shiny::conditionalPanel(
+      condition = "input.geography_level == 'HSDA'||
+                   input.geography_level == 'LHA' ||
+                   input.geography_level == 'CHSA'",
+      ns = ns,
+      shiny::selectizeInput(
+        ns("HSDA"),
+        "Select HSDA",
+        choices = NULL, # we will update this later
+        options = list(allowEmptyOption = FALSE)
+      )
+    ),
+    # Fourth level, for LHA
+    # Anything LHA or lower show this menu
+    shiny::conditionalPanel(
+      condition = "input.geography_level == 'LHA' ||
+                   input.geography_level == 'CHSA'",
+      ns = ns,
+      shiny::selectizeInput(
+        ns("LHA"),
+        "Select LHA",
+        choices = NULL,
+        options = list(allowEmptyOption = FALSE)
+      )
+    ),
+    # Fifth level, for CHSA
+    # Anything CHSA how this menu
+    shiny::conditionalPanel(
+      condition = "input.geography_level == 'CHSA'",
+      ns = ns,
+      shiny::selectizeInput(
+        ns("CHSA"),
+        "Select CHSA",
+        choices = NULL,
+        options = list(allowEmptyOption = FALSE)
+      )
+    ),
+    # A button for generating the profile
+    # again this is geared for this app only, we could've just had this outside
+    # to make this function a bit more generalizable
+    shiny::actionButton(ns("generate_profile"), "Generate Profile")
+    
+  )
+}
+# Server set up time, standard id argument
+sidebar_select_server <- function(id) {
+  # The usual setup
+  shiny::moduleServer(
+    id,
+    function (input, output, session) {
+      # When we have an HA input we update the according HSDAs  
+      shiny::observeEvent(input$HA, {
+        shiny::updateSelectizeInput(
+          session,
+          "HSDA",
+          choices = shiny::isolate(names(region_list[[input$HA]])), # Hmm.. again maybe we don't need this isolate(), we can test it!
+          server = FALSE
+        )
+        # When we have an HSDA input we update the according LHAs  
+        observeEvent(input$HSDA, {
+          shiny::updateSelectizeInput(
+            session,
+            "LHA",
+            # Hard coded list again.. could be an argument then we can use it for other apps!
+            choices = shiny::isolate(names(region_list[[input$HA]][[input$HSDA]])),
+            server = FALSE
+          )
+          # When we have an LHA input we update the according CHSAs  
+          shiny::observeEvent(input$LHA, {
+            shiny::updateSelectizeInput(
+              session,
+              "CHSA",
+              choices = shiny::isolate(region_list[[input$HA]][[input$HSDA]][[input$LHA]]),
+              server = FALSE)
+          })
+        })
+      })
+      # Create a list of values when we click the button!
+      sidebar_input <- shiny::eventReactive(input$generate_profile, {
+        
+        list(
+          geography_level = input$geography_level,
+          ha = input$HA,
+          hsda = input$HSDA,
+          lha = input$LHA,
+          chsa = input$CHSA)
+      })
+      # return values for use in other parts of our app!
+      # Remember we actually have other ways to return lists
+      # that might make this a bit more clean... interesting
+      # how there are different ways to do the same thing!
+      sidebar_return <- shiny::reactiveValues()
+      observeEvent(input$generate_profile, {
+        sidebar_return$level <- shiny::req({ sidebar_input()$geography_level })
+        sidebar_return$ha <- shiny::req({ sidebar_input()$ha })
+        sidebar_return$hsda <- shiny::req({ sidebar_input()$hsda })
+        sidebar_return$lha <- shiny::req({ sidebar_input()$lha })
+        sidebar_return$chsa <- shiny::req({ sidebar_input()$chsa })
+      })
+      return(sidebar_return)
+    }
+  )
+}
+
+# Test! ------------------------------------
+
+sidebar_select_demo <- function() {
+  
+  ui <- fluidPage(
+    sidebar_select_ui(id = "region_select"),
+    textOutput("level"),
+    textOutput("ha"),
+    textOutput("hsda"),
+    textOutput("lha"),
+    textOutput("chsa"),
+  )
+  # server
+  server <- function(input, output, session) {
+    # If we returned a different list format than the one up there
+    # we probably wouldn't need these initial `myvals <-` or `mytxt <-`. 
+    #Something to consider!
+    myvals <- reactiveValues()
+    mytxt <- reactiveValues()
+    mytxt <- sidebar_select_server(id  = "region_select")
+    observe({
+      myvals$level <- mytxt$level
+      myvals$ha <- mytxt$ha
+      myvals$hsda <- mytxt$hsda
+      myvals$lha <- mytxt$lha
+      myvals$chsa <- mytxt$chsa
+      output$level <- renderText({ myvals$level })
+      output$ha <- renderText({ myvals$ha })
+      output$hsda <- renderText({ myvals$hsda })
+      output$lha <- renderText({ myvals$lha })
+      output$chsa <- renderText({ myvals$chsa })
+    })
+  }
+  shinyApp(ui, server)
+}
+
+sidebar_select_demo()
+
+```
 
 
 

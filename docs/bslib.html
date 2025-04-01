@@ -250,16 +250,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.2" data-path="modularization.html"><a href="modularization.html#module-server"><i class="fa fa-check"></i><b>5.1.2</b> Module server</a></li>
 <li class="chapter" data-level="5.1.3" data-path="modularization.html"><a href="modularization.html#module-testing"><i class="fa fa-check"></i><b>5.1.3</b> Module testing</a></li>
 <li class="chapter" data-level="5.1.4" data-path="modularization.html"><a href="modularization.html#namespacing"><i class="fa fa-check"></i><b>5.1.4</b> Namespacing</a></li>
-<li class="chapter" data-level="5.1.5" data-path="modularization.html"><a href="modularization.html#naming-conventions"><i class="fa fa-check"></i><b>5.1.5</b> Naming conventions</a></li>
+<li class="chapter" data-level="5.1.5" data-path="modularization.html"><a href="modularization.html#module-naming-conventions"><i class="fa fa-check"></i><b>5.1.5</b> Module naming conventions</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="modularization.html"><a href="modularization.html#advanced-inputs-and-outputs"><i class="fa fa-check"></i><b>5.2</b> Advanced Inputs and outputs</a><ul>
+<li class="chapter" data-level="5.2" data-path="modularization.html"><a href="modularization.html#advanced-inputs-and-outputs"><i class="fa fa-check"></i><b>5.2</b> Advanced inputs and outputs</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="modularization.html"><a href="modularization.html#ui-input-and-server-output"><i class="fa fa-check"></i><b>5.2.1</b> UI input and server output</a></li>
 <li class="chapter" data-level="5.2.2" data-path="modularization.html"><a href="modularization.html#server-inputs-1"><i class="fa fa-check"></i><b>5.2.2</b> Server inputs</a></li>
 <li class="chapter" data-level="5.2.3" data-path="modularization.html"><a href="modularization.html#modules-inside-of-modules"><i class="fa fa-check"></i><b>5.2.3</b> Modules inside of modules</a></li>
 <li class="chapter" data-level="5.2.4" data-path="modularization.html"><a href="modularization.html#multiple-outputs"><i class="fa fa-check"></i><b>5.2.4</b> Multiple outputs</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="modularization.html"><a href="modularization.html#advising-against-single-object-modules"><i class="fa fa-check"></i><b>5.3</b> Advising against single object modules</a></li>
-<li class="chapter" data-level="5.4" data-path="modularization.html"><a href="modularization.html#example"><i class="fa fa-check"></i><b>5.4</b> Example</a></li>
+<li class="chapter" data-level="5.4" data-path="modularization.html"><a href="modularization.html#examples-from-the-phmrsapp"><i class="fa fa-check"></i><b>5.4</b> Examples from the PHMRSapp</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="modularization.html"><a href="modularization.html#dropdown-module"><i class="fa fa-check"></i><b>5.4.1</b> Dropdown module</a></li>
+<li class="chapter" data-level="5.4.2" data-path="modularization.html"><a href="modularization.html#csv-download-module"><i class="fa fa-check"></i><b>5.4.2</b> CSV Download Module</a></li>
+<li class="chapter" data-level="5.4.3" data-path="modularization.html"><a href="modularization.html#domain-select-module"><i class="fa fa-check"></i><b>5.4.3</b> Domain select module</a></li>
+<li class="chapter" data-level="5.4.4" data-path="modularization.html"><a href="modularization.html#sidebar-select-module"><i class="fa fa-check"></i><b>5.4.4</b> Sidebar select module</a></li>
+</ul></li>
 <li class="chapter" data-level="5.5" data-path="modularization.html"><a href="modularization.html#additional-resources-4"><i class="fa fa-check"></i><b>5.5</b> Additional Resources</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -293,7 +298,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Custom theming of Shiny apps.</li>
 </ul>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;bslib&quot;</span>)</a></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-29"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-30"></span>
 <img src="images/bslib_ex.png" alt="Example of a bslib dashboard" width="960" />
 <p class="caption">
 Figure 4.1: Example of a bslib dashboard
@@ -304,7 +309,7 @@ Figure 4.1: Example of a bslib dashboard
 <div id="pages" class="section level3 hasAnchor">
 <h3><span class="header-section-number">4.1.1</span> Pages<a href="bslib.html#pages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One of the core features of <code>bslib</code> is the use of pages/tabs. To build an app this way <code>bslib</code> makes it easy by using the <code>bslib::page_navbar()</code> function to create child tabs with <code>bslib::nav_panel()</code>. Additionally, <code>bslib</code> apps tend to rely on sidebars so many functions, including <code>bslib::page_navbar()</code>, have a built in <code>sidebar</code> argument that you can fill using <code>bslib::sidebar()</code>.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-30"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-31"></span>
 <img src="images/pages_ex.png" alt="Example of a bslib dashboard with a page layout." width="1072" />
 <p class="caption">
 Figure 4.2: Example of a bslib dashboard with a page layout.
@@ -314,7 +319,7 @@ Figure 4.2: Example of a bslib dashboard with a page layout.
 <div id="cards-intro" class="section level3 hasAnchor">
 <h3><span class="header-section-number">4.1.2</span> Cards<a href="bslib.html#cards-intro" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another core feature of <code>bslib</code> apps is the <code>card()</code>. Apps built using <code>bslib</code> will almost always use cards, these are essentially containers that hold content in an organized way that make it really easy for users to engage, understand, and navigate your app.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-31"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-32"></span>
 <img src="images/card_ex.png" alt="Example of a bslib dashboard cards." width="1072" />
 <p class="caption">
 Figure 4.3: Example of a bslib dashboard cards.
@@ -325,7 +330,7 @@ Figure 4.3: Example of a bslib dashboard cards.
 <h3><span class="header-section-number">4.1.3</span> Content filling<a href="bslib.html#filling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The last core concept to <code>bslib</code> is the way it is geared towards a filling layout, which means that contents are encouraged to grow/shrink to fit the browser window so that regardless of the resolution you’re accessing the app it will adjust to fill it nicely. As a result, many functions have a <code>fill</code> argument; these are considered “fillable” containers. The child contents, a child in this case means it is wrapped by the parent function, will fill the parent feature when <code>fill = TRUE</code>, which is the default. When content goes beyond the screen resolution <code>bslib</code> will make the content scrollable.</p>
 <p>There is a lot to filling and it’s fundamental to <code>bslib</code> so it is recommended to read more about it <a href="https://rstudio.github.io/bslib/articles/filling/index.html">here</a>.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-32"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-33"></span>
 <img src="images/fill_ex.png" alt="Example of a plot filling a card and cards filling a page." width="1072" />
 <p class="caption">
 Figure 4.4: Example of a plot filling a card and cards filling a page.
@@ -421,7 +426,7 @@ Figure 4.4: Example of a plot filling a card and cards filling a page.
 <a class="sourceLine" id="cb26-7" title="7">    bslib<span class="op">::</span><span class="kw">card</span>()</a>
 <a class="sourceLine" id="cb26-8" title="8">  )</a>
 <a class="sourceLine" id="cb26-9" title="9">)</a></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-37"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-38"></span>
 <img src="images/layout_columns.png" alt="Example of bslib::layout_columns()" width="390" />
 <p class="caption">
 Figure 4.5: Example of bslib::layout_columns()
@@ -726,7 +731,7 @@ Figure 4.5: Example of bslib::layout_columns()
 <div id="value-boxes" class="section level2 hasAnchor">
 <h2><span class="header-section-number">4.5</span> Value boxes<a href="bslib.html#value-boxes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A <code>bslib::value_box()</code> is a special kind of card designed for highlighting a value along with a title and a showcase placeholder (typically a <a href="https://github.com/rstudio/bsicons">bsicons</a> icon). You can even have a plot as a backdrop to the value showcase. These can be standalone value boxes and they can also easily be inserted into cards!</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-51"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-52"></span>
 <img src="images/value_box.png" alt="An example of value boxes." width="400" />
 <p class="caption">
 Figure 4.6: An example of value boxes.
