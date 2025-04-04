@@ -274,7 +274,7 @@ datasetApp <- function(filter = NULL) {
 :::{.center}
 **NOTE**
 :::
-In the above example it called the module output as `data()` when rendering it into the table because we wanted to use the dataset to create our table and **not** the reactive aspect of the data. The reactive forms are often used in other module calls or in wrappers like `shiny::observeEvent()`.
+In the above example it called the module output as `data()` when rendering it into the table because we wanted to use the dataset to create our table and **not** the reactive aspect of the data. The reactive forms are often used for other function arguments or in wrappers like `shiny::observeEvent()`.
 ::::
 
 ### Server inputs
@@ -283,14 +283,15 @@ Sometimes we want to use other module outputs or outputs created in our larger s
 
 ``` {r eval=F}
 selectVarServer <- function(id, data, filter = is.numeric) {
-  # We need data to be reactive!
+  # We need data to be reactive to drive functionality!
   stopifnot(shiny::is.reactive(data))
   # We need the filter to be a non-reactive value!
   stopifnot(!shiny::is.reactive(filter))
   
   shiny::moduleServer(id, function(input, output, session) {
     shiny::observeEvent(data(), {
-      # See that we call data() here and just filter
+      # Now we call the actual data using data() and filter as normal as it was never
+      # reactive
       shiny::updateSelectInput(session, "var", choices = find_vars(data(), filter))
     })
     
@@ -355,7 +356,7 @@ histogramApp <- function() {
 :::{.center}
 **WARNING**
 :::
-The main challenge with this sort of code is remembering when you use the reactive form (e.g. `x$value`) vs. when you use its stored value (e.g. `x$value()`). Just remember that when passing an argument to a module, you want the module to react to the value changing which means that you have to pass the reactive, not it’s current value. Within the module the value can then easily be called when needed.
+The main challenge with this sort of code is remembering when you use the reactive form (e.g. `x$value`) vs. when you use its stored value (e.g. `x$value()`). Just remember that if you need to drive behaviour as a result of that value, you will need the reactive form, you can then call the value from that reactive value as needed. However, if the function only needs the value then consider requiring the non-reactive value for the argument!
 ::::
 
 ### Modules inside of modules
@@ -434,7 +435,11 @@ Here is the original module:
 # we also have a label argument so we can customize
 # our menu title depending on what we're using it for
 dropdown_ui <- function(id, label) {
-  # Here's the alternative method, not needed for the other way
+  # Here's the alternative method, the idea of this is that
+  # it will use the `id` from the function argument to create the
+  # internal namespace instead of just declaring it right here. This is only possible
+  # when we only have one internal namespace in the module. Other larger examples
+  # will declare internal namespaces still
   ns <- shiny::NS(id)
   # The dropdown function from shiny
   shiny::selectizeInput(
@@ -665,14 +670,14 @@ domain_select_ui <- function(id) {
   shiny::fluidRow(
     # Domain selection dropdown
     shiny::selectizeInput(
-      ns("domain"),
+      ns("domain"), # for this example with this alternative method the namespace is specified because we have more than one element
       "Select domain", # the title
       choices = names(domain_list), # initial list
       selected = names(domain_list)[1] #the initial selection
     ),
     # Second dropdown for selection
     shiny::selectizeInput(
-      ns("sub_domain"), 
+      ns("sub_domain"),
       "Select subdomain", # the title
       choices = NULL # empty because updating later on
     )
@@ -703,7 +708,7 @@ domain_select_server <- function(id) {
       # return a list of values
       return <- shiny::reactiveValues()
       shiny::observe({
-        return$domain <- shiny::req(input$domain) 
+        return$domain <- shiny::req(input$domain) # No need for the weird code in the first example to refer to the namespace
         return$sub_domain <- shiny::req(input$sub_domain)
       })
       return(return)
