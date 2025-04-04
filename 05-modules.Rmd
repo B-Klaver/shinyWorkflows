@@ -36,7 +36,7 @@ server <- function(input, output, session) {
 
 ```
 
-What you'll notice is that a module is very similar to an app, that is, they are composed of two parts:    
+As we begin to modularize this app you'll notice that a module is very similar to an app, that is, they are composed of two parts:    
 
 - A module UI function
 - A module server function
@@ -95,7 +95,7 @@ histogramUI <- function(id) {
 
 ### Module server
 
-The second part of this is the server function, which is also going to have an `id` argument, which we will use to link it to our UI component later. Inside of this function we call `moduleServer()` with the `id` arugment, and an additional function that looks like the typical server function:
+The second part of the module is the server function, which is also going to have an `id` argument; we will use the `id` to link it to our UI component later when building our app. Inside of this function we call `moduleServer()` with the `id` arugment, and an additional function that looks like a typical server function:
 
 ``` {r eval=F}
 # your first line will look like this, you may have more
@@ -155,7 +155,7 @@ Let's circle back on namespacing. At this point of the example we have two separ
 
 It's important to realize here that the namespaces that are created inside a module only exist (ie. can be referred to) within the two module functions; in other words, a module is in essence a "black box" that can't be seen from outside of the module. This means that as an author of a module, you don't need to worry about conflicts with namespacing with other modules or with namespacing in the app UI or server.
 
-If you'd like to refer to inputs from other places in the app in your module you'll have to pass them to a module argument explicitly - we'll talk about this later in section \@ref(advanced-modules).
+Even though modules are a "black box" you can still use outside inputs by adding additional function arguments or module outputs to drive functionality with other modules or server elements - we'll talk about this later in section \@ref(advanced-modules).
 
 [Read more!](https://mastering-shiny.org/scaling-modules.html#namespacing)
 
@@ -171,7 +171,7 @@ Note that the module UI and server differ in how the namespacing is expressed:
 
 ### Single object modules
 
-When some people encounter modules for the first time, they immediately attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, `plotOutput()` and `renderPlot()` are connected only by shared `id`. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared `id`. This also allows you to make them more generalizable and allows for reactivity.
+When some people encounter modules for the first time, they may attempt to combine the module server and module UI into a single module object. However, in Shiny, UI and server are inherently disconnected; Shiny doesn’t know which UI invocation belongs to which server session. You can see this pattern throughout Shiny: for example, `plotOutput()` and `renderPlot()` are connected only by shared `id`. Writing modules as separate functions reflects that reality: they’re distinct functions that are not connected other than through a shared `id`. This also allows you to make them more generalizable and allows for reactivity.
 
 For a full example [read more here](https://mastering-shiny.org/scaling-modules.html#module-objects).
 
@@ -194,7 +194,7 @@ Adding arguments beyond the `id` to the module UI and server gives greater contr
 
 ### Additional UI arguments
 
-Let's look at an example from the [book](https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output) where we will have an additional argument in our input function. We do it the same way as any other function, we add it as an argument in our function call:
+Let's look at an example from the [book](https://mastering-shiny.org/scaling-modules.html#getting-started-ui-input-server-output) where we will have an additional argument in our UI function. We do it the same way as any other function, we add it as an argument in our function call:
 
 ``` {r eval=F}
 # Two arguments, id as usual and a filter
@@ -220,7 +220,7 @@ datasetInput <- function(id, filter = NULL) {
 
 ### Server outputs
 
-The next part of the app we will create the server function. Importantly, when we are planning to use an output from a server module we will need to wrap it in a `shiny::reactive()` as it's technically a reactive value given it's relationship with the UI. The example sets up the server like so:
+Now let's look at the server function. When we are planning to use an output from a server module we will need to wrap it in a `shiny::reactive()` as it's technically a reactive output given it's relationship with the UI. The example sets up the server like so:
 
 ``` {r eval=F}
 datasetServer <- function(id) {
@@ -236,9 +236,9 @@ datasetServer <- function(id) {
 
 ### Operationalizing advanced modules
 
-Here we put the two parts together. The UI portion is fairly simple, we included the `filter` argument in the larger app call. However, the server part is a bit more complicated. When you are returning a value in the server portion of your app from your module you must assign it to a value in the environment, just like you would in typical R code (ie. `x <- mymodule_server()`. Because we are working with shiny and the returned values from modules are reactive the challenge is deciding if you want to refer to the reactive aspect of the value or the value itself.. let me explain:
+Here we put the two parts together. The UI portion is fairly simple, with the only difference being the `filter` argument was included in the larger app call as well. However, the server part is a bit more complicated. When you are returning a value in the server portion of your app from your module you must assign it to a value in the environment, just like you would in typical R code (ie. `x <- mymodule_server()`). Because we are working with shiny, and the returned values from modules are reactive, the challenge is deciding if you want to refer to the reactive aspect of the value or the value itself.. let me explain:
 
-- When you want to use that stored value (ie. the dataset or value itself) you must refer to it as `value()` or `data()`
+- When you want to use that stored value/object (ie. the dataset or value itself) you must refer to it as `value()` or `data()` for example.
 - When you want to use the reactive aspect to drive more server logic/behaviour you would just refer to `value` or `data`
 
 Let's see how this looks in the example:
@@ -277,6 +277,37 @@ datasetApp <- function(filter = NULL) {
 In the above example it called the module output as `data()` when rendering it into the table because we wanted to use the dataset to create our table and **not** the reactive aspect of the data. The reactive forms are often used in other module calls or in wrappers like `shiny::observeEvent()`.
 ::::
 
+### Server inputs
+
+Sometimes we want to use other module outputs or outputs created in our larger server call in a module. We can do this by adding an argument in our top level server function. We also need to consider what kind of value we want to use for that argument (ie. reactive versus the actual values); for this reason it can be a good idea to set up simple error messages in your server modules to ensure that future users know what type of value is expected in a server argument:
+
+``` {r eval=F}
+selectVarServer <- function(id, data, filter = is.numeric) {
+  # We need data to be reactive!
+  stopifnot(shiny::is.reactive(data))
+  # We need the filter to be a non-reactive value!
+  stopifnot(!shiny::is.reactive(filter))
+  
+  shiny::moduleServer(id, function(input, output, session) {
+    shiny::observeEvent(data(), {
+      # See that we call data() here and just filter
+      shiny::updateSelectInput(session, "var", choices = find_vars(data(), filter))
+    })
+    
+    shiny::reactive(data()[[input$var]])
+  })
+}
+```
+
+[Read more!](https://mastering-shiny.org/scaling-modules.html#server-inputs)
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+Another way to think about reactive or non-reactive values is when can the value change: is it fixed and constant over the life-time of the app, or is it reactive, changing as the user interacts with the app.
+::::
+
 ### Multiple server outputs
 
 Sometimes it's useful for the module's server to return more than one value. You can easily do this the same way you would for a regular R function - return a list. 
@@ -309,7 +340,8 @@ histogramApp <- function() {
     # assign the list to X
     x <- selectVarServer("var", data)
     # create a histogram using the values and title it with the
-    # variable name
+    # variable name. We refer to the reactive forms of the values
+    # because within this server module the values are called from the reactive
     histogramServer("hist", x$value, x$name)
   }
   shinyApp(ui, server)
@@ -323,38 +355,7 @@ histogramApp <- function() {
 :::{.center}
 **WARNING**
 :::
-The main challenge with this sort of code is remembering when you use the reactive form (e.g. `x$value`) vs. when you use its stored value (e.g. `x$value()`). Just remember that when passing an argument to a module, you want the module to react to the value changing which means that you have to pass the reactive, not it’s current value. However, if you want to display the actual current value you would pass the stored value.
-::::
-
-### Server inputs
-
-Sometimes we want to use other module outputs or outputs created in our larger server call in a module. We can do this by adding an argument in our top level server function. We also need to consider what kind of value we want to use for that argument (ie. reactive versus the actual values); for this reason it can be a good idea to set up simple error messages in your server modules to ensure that future users know what type of value is expected in a server argument:
-
-``` {r eval=F}
-selectVarServer <- function(id, data, filter = is.numeric) {
-  # We need data to be reactive!
-  stopifnot(shiny::is.reactive(data))
-  # We need the filter to be a non-reactive value!
-  stopifnot(!shiny::is.reactive(filter))
-  
-  shiny::moduleServer(id, function(input, output, session) {
-    shiny::observeEvent(data(), {
-      # See that we call data() here and just filter
-      shiny::updateSelectInput(session, "var", choices = find_vars(data(), filter))
-    })
-    
-    shiny::reactive(data()[[input$var]])
-  })
-}
-```
-
-[Read more!](https://mastering-shiny.org/scaling-modules.html#server-inputs)
-
-::::{.notebox}
-:::{.center}
-**NOTE**
-:::
-Another way to think about reactive or non-reactive values is when can the value change: is it fixed and constant over the life-time of the app, or is it reactive, changing as the user interacts with the app.
+The main challenge with this sort of code is remembering when you use the reactive form (e.g. `x$value`) vs. when you use its stored value (e.g. `x$value()`). Just remember that when passing an argument to a module, you want the module to react to the value changing which means that you have to pass the reactive, not it’s current value. Within the module the value can then easily be called when needed.
 ::::
 
 ### Modules inside of modules
@@ -405,6 +406,16 @@ selectDataVarApp <- function(filter = is.numeric) {
 ```
 
 [Read more!](https://mastering-shiny.org/scaling-modules.html#modules-inside-of-modules)
+
+::::{.tipbox}
+:::{.center}
+**TIP**
+:::
+Nesting can be a really good idea because functionally it requires us to break down our code to the smallest possible building blocks. The two main benefits are:   
+
+- We can easily build new larger functions with these smaller components.    
+- We can test these smaller components before combining them - troubleshooting code in shiny is a bit more challenging that typical R, so this makes it easier!   
+::::
 
 ## Examples from the PHMRSapp
 
@@ -557,6 +568,17 @@ dropdown_demo <- function() {
 
 dropdown_demo()
 ```
+
+::::{.notebox}
+:::{.center}
+**NOTE**
+:::
+The alternative approach improves on the code in three main ways:
+
+- By using `NS(id, "id_name")` instead we create our internal namespace right away, whereas the original method requires tricky code at the end to link the two together `myreturn$txt <- shiny::req(eval(parse(text = paste0("input$", id))))`    
+- As this module only returns one value we didn't need to return it in list format, for this reason it was simpler to call the modules return value with `letter()` as opposed to `select$txt`    
+- Finally, the typical approach to calling values is by using `value()` versus the reactive call with `value`, the original doesn't follow this approach    
+::::
 
 ### CSV Download Module
 

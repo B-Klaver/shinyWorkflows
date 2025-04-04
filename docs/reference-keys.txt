@@ -112,8 +112,8 @@ advanced-modules
 additional-ui-arguments
 server-outputs-1
 operationalizing-advanced-modules
-multiple-server-outputs
 server-inputs-1
+multiple-server-outputs
 modules-inside-of-modules
 examples-from-the-phmrsapp
 dropdown-module
