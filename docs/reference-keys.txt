@@ -115,7 +115,7 @@ operationalizing-advanced-modules
 server-inputs-1
 multiple-server-outputs
 modules-inside-of-modules
-examples-from-the-phmrsapp
+examples
 dropdown-module
 csv-download-module
 domain-select-module

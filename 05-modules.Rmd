@@ -418,13 +418,13 @@ Nesting can be a really good idea because functionally it requires us to break d
 - We can test these smaller components before combining them - troubleshooting code in shiny is a bit more challenging that typical R, so this makes it easier!   
 ::::
 
-## Examples from the PHMRSapp
+## Examples
 
-To ground some of our knowledge let's look at examples from our very own PHMRSapp. These aren't necessarily perfect so try to think of ways you could improve them and test out your ideas! 
+To ground some of our knowledge let's look at some examples used in our apps. These aren't necessarily perfect so try to think of ways you could improve them and test out your ideas! 
 
 ### Dropdown module
 
-First let's break down a simple module that helps create a dropdown menu. We will go over the module that currently exists in the PHMRSapp and then consider ways that we could improve it according to the mastering shiny documentation.
+First let's break down a simple module that helps create a dropdown menu. We will go over the module and then consider ways that we could improve it according to the mastering shiny documentation.
 
 Here is the original module:
 
